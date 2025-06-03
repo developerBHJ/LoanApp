@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol PersonalInfoViewEventDelegate {
-    func showAlertView(title: String,key: String,options: [ProductFormItem])
+    func showAlertView(isAddress: Bool,title: String,key: String,options: [ProductFormItem])
     func saveUserInfo(key: String,value: String)
 }
 
@@ -23,8 +23,8 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
         }
     }
     
-    func showAlertView(title: String,key: String, options: [ProductFormItem]) {
-        if key == viewModel.cityKey{
+    func showAlertView(isAddress: Bool,title: String,key: String, options: [ProductFormItem]) {
+        if isAddress{
             showAddressPickerView(key: key)
         }else{
             showCommonAlertView(title: title, key: key, options: options)

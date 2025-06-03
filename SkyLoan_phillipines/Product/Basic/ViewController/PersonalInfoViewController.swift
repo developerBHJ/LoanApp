@@ -57,7 +57,8 @@ extension PersonalInfoViewController{
         }
         listView.snp.remakeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-getNotchHeight()-56.ratio())
         }
         listView.register(PersonalBasicInfoCell.self, forCellReuseIdentifier: PersonalBasicInfoCell.reusableId)
         navBar.title = navTitle

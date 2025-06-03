@@ -13,7 +13,6 @@ class PersonalInfoViewModel {
     var itemList: [PersonalBasicModel] = []
     var editData: [ProductEditItem] = []
     var eventDelegate: PersonalInfoViewEventDelegate?
-    var cityKey: String = "company_city"
     
     func reloadData() async{
         guard !productId.isEmpty else {return}
@@ -54,7 +53,7 @@ class PersonalInfoViewModel {
             return  PersonalBasicInfoItemView.Model(title: model.feel,placeHolder: model.tea,content: content,keyBordType: model.clear,isPicker: model.bow != .text,key: model.article,options: model.definitely ?? [], valueChanged: {[weak self] key, value in
                 self?.eventDelegate?.saveUserInfo(key: key, value: value)
             },pickCompletion:  {[weak self] options in
-                self?.eventDelegate?.showAlertView(title: model.feel,key: model.article, options: options)
+                self?.eventDelegate?.showAlertView(isAddress:model.bow == .citySelect,title: model.feel,key: model.article, options: options)
             })
         }
         dataSource = [UITableSectionModel.init(cellType: PersonalBasicInfoCell.self,cellDatas: [PersonalBasicInfoCell.Model(items: array)])]

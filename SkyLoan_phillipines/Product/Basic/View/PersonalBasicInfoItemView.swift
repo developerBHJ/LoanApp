@@ -103,7 +103,8 @@ extension PersonalBasicInfoItemView{
         }
         contentTextField.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(5.ratio())
-            make.leading.trailing.equalToSuperview().inset(12.ratio())
+            make.leading.equalToSuperview().inset(12.ratio())
+            make.trailing.equalToSuperview().inset(44.ratio())
             make.height.equalTo(33.ratio())
         }
         arrowView.snp.makeConstraints { make in

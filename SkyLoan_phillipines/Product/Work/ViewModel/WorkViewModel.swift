@@ -15,7 +15,6 @@ class WorkViewModel {
     var eventDelegate: WorkInfoViewEventDelegate?
     var fullAddress: String = ""
     var cityName: String = ""
-    var addressKey = "administered"
     
     func reloadData() async{
         guard !productId.isEmpty else {return}
@@ -62,7 +61,7 @@ class WorkViewModel {
                 self.fullAddress = value
                 self.saveUserInfo(item: .init(key: key,value: self.fullAddress + cityName))
             },pickCompletion:  {[weak self] options in
-                self?.eventDelegate?.showAlertView(title: model.feel,key: model.article, options: options)
+                self?.eventDelegate?.showAlertView(isAddress:model.bow == .citySelect,title: model.feel,key: model.article, options: options)
             })
         }
         dataSource = [UITableSectionModel.init(cellType: PersonalBasicInfoCell.self,cellDatas: [PersonalBasicInfoCell.Model(items: array)])]

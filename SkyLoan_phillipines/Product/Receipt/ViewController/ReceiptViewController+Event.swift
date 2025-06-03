@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol ReceiptViewEventDelegate {
-    func showAlertView(title: String,key: String,options: [ProductFormItem])
+    func showAlertView(isAddress: Bool,title: String,key: String,options: [ProductFormItem])
     func refreshData()
 }
 
@@ -23,7 +23,7 @@ extension ReceiptViewController: ReceiptViewEventDelegate{
         }
     }
     
-    func showAlertView(title: String,key: String, options: [ProductFormItem]) {
+    func showAlertView(isAddress: Bool,title: String,key: String, options: [ProductFormItem]) {
         var selectedType: String?
         let cellDatas = options.map { item in
             IDCardAuthenTypeCell.Model(title: item.nowadays)

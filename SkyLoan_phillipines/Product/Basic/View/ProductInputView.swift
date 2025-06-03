@@ -69,8 +69,9 @@ extension ProductInputView{
         }
         addSubview(inputTextField)
         inputTextField.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview()
+            make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview().inset(12.ratio())
+            make.trailing.equalToSuperview().inset(44.ratio())
         }
         addSubview(arrowView)
         arrowView.snp.makeConstraints { make in

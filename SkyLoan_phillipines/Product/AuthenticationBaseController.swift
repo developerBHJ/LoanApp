@@ -76,7 +76,8 @@ extension AuthenticationBaseController{
         view.addSubview(listView)
         listView.snp.makeConstraints { make in
             make.top.equalTo(navBar.snp.bottom).offset(12.ratio())
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-getNotchHeight()-56.ratio())
         }
         view.addSubview(nextButton)
         nextButton.snp.makeConstraints { make in

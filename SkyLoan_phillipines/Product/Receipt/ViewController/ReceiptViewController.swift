@@ -58,7 +58,7 @@ extension ReceiptViewController{
         listView.snp.remakeConstraints { make in
             make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-getNotchHeight()-50.ratio())
+            make.bottom.equalToSuperview().offset(-getNotchHeight()-56.ratio())
         }
         listView.register(ReceiptListCell.self, forCellReuseIdentifier: ReceiptListCell.reusableId)
         navBar.title = navTitle

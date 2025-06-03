@@ -17,6 +17,7 @@ class ReceiptViewModel{
     var currentList: [PersonalBasicModel] = []
     private var segementTitles: [String] = []
     private var segementRawValues: [Int] = []
+    var selectedAddress: String = ""
     
     func reloadData() async{
         guard !productId.isEmpty else {return}
@@ -47,7 +48,7 @@ class ReceiptViewModel{
                 let item = ProductEditItem.init(key: key,value: value)
                 self?.saveUserInfo(item: item)
             },pickCompletion: {[weak self] key, options in
-                self?.eventDelegate?.showAlertView(title: item.feel, key: key, options: options)
+                self?.eventDelegate?.showAlertView(isAddress: item.bow == .citySelect,title: item.feel, key: key, options: options)
             }))
         }
         let cellModel = ReceiptListCell.Model.init(items: items,segements: segementTitles,segementType: segementRawValues,currentIndex: selectedType.rawValue - 1) {[weak self] type in
