@@ -22,8 +22,20 @@ class CustomCameraViewController: UIViewController {
     // MARK: - UI组件
     private let captureButton = UIButton()
     private let flashButton = UIButton()
+    private var position: AVCaptureDevice.Position = .back
+    
+    lazy var navBar: CustomNavigationBar = {
+        let view = CustomNavigationBar(frame: .init(x: 0, y: 0, width: kScreenW, height: kNavigationBarH))
+        view.backButton.setImage(UIImage(named: "icon_back")?.withTintColor(.white,renderingMode: .alwaysOriginal), for: .normal)
+        return view
+    }()
     
     var delegate: CustomCameraViewDelegate?
+    
+    convenience init(position: AVCaptureDevice.Position){
+        self.init()
+        self.position = position
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +49,7 @@ class CustomCameraViewController: UIViewController {
         captureSession.sessionPreset = .photo
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,
-                                                   position: .front) else { return }
+                                                   position: self.position) else { return }
         currentCamera = device
         do {
             let input = try AVCaptureDeviceInput(device: device)
@@ -78,6 +90,7 @@ class CustomCameraViewController: UIViewController {
         captureButton.layer.cornerRadius = 35
         captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
         view.addSubview(captureButton)
+        view.addSubview(navBar)
     }
     
     @objc private func captureButtonTapped() {

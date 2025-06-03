@@ -31,6 +31,8 @@ class SelectedImageAlertView: UIView {
         button.setImage(UIImage(named: "icon_product_library"), for: .normal)
         button.addTarget(self, action: #selector(buttonEvent(sender:)), for: .touchUpInside)
         button.tag = 1000
+        button.layer.cornerRadius = 11.ratio()
+        button.layer.masksToBounds = true
         return button
     }()
     
@@ -39,8 +41,12 @@ class SelectedImageAlertView: UIView {
         button.setImage(UIImage(named: "icon_product_library"), for: .normal)
         button.addTarget(self, action: #selector(buttonEvent(sender:)), for: .touchUpInside)
         button.tag = 1001
+        button.layer.cornerRadius = 11.ratio()
+        button.layer.masksToBounds = true
         return button
     }()
+    
+    private var selectedButton: UIButton?
     
     var model: Model = .init(){
         didSet{
@@ -76,6 +82,11 @@ extension SelectedImageAlertView{
     
     @objc func buttonEvent(sender: UIButton){
         model.selectedCompletion?(sender.tag - 1000)
+        self.selectedButton?.layer.borderColor = UIColor.clear.cgColor
+        self.selectedButton?.layer.borderWidth = 0
+        sender.layer.borderColor = UIColor.red.cgColor
+        sender.layer.borderWidth = 2
+        selectedButton = sender
     }
 }
 

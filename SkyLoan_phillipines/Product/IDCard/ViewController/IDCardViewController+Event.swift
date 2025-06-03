@@ -17,10 +17,14 @@ protocol IDCardViewEventDelegate{
 extension IDCardViewController: IDCardViewEventDelegate{
     
     func pickerImage() {
-        if viewModel.detailModel.general == 2{
+        if viewModel.viewType == .face{
             takeImage(type: 1)
         }else{
-            showAlertView()
+            if viewModel.detailModel.general == 2{
+                takeImage(type: 1)
+            }else{
+                showAlertView()
+            }
         }
         TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
     }
@@ -48,19 +52,10 @@ extension IDCardViewController: IDCardViewEventDelegate{
     func setupCamera(){
         Task{
             guard await PermissionHandle.shared.requestCameraAccess() else {return}
-            if viewModel.viewType == .face{
-                let imagePicker = CustomCameraViewController()
-                imagePicker.delegate = self
-                imagePicker.presentFullScreenAndDisablePullToDismiss()
-                present(imagePicker, animated: true)
-            }else{
-                let imagePicker = UIImagePickerController()
-                imagePicker.delegate = self
-                imagePicker.sourceType = .camera
-                imagePicker.cameraDevice = .front
-                imagePicker.allowsEditing = false
-                present(imagePicker, animated: true)
-            }
+            let imagePicker = CustomCameraViewController(position: self.viewModel.viewType == .face ? .front : .back)
+            imagePicker.delegate = self
+            imagePicker.presentFullScreenAndDisablePullToDismiss()
+            present(imagePicker, animated: true)
         }
     }
     
@@ -92,7 +87,8 @@ extension IDCardViewController: IDCardViewEventDelegate{
         paramas["mile"] = ""
         Task{
             let reslt = await viewModel.uploadImage(parama: paramas)
-            if reslt,viewModel.viewType == .idCard{
+            guard reslt else {return}
+            if viewModel.viewType == .idCard{
                 showConfirmInfoAlertView()
             }else {
                 TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
@@ -154,8 +150,11 @@ extension IDCardViewController: IDCardViewEventDelegate{
     
     private func updateConfirmView(){
         self.configConfirmView()
-        self.confirmAlertVC.model = .init(title: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(),confirmCompletion: {
+        self.confirmAlertVC.model = .init(title: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(),autoDismiss: false,closeCompletion: {
+            IQKeyboardManager.shared().isEnabled = true
+        },confirmCompletion: {
             [weak self] in
+            IQKeyboardManager.shared().isEnabled = true
             self?.saveAuthenInfo()
         })
     }
@@ -166,6 +165,7 @@ extension IDCardViewController: UIImagePickerControllerDelegate,UINavigationCont
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let image = info[.originalImage] as? UIImage{
             viewModel.pickedImage = image
+            viewModel.selectedImage = image
         }
         dismiss(animated: true)
         reloadData()
@@ -176,6 +176,7 @@ extension IDCardViewController: CustomCameraViewDelegate{
     func didFinishPickingImage(image: UIImage) {
         dismiss(animated: true)
         viewModel.pickedImage = image
+        viewModel.selectedImage = image
         reloadData()
     }
 }

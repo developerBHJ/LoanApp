@@ -22,7 +22,7 @@ extension String{
     func addUnderline() -> NSAttributedString?{
         guard self.count > 0 else {return nil}
         let attStr = NSMutableAttributedString(string: self)
-        attStr.addAttributes([NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue], range: .init(location: 0, length: self.count))
+        attStr.addAttributes([NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,NSAttributedString.Key.baselineOffset: 6.ratio()], range: .init(location: 0, length: self.count))
         return attStr
     }
     

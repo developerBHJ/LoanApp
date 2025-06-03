@@ -29,4 +29,14 @@ struct HomeProductModel:BaseModel {
     var prospect: String = ""
     // 产品地址
     var somehow: String = ""
+    
+    
+    /// 贷款期限
+    var assistant: String = ""
+    /// 贷款期限的描述文案
+    var cut: String = ""
+    /// 贷款金额
+    var dine: String = ""
+    /// 贷款利率
+    var decidedly: String = ""
 }

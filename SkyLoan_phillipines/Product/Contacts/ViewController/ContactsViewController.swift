@@ -71,6 +71,13 @@ extension ContactsViewController{
         let model =  PersonalBasicHeaderView.Model.init(title: navTitle,imageName: "icon_product_basic",current: viewModel.editData.count,total: viewModel.itemList.count)
         headerView.model = model
     }
+    
+    override func popNavigation(animated: Bool = true) {
+        super.popNavigation(animated: animated)
+        if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
+            navigationController?.popToViewController(rootVC, animated: true)
+        }
+    }
 }
 
 extension ContactsViewController:UITableViewDelegate,UITableViewDataSource{

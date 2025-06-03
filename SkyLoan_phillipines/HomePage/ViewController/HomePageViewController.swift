@@ -59,6 +59,9 @@ class HomePageViewController: UIViewController {
         ADTool.shared.registerIDFA()
         viewModel.eventDelegate = self
         RouteManager.shared.regisetrRoutes()
+        Task{
+           await LoginTool.shared.requestAddressList()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

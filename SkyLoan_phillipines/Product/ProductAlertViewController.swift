@@ -156,7 +156,9 @@ extension ProductAlertViewController{
     }
     
     @objc func nextEvent(){
-        popNavigation()
+        if model.autoDismiss{
+            popNavigation()
+        }
         model.confirmCompletion?()
     }
     
@@ -185,6 +187,7 @@ extension ProductAlertViewController{
         var buttonTitle: String = LocalizationConstants.Product.alertBottomButton
         var buttonImage: String = "icon_product_alert_button"
         var contentHeight: CGFloat = 312.ratio()
+        var autoDismiss: Bool = true
         var isAddressView: Bool = false
         var closeCompletion: (()-> Void)? = nil
         var confirmCompletion: (()-> Void)? = nil

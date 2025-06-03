@@ -167,6 +167,7 @@ extension LoginViewController: BaseViewController{
     }
     
     @objc func sendCode(){
+        self.view.endEditing(true)
         sendButton.startCountdown {}
         viewModel.getVerifyCode()
         TrackMananger.shared.trackGoogleMarket()

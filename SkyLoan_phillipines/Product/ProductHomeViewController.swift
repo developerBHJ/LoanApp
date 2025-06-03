@@ -18,9 +18,6 @@ class ProductHomeViewController: AuthenticationBaseController {
         super.viewDidLoad()
         setupUI()
         viewModel.eventDelegate = self
-        Task{
-           await LoginTool.shared.requestAddressList()
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

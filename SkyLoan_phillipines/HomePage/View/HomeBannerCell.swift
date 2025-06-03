@@ -70,19 +70,20 @@ extension HomeBannerCell: FSPagerViewDelegate,FSPagerViewDataSource{
     
     func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "HomeBannerItemCell", at: index)
-        let url = model.banner[index]
-        cell.imageView?.kf.setImage(with: URL.init(string: url))
+        let model = model.banner[index]
+        cell.configData(data: model)
         return cell
     }
     
     func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
-        model.didSelected?(index)
+        let m = model.banner[index]
+        model.didSelected?(m.productId)
     }
 }
 
 extension HomeBannerCell{
     struct Model {
-        var banner:[String] = []
-        var didSelected: ((Int) -> Void)? = nil
+        var banner:[HomeBannerItemCell.Model] = []
+        var didSelected: ((String) -> Void)? = nil
     }
 }

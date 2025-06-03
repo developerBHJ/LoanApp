@@ -38,11 +38,15 @@ class WorkViewModel {
     }
     
     func saveUserInfo(item: ProductEditItem){
-        guard !item.value.isEmpty else {return}
-        if let index = editData.firstIndex(where: {$0.key == item.key}){
-            editData.replaceSubrange(index ..< index + 1, with: [item])
+        if item.value.isEmpty {
+            guard let index = editData.firstIndex(where: {$0.key == item.key}) else {return}
+            editData.remove(at: index)
         }else{
-            editData.append(item)
+            if let index = editData.firstIndex(where: {$0.key == item.key}){
+                editData.replaceSubrange(index ..< index + 1, with: [item])
+            }else{
+                editData.append(item)
+            }
         }
     }
     

@@ -25,7 +25,8 @@ class IDCardViewModel {
     var detailModel: ProductInfoModel = .init()
     var cardType: VertifyType?
     var resultModel: PsychologicallyModel?
-    
+    var selectedImage: UIImage? = nil
+
     func configData(){
         pickedImage = (viewType == .face) ? UIImage(named: "icon_face_example") : UIImage(named: "icon_product_example")
     }
@@ -52,7 +53,7 @@ class IDCardViewModel {
     }
     
     func uploadImage(parama:[String: Any]) async -> Bool{
-        guard let image = pickedImage else {return false}
+        guard let image = selectedImage else {return false}
         if viewType == .face {
             let reslt: [String: Any]? = await HttpRequestDictionary(UploadService.uploadProfile(image: image, meta: parama),showLoading: true,showMessage: true)
             if let extraordinarily = reslt?["extraordinarily"] as? Int,extraordinarily == 9{

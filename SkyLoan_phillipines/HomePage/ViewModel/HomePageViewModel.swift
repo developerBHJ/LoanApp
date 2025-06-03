@@ -44,19 +44,19 @@ class HomePageViewModel {
     }
     
     func configHeaderSection() -> UITableSectionModel? {
-        guard let banner = infoModel.anybody,let array = banner.winning else {return nil}
-        let items: [String] = array.map { item in
-            item.hair
+        guard let banner = infoModel.romance,let array = banner.winning else {return nil}
+        let items: [HomeBannerItemCell.Model] = array.map { item in
+            HomeBannerItemCell.Model.init(title: item.friends,amount: item.dine,duration:item.assistant, rate:item.decidedly, durationDesc: item.cut,rateDesc: item.cheer,productId: "\(item.confidential)")
         }
-        let model = HomeBannerCell.Model(banner: items) {[weak self] index in
-            self?.eventDelegate?.onPushWebView(url: items[index])
+        let model = HomeBannerCell.Model(banner: items) {[weak self] productId in
+            self?.eventDelegate?.onPushDetailView(productId: productId)
         }
         let sectionMoldel = UITableSectionModel(cellType: HomeBannerCell.self,cellDatas: [model])
         return sectionMoldel
     }
     
     func configKingKongSection() -> UITableSectionModel? {
-        let model = HomeKingKongCell.Model(leftButtonTitle: LocalizationConstants.HomePage.kingKong_left,middleButtonTitle: LocalizationConstants.HomePage.kingKong_middle,rightButtonTitle: LocalizationConstants.HomePage.kingKong_right,leftButtonIcon: "icon_home_shape",middleButtonIcon: "icon_home_shape_middle",rightButtonIcon: "icon_home_shape",hideThumb: false) {[weak self] type in
+        let model = HomeKingKongCell.Model(leftButtonTitle: LocalizationConstants.HomePage.kingKong_left,middleButtonTitle: infoModel.romance?.winning?.first?.night ?? LocalizationConstants.HomePage.kingKong_middle,rightButtonTitle: LocalizationConstants.HomePage.kingKong_right,leftButtonIcon: "icon_home_shape",middleButtonIcon: "icon_home_shape_middle",rightButtonIcon: "icon_home_shape",hideThumb: false) {[weak self] type in
             self?.kingKongEvent(type: type)
         }
         let sectionMoldel = UITableSectionModel(cellType: HomeKingKongCell.self,cellDatas: [model])
