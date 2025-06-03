@@ -1,0 +1,69 @@
+PODS:
+  - Alamofire (5.10.2)
+  - DeviceKit (5.6.0)
+  - FBAEMKit (18.0.0):
+    - FBSDKCoreKit_Basics (= 18.0.0)
+  - FBSDKCoreKit (18.0.0):
+    - FBAEMKit (= 18.0.0)
+    - FBSDKCoreKit_Basics (= 18.0.0)
+  - FBSDKCoreKit_Basics (18.0.0)
+  - FSPagerView (0.8.3)
+  - IQKeyboardManager (6.5.19)
+  - Kingfisher (8.3.2)
+  - MBProgressHUD (1.2.0)
+  - MJRefresh (3.7.9)
+  - Moya (15.0.0):
+    - Moya/Core (= 15.0.0)
+  - Moya/Core (15.0.0):
+    - Alamofire (~> 5.0)
+  - SmartCodable (5.0.3):
+    - SmartCodable/Core (= 5.0.3)
+  - SmartCodable/Core (5.0.3)
+  - SnapKit (5.7.1)
+
+DEPENDENCIES:
+  - DeviceKit
+  - FBSDKCoreKit
+  - FSPagerView (~> 0.8.3)
+  - IQKeyboardManager (~> 6.5.19)
+  - Kingfisher (~> 8.3.2)
+  - MBProgressHUD (~> 1.2.0)
+  - MJRefresh (~> 3.7.9)
+  - Moya (~> 15.0.0)
+  - SmartCodable (~> 5.0.3)
+  - SnapKit (~> 5.7.0)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Alamofire
+    - DeviceKit
+    - FBAEMKit
+    - FBSDKCoreKit
+    - FBSDKCoreKit_Basics
+    - FSPagerView
+    - IQKeyboardManager
+    - Kingfisher
+    - MBProgressHUD
+    - MJRefresh
+    - Moya
+    - SmartCodable
+    - SnapKit
+
+SPEC CHECKSUMS:
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  DeviceKit: 9f2e0b68984a384f864b0f4e40a54bae43636bd8
+  FBAEMKit: e34530df538b8eb8aeb53c35867715ba6c63ef0c
+  FBSDKCoreKit: d3f479a69127acebb1c6aad91c1a33907bcf6c2f
+  FBSDKCoreKit_Basics: 017b6dc2a1862024815a8229e75661e627ac1e29
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
+  IQKeyboardManager: c8665b3396bd0b79402b4c573eac345a31c7d485
+  Kingfisher: 0621d0ac0c78fecb19f6dc5303bde2b52abaf2f5
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
+  Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
+  SmartCodable: 7d06ad219679d77a72d60fc07eb411f7b18bb873
+  SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+
+PODFILE CHECKSUM: 966ba7548b82812805d108aff546adf9dff5dc70
+
+COCOAPODS: 1.16.2

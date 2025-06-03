@@ -1,0 +1,34 @@
+/* 
+  Product.strings
+  SkyLoan_phillipines
+
+  Created by BHJ on 2025/5/22.
+  
+*/
+"product_nav_title" = "Authentication";
+"product_bottomButton_title" = "Apply for a loan";
+"product_head_title" = "Certification to Get \nHigher Quota";
+"product_head_iDCard" = "Upload Front ID Card";
+"product_head_face" = "Face Recognition";
+"product_item_status_finish" = "Finish";
+"product_item_status_unFinish" = "Unfnished";
+
+"product_idCard_bottom_buttonTitle" = "Continue certification";
+"product_idCard_bottom_buttonTitle1" = "OK";
+"product_idCard_tips" = "Click to upload ID card";
+"product_idCard_requireTitle" = "Requirements for photographing lD cards";
+"product_idCard_require" = "When shooting,Make sure the lD card frame is intact,clearand even in brghtness.";
+"product_face_requireTitle" = "Requirements for uploading portraits";
+"product_face_require" = "When shooting, please ensure that the portrait frame is intact, clear, and evenly lit.";
+"product_face_tips" = "Click to perform face recognition";
+"product_idCard_slogn" = "Upload Front ID Card";
+"product_face_slogn" = "Face Recognition";
+"product_alert_bottom_buttonTitle" = "Confirm";
+"product_authen_info_name" = "Aadhaar Name";
+"product_authen_info_number" = "Aadhaar Number";
+"product_authen_info_birthday" = "Birthday";
+"product_authen_result_name" = "Full Name";
+"product_authen_result_number" = "ID NO.";
+"product_authen_result_birthday" = "Date of Birth";
+"product_next_step" = "Next step";
+"product_company_address_placeholder" = "Please Enter The Full Address";

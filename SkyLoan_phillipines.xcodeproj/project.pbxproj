@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		10494B9572EEA125F03FE3A3 /* Pods_SkyLoan_phillipines.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005C11863AD758DC0A0E46F8 /* Pods_SkyLoan_phillipines.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		005C11863AD758DC0A0E46F8 /* Pods_SkyLoan_phillipines.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SkyLoan_phillipines.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52EBAC947818BC7CE444537A /* Pods-SkyLoan_phillipines.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkyLoan_phillipines.debug.xcconfig"; path = "Target Support Files/Pods-SkyLoan_phillipines/Pods-SkyLoan_phillipines.debug.xcconfig"; sourceTree = "<group>"; };
 		C504553A2DD1D626006DA18B /* SkyLoan_phillipines.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkyLoan_phillipines.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF2D0F2F20D93CD3DDC5EAC6 /* Pods-SkyLoan_phillipines.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SkyLoan_phillipines.release.xcconfig"; path = "Target Support Files/Pods-SkyLoan_phillipines/Pods-SkyLoan_phillipines.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,17 +43,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10494B9572EEA125F03FE3A3 /* Pods_SkyLoan_phillipines.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C0A036107B0486FE3BA06C7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				52EBAC947818BC7CE444537A /* Pods-SkyLoan_phillipines.debug.xcconfig */,
+				FF2D0F2F20D93CD3DDC5EAC6 /* Pods-SkyLoan_phillipines.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B0DA78101F715E309D26F05D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				005C11863AD758DC0A0E46F8 /* Pods_SkyLoan_phillipines.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C50455312DD1D625006DA18B = {
 			isa = PBXGroup;
 			children = (
 				C504553C2DD1D626006DA18B /* SkyLoan_phillipines */,
 				C504553B2DD1D626006DA18B /* Products */,
+				2C0A036107B0486FE3BA06C7 /* Pods */,
+				B0DA78101F715E309D26F05D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,9 +92,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C504554D2DD1D627006DA18B /* Build configuration list for PBXNativeTarget "SkyLoan_phillipines" */;
 			buildPhases = (
+				0B1A25AC112F0926637D3D12 /* [CP] Check Pods Manifest.lock */,
 				C50455362DD1D625006DA18B /* Sources */,
 				C50455372DD1D625006DA18B /* Frameworks */,
 				C50455382DD1D625006DA18B /* Resources */,
+				2F7986A16E45B035E01BAF0A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,8 +106,6 @@
 				C504553C2DD1D626006DA18B /* SkyLoan_phillipines */,
 			);
 			name = SkyLoan_phillipines;
-			packageProductDependencies = (
-			);
 			productName = SkyLoan_phillipines;
 			productReference = C504553A2DD1D626006DA18B /* SkyLoan_phillipines.app */;
 			productType = "com.apple.product-type.application";
@@ -127,6 +154,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0B1A25AC112F0926637D3D12 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SkyLoan_phillipines-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2F7986A16E45B035E01BAF0A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SkyLoan_phillipines/Pods-SkyLoan_phillipines-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SkyLoan_phillipines/Pods-SkyLoan_phillipines-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SkyLoan_phillipines/Pods-SkyLoan_phillipines-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C50455362DD1D625006DA18B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,55 +209,95 @@
 /* Begin XCBuildConfiguration section */
 		C504554E2DD1D627006DA18B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52EBAC947818BC7CE444537A /* Pods-SkyLoan_phillipines.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = SkyLoan_phillipines/SkyLoan_phillipines.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8K9YQ3M42C;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SkyLoan_phillipines/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ABC;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used for taking photos and uploading images";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access the address book to achieve contact functionality";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to access your location to provide location-based services";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used for taking photos and uploading images";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This application needs to track user activities to provide a personalized advertising experience";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "HJ.SkyLoan-phillipines";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = SK20250529;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = SK20250529;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		C504554F2DD1D627006DA18B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FF2D0F2F20D93CD3DDC5EAC6 /* Pods-SkyLoan_phillipines.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = SkyLoan_phillipines/SkyLoan_phillipines.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8K9YQ3M42C;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SkyLoan_phillipines/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ABC;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used for taking photos and uploading images";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access the address book to achieve contact functionality";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need to access your location to provide location-based services";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Used for taking photos and uploading images";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This application needs to track user activities to provide a personalized advertising experience";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "HJ.SkyLoan-phillipines";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = SK20250529;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = SK20250529;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

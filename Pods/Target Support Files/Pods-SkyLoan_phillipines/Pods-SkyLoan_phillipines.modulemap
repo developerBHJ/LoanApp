@@ -1,0 +1,6 @@
+framework module Pods_SkyLoan_phillipines {
+  umbrella header "Pods-SkyLoan_phillipines-umbrella.h"
+
+  export *
+  module * { export * }
+}

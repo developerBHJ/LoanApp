@@ -1,0 +1,15 @@
+/* 
+  Order.strings
+  SkyLoan_phillipines
+
+  Created by BHJ on 2025/5/21.
+  
+*/
+"order_nav_title" = "Loan History ";
+"order_empty_title" = "No orders yet";
+"order_empty_content" = "There are currently no order\nrecords available";
+"order_empty_button" = "Go AppLy";
+"order_nonet_title" = "No network available";
+"order_nonet_content" = "Data request failed. Please return and try again.";
+"order_nonet_button" = "Refresh It";
+

@@ -1,0 +1,29 @@
+/* 
+  Localizable.strings
+  QuarantineTheThirdParty
+
+  Created by BHJ on 2025/2/26.
+  
+*/
+
+"login_appName" = "Sky Loan";
+"login_phone_title" = "Cell phone";
+"login_phone_placeHolder" = "Phone Number";
+"login_code_title" = "Verification Code";
+"login_code_placeHolder" = "Enter Verification code";
+"login_sendButton_title" = "Acquire";
+"login_privacy_notice" = "By logging in, you agree to the";
+"login_privacy_tap" = "Privacy Agreement";
+
+"alert_stay_content" = "Binding information can help obtain loans faster \nYou can register information to improve your acquisition speed faster and develop your plan";
+"alert_stay_button_cancel" = "Cancel";
+"alert_stay_button_confirm" = "Confirm";
+
+"alert_exit_content" = "It would be a pity to quit now.Exclusive rights such as priority loanare waiting for you. Come andexperience it!";
+"alert_exit_button_cancel" = "Continue to use";
+"alert_exit_button_confirm" = "Confirm Exit";
+
+"alert_cancellation_content" = "Your departure is our biggest regret.We have been working hard toimprove our services and hope toprovide you with a more convenientand better loan experience.";
+"alert_cancellation_privacy" = "l have read and agree to the above";
+"alert_cancellation_button_cancel" = "Continue to use";
+"alert_cancellation_button_confirm" = "Confirm account cancellation";

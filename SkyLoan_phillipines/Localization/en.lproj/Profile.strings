@@ -1,0 +1,14 @@
+/* 
+  Profile.strings
+  SkyLoan_phillipines
+
+  Created by BHJ on 2025/5/14.
+  
+*/
+"list_order" = "Order";
+"list_service" = "Online Service";
+"list_privacy" = "Privacy Agreement";
+"list_exit" = "Go Out";
+"list_logOff" = "Account Cancellation";
+"profile_version" = "Version";
+
