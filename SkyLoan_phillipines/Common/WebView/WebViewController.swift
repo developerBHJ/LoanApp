@@ -134,6 +134,14 @@ extension WebViewController{
         URLCache.shared.removeAllCachedResponses()
     }
     
+    override func popNavigation(animated: Bool = true) {
+        if webView.canGoBack {
+            webView.goBack()
+        }else{
+            super.popNavigation(animated: animated)
+        }
+    }
+    
     func registerJSMethod() {
         bridge?.registerHandler(JSMethod.uploadRiskLoan.rawValue) { params in
             if let list = params as? [String]{

@@ -74,7 +74,6 @@ extension ContactsViewController{
     }
     
     override func popNavigation(animated: Bool = true) {
-        super.popNavigation(animated: animated)
         if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
             navigationController?.popToViewController(rootVC, animated: true)
         }
