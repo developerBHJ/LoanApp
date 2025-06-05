@@ -63,6 +63,13 @@ class HomePageProductListLargeCell: UIView {
         return view
     }()
     
+    lazy var largeImageView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
     var model: Model = .init(){
         didSet{
             applyModel()
@@ -80,6 +87,7 @@ extension HomePageProductListLargeCell{
         addSubview(contentLabel)
         addSubview(nextButton)
         addSubview(coverImage)
+        addSubview(largeImageView)
         NSLayoutConstraint.activate([
             coverImage.topAnchor.constraint(equalTo: topAnchor),
             coverImage.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -100,6 +108,12 @@ extension HomePageProductListLargeCell{
             contentLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             contentLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             contentLabel.bottomAnchor.constraint(lessThanOrEqualTo: nextButton.topAnchor,constant: -10.ratio()),
+            
+            largeImageView.topAnchor.constraint(equalTo: topAnchor),
+            largeImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            largeImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            largeImageView.heightAnchor.constraint(equalToConstant: 125.ratio()),
+            largeImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
         self.addTarget(action: #selector(buttonEvent))
     }
@@ -108,7 +122,13 @@ extension HomePageProductListLargeCell{
         titleLabel.text = model.title
         contentLabel.text = model.content
         nextButton.setTitle(model.buttonTitle, for: .normal)
-        coverImage.kf.setImage(with: URL(string: model.imageUrl))
+        if !model.imageName.isEmpty{
+            largeImageView.isHidden = false
+            largeImageView.image = UIImage(named: model.imageName)
+        }else{
+            largeImageView.isHidden = true
+            coverImage.kf.setImage(with: URL(string: model.imageUrl))
+        }
         nextButton.layoutImagePositionType(type: .right,spacing: 8.ratio())
     }
     
@@ -125,6 +145,7 @@ extension HomePageProductListLargeCell{
         var buttonTitle: String = ""
         var imageUrl: String = ""
         var linkUrl: String = ""
+        var imageName: String = ""
         var buttonTapClosure: ((String) -> Void)? = nil
     }
 }

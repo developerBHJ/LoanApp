@@ -30,6 +30,8 @@ class ReceiptViewController: AuthenticationBaseController {
     override func popNavigation(animated: Bool = true) {
         if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
             navigationController?.popToViewController(rootVC, animated: true)
+        }else{
+            super.popNavigation(animated: animated)
         }
     }
     

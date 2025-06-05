@@ -39,4 +39,7 @@ struct HomeProductModel:BaseModel {
     var dine: String = ""
     /// 贷款利率
     var decidedly: String = ""
+    
+    var isPageOne: Bool = false
+    var imageName: String = ""
 }

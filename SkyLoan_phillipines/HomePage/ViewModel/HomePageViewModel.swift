@@ -12,6 +12,7 @@ class HomePageViewModel {
     var sections: [UITableSectionModel] = []
     var infoModel: HomePageInfoModel = .init()
     var eventDelegate: HomePageEventDelegate?
+    var pageOneArray: [String] = ["icon_home_product","icon_home_product1","icon_home_product2"]
     
     var needLocation: Bool{
         infoModel.deed == 1
@@ -79,8 +80,15 @@ class HomePageViewModel {
     
     func configProductSection() -> UITableSectionModel?{
         var model: HomePageProductListCell.Model?
-        if let comic = infoModel.comic,let list = comic.winning,!list.isEmpty {
-            model = HomePageProductListCell.Model.init(isLarge: true,items: list,tapClosure: {[weak self] productId in
+        if isLarge,infoModel.murdering == 1{
+            let array = pageOneArray.map { imageName in
+                HomeProductModel.init(confidential:  infoModel.romance?.winning?.first?.confidential ?? 0,isPageOne: true, imageName: imageName)
+            }
+            model = HomePageProductListCell.Model.init(isLarge: isLarge,items: array,tapClosure: {[weak self] productId in
+                self?.eventDelegate?.onPushDetailView(productId: productId)
+            })
+        }else if !isLarge,let comic = infoModel.comic,let list = comic.winning,!list.isEmpty {
+            model = HomePageProductListCell.Model.init(isLarge: isLarge,items: list,tapClosure: {[weak self] productId in
                 self?.eventDelegate?.onPushDetailView(productId: productId)
             })
         }

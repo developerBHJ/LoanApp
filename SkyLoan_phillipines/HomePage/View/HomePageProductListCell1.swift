@@ -90,7 +90,7 @@ extension HomePageProductListCell1{
         subViews = model.items.map({ model in
             let subTitle = "Loan Amount：₱ \(model.eyebrows)"
             let view = HomePageProductListSmellCell.init(frame: .zero, model: .init(id:"\(model.confidential)",title: model.fun,content: subTitle,buttonTitle: model.night,imageUrl: model.pause,linkUrl: model.somehow,buttonTapClosure: {[weak self] id in
-                self?.model.productEvent?(id)
+                self?.model.tapClosure?(id)
             }))
             view.snp.makeConstraints { make in
                 make.width.equalTo(kScreenW - 32.ratio())
