@@ -103,7 +103,7 @@ extension HomePageProductListCell{
         var subViews: [UIView]
         subViews = model.items.map({ model in
             let view = HomePageProductListLargeCell(frame: .zero, model: .init(id:"\(model.confidential)",title: model.fun,content: model.friends,buttonTitle: model.night,imageUrl: model.pause,linkUrl: model.somehow,buttonTapClosure: {[weak self] url in
-                self?.model.tapClosure?(url)
+                self?.model.tapClosure?("\(model.confidential)")
             }))
             view.snp.makeConstraints { make in
                 make.width.equalTo(kScreenW - 70.ratio())

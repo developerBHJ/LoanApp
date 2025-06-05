@@ -79,13 +79,9 @@ class HomePageViewModel {
     
     func configProductSection() -> UITableSectionModel?{
         var model: HomePageProductListCell.Model?
-        if isLarge,let romance = infoModel.romance,let list = romance.winning,!list.isEmpty {
-            model = HomePageProductListCell.Model.init(isLarge: true,items: list,tapClosure: {[weak self] url in
-                self?.eventDelegate?.onPushWebView(url: url)
-            })
-        }else if !isLarge,let comic = infoModel.comic,let list = comic.winning,!list.isEmpty{
-            model = HomePageProductListCell.Model.init(isLarge: false,items: list,tapClosure: {[weak self] id in
-                self?.eventDelegate?.onPushDetailView(productId: id)
+        if let comic = infoModel.comic,let list = comic.winning,!list.isEmpty {
+            model = HomePageProductListCell.Model.init(isLarge: true,items: list,tapClosure: {[weak self] productId in
+                self?.eventDelegate?.onPushDetailView(productId: productId)
             })
         }
         guard let model = model else {return nil}
