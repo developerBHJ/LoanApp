@@ -55,10 +55,8 @@ class IDCardViewModel {
     func uploadImage(parama:[String: Any]) async -> Bool{
         guard let image = selectedImage else {return false}
         if viewType == .face {
-            let reslt: [String: Any]? = await HttpRequestDictionary(UploadService.uploadProfile(image: image, meta: parama),showLoading: true,showMessage: true)
-            if let extraordinarily = reslt?["extraordinarily"] as? Int,extraordinarily == 9{
-                return true
-            }
+            let result: [String: Any]? = await HttpRequestDictionary(UploadService.uploadProfile(image: image, meta: parama),showLoading: true,showMessage: true)
+            return result != nil
         }else if viewType == .idCard{
             let reslt: PsychologicallyModel? = await HttpRequest(UploadService.uploadProfile(image: image, meta: parama),showLoading: true,showMessage: true)
             resultModel = reslt

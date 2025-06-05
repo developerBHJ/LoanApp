@@ -43,7 +43,7 @@ class ProductViewModel {
     
     func getUrl() -> String?{
         guard detailModel.disdainful != 200,!detailModel.somehow.isEmpty else {return nil}
-        let url = detailModel.somehow + "?" + PublicParamas().toURLStrings()
+        let url = detailModel.somehow
         return url
     }
     

@@ -178,7 +178,5 @@ extension IDCardViewController: CustomCameraViewDelegate{
         viewModel.pickedImage = image
         viewModel.selectedImage = image
         reloadData()
-        guard viewModel.viewType == .face else {return}
-        saveAuthenInfo()
     }
 }

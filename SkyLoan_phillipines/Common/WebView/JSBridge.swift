@@ -31,18 +31,14 @@ class JSBridge:NSObject {
     init(webView: WKWebView) {
         self.webView = webView
         super.init()
-        setupConfiguration()
     }
     
     deinit {
-        webView?.configuration.userContentController.removeScriptMessageHandler(forName: "nativeBridge")
-    }
-    
-    private func setupConfiguration(){
-        webView?.configuration.userContentController.add(self, name: "nativeBridge")
+        webView?.configuration.userContentController.removeAllScriptMessageHandlers()
     }
     
     func registerHandler(_ name: String, handler: @escaping (Any) -> Void) {
+        webView?.configuration.userContentController.add(self, name: name)
         messageHandlers[name] = handler
     }
     
@@ -62,10 +58,7 @@ class JSBridge:NSObject {
 
 extension JSBridge: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard message.name == "nativeBridge",
-              let body = message.body as? [String: Any],
-              let method = body["method"] as? String,
-              let handler = messageHandlers[method] else { return }
-        handler(body["params"] ?? NSNull())
+        guard let handler = messageHandlers[message.name] else { return }
+        handler(message.body)
     }
 }

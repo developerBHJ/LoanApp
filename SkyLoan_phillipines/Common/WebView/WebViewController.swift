@@ -221,6 +221,8 @@ extension WebViewController{
             let subject = "APP:\(appName)\nPhone:\(LoginTool.shared.getUserName())"
             mail.setSubject(subject)
             present(mail, animated: true)
+        }else{
+            showCustomAlert(title: "Friendly Tips", message: "Unable to send email, please check the email account settings on your device.")
         }
     }
 }

@@ -79,7 +79,7 @@ extension HomePageViewController: HomePageEventDelegate{
             }
             TrackMananger.shared.trackLoacationInfo(paramas: LocationManager.shared.model.toDictionary() ?? [:])
             TrackMananger.shared.trackDeviceInfo()
-            ProductEntrance.shared.onPushAuthenView(productId: productId)
+            ProductEntrance.shared.apply(productId: productId)
         }
     }
     

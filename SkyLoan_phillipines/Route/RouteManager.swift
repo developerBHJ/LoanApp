@@ -77,6 +77,7 @@ extension RouteManager{
         }
     }
     
+    @MainActor
     func regisetrRoutes(){
         
         RouteManager.shared.register(pattern: "blue://sky.yes.app") {[weak self] url, paramas in
@@ -92,6 +93,7 @@ extension RouteManager{
         }
     }
     
+    @MainActor
     func handleRouter(route: Route,pramas: [String:Any] = [:]){
         switch route {
         case .homePage:

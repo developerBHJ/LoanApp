@@ -66,7 +66,7 @@ class ProductEntrance{
     
     private func getUrl(model: ProductDetailModel) -> String?{
         guard model.disdainful != 200,!model.somehow.isEmpty else {return nil}
-        let url = model.somehow + "?" + PublicParamas().toURLStrings()
+        let url = model.somehow
         return url
     }
     

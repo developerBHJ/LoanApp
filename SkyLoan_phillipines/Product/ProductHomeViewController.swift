@@ -12,6 +12,7 @@ class ProductHomeViewController: AuthenticationBaseController {
     convenience init(productId: String,orderNum: String){
         self.init()
         viewModel.productId = productId
+        viewModel.orderNum = orderNum
     }
     
     override func viewDidLoad() {
