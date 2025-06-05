@@ -60,8 +60,14 @@ class HttpRequest{
                             }else{
                                 continuation.resume(returning: .failure(SLError.tokenExpired(code: nil)))
                             }
-                            if !message.isEmpty,code != 0,showMessage{
-                                SLProgressHUD.showWindowesLoading(message: message,autoHide: true)
+                            if target.path == LoginAPI.getVerifyCode(pay: "").path {
+                                if !message.isEmpty,showMessage{
+                                    SLProgressHUD.showToast(message: message)
+                                }
+                            }else{
+                                if !message.isEmpty,code != 0,showMessage{
+                                    SLProgressHUD.showToast(message: message)
+                                }
                             }
                         }else{
                             continuation.resume(returning: .failure(SLError.tokenExpired(code: nil)))

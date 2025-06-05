@@ -27,3 +27,5 @@
 "alert_cancellation_privacy" = "l have read and agree to the above";
 "alert_cancellation_button_cancel" = "Continue to use";
 "alert_cancellation_button_confirm" = "Confirm account cancellation";
+
+"selecte_city_toast" = "Please select the complete address";

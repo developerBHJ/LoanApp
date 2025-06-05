@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.overrideUserInterfaceStyle = .light
         window?.rootViewController = BaseNavigationController.init(rootViewController: HomePageViewController())
         IQKeyboardManager.shared().isEnabled = true
+        if let window = UIApplication.shared.windows.first {
+            if let rootVC = window.rootViewController as? UINavigationController {
+                rootVC.interactivePopGestureRecognizer?.isEnabled = false
+            }
+        }
         return true
     }
     

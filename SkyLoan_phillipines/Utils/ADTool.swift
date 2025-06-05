@@ -14,16 +14,17 @@ class ADTool {
     static let shared = ADTool()
     let idfvString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
     var idfaString: String = ""
-    var isTracked: Bool = false
+    var trackCount: Int = 0
     
     func registerIDFAAndTrack(){
         Task{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
                 [weak self] in
                 guard let self else {return}
                 self.registerIDFA()
-                guard !self.isTracked else {return}
+                guard self.trackCount < 3 else {return}
                 TrackMananger.shared.trackGoogleMarket()
+                self.trackCount += 1
             })
         }
     }

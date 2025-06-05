@@ -102,5 +102,38 @@ class WifiUtils {
             return .other
         }
     }
+    
+    static func getLocalIPAddress() -> String? {
+        var address: String?
+        var ifaddr: UnsafeMutablePointer<ifaddrs>?
+        
+        guard getifaddrs(&ifaddr) == 0 else { return nil }
+        guard let firstAddr = ifaddr else { return nil }
+        
+        for ptr in sequence(first: firstAddr, next: { $0.pointee.ifa_next }) {
+            let interface = ptr.pointee
+            let addrFamily = interface.ifa_addr.pointee.sa_family
+            // 筛选IPv4且非回环地址
+            if addrFamily == UInt8(AF_INET) {
+                let flags = Int32(interface.ifa_flags)
+                if (flags & (IFF_UP|IFF_RUNNING|IFF_LOOPBACK)) == (IFF_UP|IFF_RUNNING) {
+                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                    getnameinfo(interface.ifa_addr,
+                                socklen_t(interface.ifa_addr.pointee.sa_len),
+                                &hostname,
+                                socklen_t(hostname.count),
+                                nil,
+                                socklen_t(0),
+                                NI_NUMERICHOST)
+                    address = String(cString: hostname)
+                    if address?.hasPrefix("127.") == false {
+                        break
+                    }
+                }
+            }
+        }
+        freeifaddrs(ifaddr)
+        return address
+    }
 }
 

@@ -18,6 +18,7 @@ extension ContactsViewController: ContactsViewEventDelegate{
         Task{
             guard await viewModel.saveBasicInfo() else {return}
             TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            trackContactsInfo()
             TrackMananger.shared.trackRisk(type: .contacts, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()
         }
@@ -42,7 +43,6 @@ extension ContactsViewController: ContactsViewEventDelegate{
     func onPushContactsView() {
         Task{
             if await PermissionHandle.shared.requestContactsAccess() {
-                trackContactsInfo()
                 let picker = CNContactPickerViewController()
                 picker.delegate = self
                 picker.predicateForEnablingContact = NSPredicate(format: "phoneNumbers.@count > 0")
@@ -64,10 +64,9 @@ extension ContactsViewController: ContactsViewEventDelegate{
     
     func trackContactsInfo(){
         Task{
-            guard !viewModel.isTracked,let jsons = await ContactJSONManager.shared.fetchContactsAsJSON() else {return}
+            guard let jsons = await ContactJSONManager.shared.fetchContactsAsJSON() else {return}
             let dic = ["general":"3","howl": jsons]
             TrackMananger.shared.tackContactsInfo(paramas: dic)
-            viewModel.isTracked = true
         }
     }
 }

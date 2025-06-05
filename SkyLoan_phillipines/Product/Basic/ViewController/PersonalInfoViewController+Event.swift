@@ -48,6 +48,7 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
         present(alertVC, animated: true)
     }
     
+    @MainActor
     func showAddressPickerView(key: String) {
         if LoginTool.shared.addressList.isEmpty {
             Task{
@@ -55,13 +56,19 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
             }
         }
         var selectedAddress: String?
-        let selectedView = AddressPickerView.init(frame: .zero, model: .init(valueChanged: { address in
+        var isFullAddress: Bool = false
+        let selectedView = AddressPickerView.init(frame: .zero, model: .init(valueChanged: { address,result in
             selectedAddress = address
+            isFullAddress = result
             HJPrint(selectedAddress)
         }))
         let alertVC = ProductAlertViewController(model: .init(titleImage:"icon_select Address",contentView: selectedView,buttonImage: "icon_product_alert_button_yes",isAddressView: true,confirmCompletion: {
             [weak self] in
-            self?.saveUserInfo(key: key, value: selectedAddress ?? "")
+            if isFullAddress{
+                self?.saveUserInfo(key: key, value: selectedAddress ?? "")
+            }else{
+                SLProgressHUD.showToast(message: LocalizationConstants.Alert.selectedCityToast)
+            }
         }))
         present(alertVC, animated: true)
     }

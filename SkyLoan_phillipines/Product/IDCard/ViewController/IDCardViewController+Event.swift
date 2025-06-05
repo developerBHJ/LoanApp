@@ -17,6 +17,7 @@ protocol IDCardViewEventDelegate{
 extension IDCardViewController: IDCardViewEventDelegate{
     
     func pickerImage() {
+        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
         if viewModel.viewType == .face{
             takeImage(type: 1)
         }else{
@@ -26,7 +27,6 @@ extension IDCardViewController: IDCardViewEventDelegate{
                 showAlertView()
             }
         }
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
     }
     
     func showAlertView(){
@@ -115,7 +115,7 @@ extension IDCardViewController: IDCardViewEventDelegate{
     
     private func showConfirmInfoAlertView(){
         configConfirmView()
-        let alertVC = ProductAlertViewController(model: .init(titleImage: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(),confirmCompletion: {
+        let alertVC = ProductAlertViewController(model: .init(titleImage: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(), autoDismiss:false,confirmCompletion: {
             [weak self] in
             self?.saveAuthenInfo()
         }))
@@ -178,5 +178,7 @@ extension IDCardViewController: CustomCameraViewDelegate{
         viewModel.pickedImage = image
         viewModel.selectedImage = image
         reloadData()
+        guard viewModel.viewType == .face else {return}
+        saveAuthenInfo()
     }
 }

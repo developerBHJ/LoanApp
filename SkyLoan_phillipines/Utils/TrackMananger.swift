@@ -102,10 +102,7 @@ class TrackMananger {
         model.died = "iOS"
         model.hyena = sysVersion
         model.realized = Bundle().bundleIdentifier ?? ""
-        let device = UIDevice.current
-        let batteryLevel = device.batteryLevel
-        let percentage = Int(batteryLevel * 100)
-        model.virulence = .init(intense: percentage,human: device.batteryState == .charging ? 1 : 0)
+        model.virulence = getBatteryLevel()
         model.effect = TrackDeviceModel.getEffectModel()
         model.trace = TrackDeviceModel.getTraceModel()
         model.analyst = TrackDeviceModel.getAnalystModel()
@@ -120,6 +117,14 @@ class TrackMananger {
         }catch{
             return nil
         }
+    }
+    
+    func getBatteryLevel() -> Virulence {
+        var model = Virulence.init()
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        model.intense = Int(UIDevice.current.batteryLevel * 100)
+        model.human = UIDevice.current.batteryState == .charging ? 1: 0
+        return model
     }
 }
 
@@ -160,7 +165,7 @@ extension TrackDeviceModel{
     
     static func getAnalystModel() -> AnalystModel{
         var model = AnalystModel.init()
-        model.government = ""
+        model.government = WifiUtils.getLocalIPAddress() ?? ""
         model.learn = []
         if let currentWifi = WifiUtils.getCurrentWifiInfo(){
             model.expression = .init(nowadays: "",shock: currentWifi.bssid,existence: currentWifi.bssid,stupid: currentWifi.ssid)
@@ -174,10 +179,10 @@ extension TrackDeviceModel{
     static func getDreamyModel() -> DreamyModel{
         var model = DreamyModel.init()
         let totalMemory = ProcessInfo.processInfo.physicalMemory
-        model.winterspoon = Int(TrackDeviceModel.getTotalDiskSpace() ?? 0)
-        model.wrote = Int(TrackDeviceModel.getFreeDiskSpace() ?? 0)
+        model.winterspoon = Int(TrackDeviceModel.getFreeDiskSpace() ?? 0)
+        model.wrote = Int(TrackDeviceModel.getTotalDiskSpace() ?? 0)
         model.attentively = Int(totalMemory)
-        model.instantaneous = Int(TrackDeviceModel.getFreeMemory())
+        model.instantaneous = Int(TrackDeviceModel.systemFreeMemory())
         return model
     }
     
@@ -212,5 +217,17 @@ extension TrackDeviceModel{
         }
         return systemAttributes[.systemFreeSize] as? Int64
     }
+    
+    static func systemFreeMemory() -> UInt64 {
+         var stats = vm_statistics64()
+         var count = UInt32(MemoryLayout.size(ofValue: stats)/MemoryLayout.size(ofValue: stats.free_count))
+         let result = withUnsafeMutablePointer(to: &stats) {
+             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                 host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
+             }
+         }
+         guard result == KERN_SUCCESS else { return 0 }
+         return UInt64(stats.free_count) * UInt64(vm_page_size)
+     }
 }
 

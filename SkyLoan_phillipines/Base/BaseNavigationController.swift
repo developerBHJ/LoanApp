@@ -9,6 +9,7 @@ import UIKit
 class BaseNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
     }
 }
 extension BaseNavigationController: UINavigationControllerDelegate{

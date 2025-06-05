@@ -39,7 +39,7 @@ struct PhysicallyModel:BaseModel {
 }
 struct StrenuousModel:BaseModel {
     /// 证件是否完成 0否1是
-    var late: Int = 0
+    var late: Int = -1
     /// 证件图片地址
     var somehow: String = ""
     /// 已选卡片类型

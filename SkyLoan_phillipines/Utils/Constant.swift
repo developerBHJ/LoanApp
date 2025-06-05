@@ -51,6 +51,8 @@ let deviceUUID = UIDevice.current.identifierForVendor?.uuidString
 let deviceModel = UIDevice.current.model
 /// 系统版本
 let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+/// appName
+let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? ""
 
 let kH5Host = "http://8.220.149.161:9993"
 let kH5Host1 = "https://8.220.149.161:9993"

@@ -64,6 +64,8 @@ class WebViewController: UIViewController,BaseViewController {
         setupUI()
         bridge = JSBridge.init(webView: webView)
         registerJSMethod()
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -216,6 +218,8 @@ extension WebViewController{
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self // 设置代理
             mail.setToRecipients([email]) // 收件人地址
+            let subject = "APP:\(appName)\nPhone:\(LoginTool.shared.getUserName())"
+            mail.setSubject(subject)
             present(mail, animated: true)
         }
     }

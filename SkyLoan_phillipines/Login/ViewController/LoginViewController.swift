@@ -170,9 +170,10 @@ extension LoginViewController: BaseViewController{
         self.view.endEditing(true)
         sendButton.startCountdown {}
         viewModel.getVerifyCode()
-        TrackMananger.shared.trackGoogleMarket()
-        ADTool.shared.isTracked = true
         TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
+        guard ADTool.shared.trackCount < 3 else {return}
+        TrackMananger.shared.trackGoogleMarket()
+        ADTool.shared.trackCount += 1
     }
     
     @objc func loginEvent(){

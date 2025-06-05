@@ -64,6 +64,8 @@ extension LocalizationConstants{
         static var cancellation_cancel = "alert_cancellation_button_cancel"
         @Localized(tableName: LocalizationConstants.localizableFileName)
         static var cancellation_privacy = "alert_cancellation_privacy"
+        @Localized(tableName: LocalizationConstants.localizableFileName)
+        static var selectedCityToast = "selecte_city_toast"
     }
     
     enum HomePage {

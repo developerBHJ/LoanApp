@@ -102,7 +102,7 @@ extension HomePageViewController: HomePageEventDelegate{
                 ProductEntrance.shared.apply(productId: "\(productId)")
             }
         case .contact:
-            RouteManager.shared.routeTo(HtmlPath.contactUs.url)
+            RouteManager.shared.routeTo(HtmlPath.customerService.url)
         }
     }
 }

@@ -141,17 +141,17 @@ extension AddressPickerView: UIPickerViewDelegate,UIPickerViewDataSource{
             selectedProvince = model.dataSource[row]
             leftButton.setTitle(selectedProvince?.nowadays, for: .normal)
             let address = selectedProvince?.nowadays ?? ""
-            model.valueChanged?(address)
+            model.valueChanged?(address,false)
         }else if selectedType == 1,selectedProvince?.trust.count ?? 0 > row{
             selectedCity = selectedProvince?.trust[row]
             middleButton.setTitle(selectedCity?.nowadays, for: .normal)
             let address = (selectedProvince?.nowadays ?? "")  + " " + (selectedCity?.nowadays ?? "")
-            model.valueChanged?(address)
+            model.valueChanged?(address,false)
         }else if selectedCity?.trust.count ?? 0 > row{
             selectedStreet = selectedCity?.trust[row]
             rightButton.setTitle(selectedStreet?.nowadays, for: .normal)
-            let address = (selectedProvince?.nowadays ?? "") + " " + (selectedCity?.nowadays ?? "") + " " +  (selectedStreet?.nowadays ?? "")
-            model.valueChanged?(address)
+            let address = (selectedProvince?.nowadays ?? "") + "-" + (selectedCity?.nowadays ?? "") + "-" +  (selectedStreet?.nowadays ?? "")
+            model.valueChanged?(address,true)
         }
     }
 }
@@ -211,7 +211,7 @@ extension AddressPickerView{
     struct Model {
         var contentHeight = 200.ratio()
         var dataSource: [AddressModel] = LoginTool.shared.addressList
-        var valueChanged: ((String)-> Void)? = nil
+        var valueChanged: ((String,Bool)-> Void)? = nil
     }
 }
 

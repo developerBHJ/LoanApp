@@ -20,8 +20,8 @@ class DatePickerView: UIView {
         self.model = model
         setupUI()
         applyModel()
-        self.pickerView(self.pickerView, didSelectRow: 0, inComponent: 0)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -51,6 +51,8 @@ class DatePickerView: UIView {
     private var selectedMonth: Int = 0
     private var selectedDay: Int = 0
     private var selectedComponent: Int = 0
+    private var months: [Int] = Array(1...12)
+    private var days: [Int] = Array(1...31)
 }
 
 extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
@@ -62,25 +64,9 @@ extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
         if component == 2 {
             return 100
         } else if component == 1 {
-            let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!
-            let currentMoth = Date().currentMonth
-            let currentYear = Date().currentYear
-            if year == currentYear{
-                return currentMoth
-            }
-            return 12
+            return months.count
         } else {
-            let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!
-            let month: Int = pickerView.selectedRow(inComponent: 1) + 1
-            let days: Int = howManyDays(inThisYear: year, withMonth: month)
-            let currentMoth = Date().currentMonth
-            let currentYear = Date().currentYear
-            let currentDay = Date().currentDay
-            if year == currentYear,
-               month == currentMoth{
-                return currentDay
-            }
-            return days
+            return days.count
         }
     }
     
@@ -106,9 +92,27 @@ extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
         let dateString = String(format: "%02ld-%02ld-%02ld", selectedYear, selectedMonth, selectedDay)
         model.valueChanged?(dateString)
         if component == 2 {
+            let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!
+            let currentMonth = Date().currentMonth
+            let currentYear = Date().currentYear
+            if year == currentYear{
+                months = Array(1...currentMonth)
+            }
             pickerView.reloadComponent(1)
         }
         if component == 1 {
+            let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!
+            let month: Int = pickerView.selectedRow(inComponent: 1) + 1
+            let days: Int = howManyDays(inThisYear: year, withMonth: month)
+            let currentMoth = Date().currentMonth
+            let currentYear = Date().currentYear
+            let currentDay = Date().currentDay
+            if year == currentYear,
+               month == currentMoth{
+                self.days = Array(1 ... currentDay)
+            }else{
+                self.days = Array(1 ... days)
+            }
             pickerView.reloadComponent(0)
         }
     }
@@ -136,6 +140,8 @@ extension DatePickerView{
         pickerView.snp.updateConstraints { make in
             make.height.equalTo(model.contentHeight)
         }
+        self.pickerView.reloadAllComponents()
+        self.pickerView(pickerView, didSelectRow: 0, inComponent: 2)
     }
     
     private func howManyDays(inThisYear year: Int, withMonth month: Int) -> Int {

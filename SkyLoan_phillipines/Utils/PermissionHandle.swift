@@ -58,10 +58,17 @@ class PermissionHandle {
                 locationMananger.requestWhenInUseAuthorization()
                 let publisher = locationMananger.publisher(for: \.authorizationStatus)
                 let _ = publisher.sink { status in
-                    if status == .authorizedWhenInUse || status == .authorizedAlways {
+                    switch status {
+                    case .authorizedAlways:
                         continuation.resume(returning: true)
-                    }else{
+                    case .authorizedWhenInUse:
+                        continuation.resume(returning: true)
+                    case .denied:
                         continuation.resume(returning: false)
+                    case .restricted:
+                        continuation.resume(returning: false)
+                    default:
+                        break
                     }
                 }.store(in: &cancellables)
             }

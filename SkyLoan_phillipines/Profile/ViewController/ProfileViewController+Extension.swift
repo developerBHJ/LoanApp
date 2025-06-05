@@ -53,6 +53,7 @@ extension ProfileViewController{
     
     func loginOff(){
         let model = CustomAlertView.Model.init(type: .cancellation,closeCompletion: nil,confirmCompletion: {[weak self] in
+            guard self?.viewModel.loginOffPrivary == true else {return}
             self?.hideCustomAlertView(){
                 Task{
                     if await self?.viewModel.logOff() == true{
@@ -64,6 +65,8 @@ extension ProfileViewController{
             }
         }) {[weak self] in
             self?.hideCustomAlertView()
+        }checkBoxCompletion: {[weak self] selected in
+            self?.viewModel.loginOffPrivary = selected
         }
         showCustomAlert(model: model)
     }

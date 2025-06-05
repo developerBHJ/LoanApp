@@ -10,6 +10,7 @@ import Foundation
 @MainActor
 class ProfileViewModel {
     var dataSource: [ProfileListModel] = []
+    var loginOffPrivary: Bool = false
     
     func configData(){
         dataSource = [
