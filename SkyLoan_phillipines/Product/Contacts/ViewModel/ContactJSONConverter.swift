@@ -25,7 +25,7 @@ struct ContactJSONManager {
                 let name = "\(contact.givenName) \(contact.familyName)"
                 let phones = contact.phoneNumbers.map { $0.value.stringValue }
                 contactDict["nowadays"] = name
-                contactDict["pay"] = phones
+                contactDict["pay"] = phones.joined(separator: ",")
                 contactsArray.append(contactDict)
             }
             let jsonData = try JSONSerialization.data(

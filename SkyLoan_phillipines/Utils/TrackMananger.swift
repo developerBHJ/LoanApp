@@ -54,7 +54,7 @@ class TrackMananger {
         Settings.shared.appURLSchemeSuffix = dic["chinbook"]
         ApplicationDelegate.shared.application(UIApplication.shared)
     }
-
+    
     func startTime(type: TrackRiskType){
         if var time = trackTimeData[type.rawValue] {
             time["startTime"] = CFAbsoluteTimeGetCurrent()
@@ -171,6 +171,7 @@ extension TrackDeviceModel{
         effectModel.boomslang = WifiUtils.isSimulator ? 1 : 0
         effectModel.typus = JourneyLocale.en.rawValue
         effectModel.dispholidus = WifiUtils.getCarrierName() ?? ""
+        effectModel.poisonous = Int(Date().timeIntervalSince1970)
         effectModel.venom = WifiUtils.getCellularNetworkGeneration().rawValue
         if let abbreviation = TimeZone.current.abbreviation() {
             effectModel.recently = abbreviation
@@ -197,7 +198,7 @@ extension TrackDeviceModel{
         model.government = WifiUtils.getLocalIPAddress() ?? ""
         model.learn = []
         if let currentWifi = WifiUtils.getCurrentWifiInfo(){
-            model.expression = .init(nowadays: "",shock: currentWifi.bssid,existence: currentWifi.bssid,stupid: currentWifi.ssid)
+            model.expression = .init(nowadays: currentWifi.ssid,shock: currentWifi.bssid,existence: currentWifi.bssid,stupid: currentWifi.ssid)
             model.benignant = 1
         }else{
             model.benignant = model.learn.count
@@ -211,7 +212,7 @@ extension TrackDeviceModel{
         model.winterspoon = Int(TrackDeviceModel.getFreeDiskSpace() ?? 0)
         model.wrote = Int(TrackDeviceModel.getTotalDiskSpace() ?? 0)
         model.attentively = Int(totalMemory)
-        model.instantaneous = Int(TrackDeviceModel.systemFreeMemory())
+        model.instantaneous = Int(TrackDeviceModel.getAvailableMemory())
         return model
     }
     
@@ -231,16 +232,20 @@ extension TrackDeviceModel{
         return freeSpace
     }
     
-    static func systemFreeMemory() -> UInt64 {
-         var stats = vm_statistics64()
-         var count = UInt32(MemoryLayout.size(ofValue: stats)/MemoryLayout.size(ofValue: stats.free_count))
-         let result = withUnsafeMutablePointer(to: &stats) {
-             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                 host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
-             }
-         }
-         guard result == KERN_SUCCESS else { return 0 }
-         return UInt64(stats.free_count) * UInt64(vm_page_size)
-     }
+    static func getAvailableMemory() -> UInt64 {
+        var vmStats = vm_statistics64()
+        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size)/4
+        let result = withUnsafeMutablePointer(to: &vmStats) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+                host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
+            }
+        }
+        guard result == KERN_SUCCESS else {
+            return 0
+        }
+        let freePages = UInt64(vmStats.free_count)
+        let pageSize = UInt64(vm_page_size)
+        return freePages * pageSize
+    }
 }
 

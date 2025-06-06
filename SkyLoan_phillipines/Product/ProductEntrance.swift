@@ -32,13 +32,26 @@ class ProductEntrance{
         }
         Task{
             guard let model = await getNextStep(productId: self.productId) else {return}
-            if let url = getUrl(model: model),!url.isEmpty{
-                await onPushWebView(url: url)
-            }else if let m = model.brain{
+            if let m = model.brain{
                 nextTitle = m.feel
                 await onPushAuthenView(type: m.fast ?? .iDCard)
             }else if let url = await getNextStepWitdh(orderId: orderId){
                 await onPushWebView(url: url)
+            }
+        }
+    }
+    
+    func onPushProductHomeView(productId: String = ""){
+        if !productId.isEmpty{
+            self.productId = productId
+        }
+        Task{
+            guard let model = await getNextStep(productId: self.productId) else {return}
+            if let url = getUrl(model: model),!url.isEmpty{
+                await onPushWebView(url: url)
+            }else{
+                let homeVC = await ProductHomeViewController(productId: productId, orderNum: orderId)
+                await UIViewController.topMost?.navigationController?.pushViewController(homeVC, animated: true)
             }
         }
     }

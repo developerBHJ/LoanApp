@@ -89,7 +89,7 @@ extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
         selectedYear = (self.currentDateCom.year!) - self.pickerView.selectedRow(inComponent: 2)
         selectedMonth = self.pickerView.selectedRow(inComponent: 1) + 1
         selectedDay = self.pickerView.selectedRow(inComponent: 0) + 1
-        let dateString = String(format: "%02ld-%02ld-%02ld", selectedYear, selectedMonth, selectedDay)
+        let dateString = String(format: "%02ld-%02ld-%02ld", selectedDay, selectedMonth, selectedYear)
         model.valueChanged?(dateString)
         if component == 2 {
             let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!

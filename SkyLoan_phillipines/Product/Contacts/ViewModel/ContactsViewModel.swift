@@ -36,6 +36,7 @@ class ContactsViewModel {
     }
     
     func saveUserInfo(key: String,name: String = "",phone:String = "",relationKey: String = "",relationName: String = ""){
+        guard !key.isEmpty else {return}
         guard (!name.isEmpty || !phone.isEmpty || !relationKey.isEmpty) else {return}
         var item: ContactsEditModel = .init()
         if let m = editData.first(where: {$0.satisfied == key}){

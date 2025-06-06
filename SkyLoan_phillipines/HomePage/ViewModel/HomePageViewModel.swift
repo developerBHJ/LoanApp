@@ -13,6 +13,7 @@ class HomePageViewModel {
     var infoModel: HomePageInfoModel = .init()
     var eventDelegate: HomePageEventDelegate?
     var pageOneArray: [String] = ["icon_home_product","icon_home_product1","icon_home_product2"]
+    var location = LocationModel()
     
     var needLocation: Bool{
         infoModel.deed == 1

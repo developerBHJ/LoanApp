@@ -31,14 +31,15 @@ class LocationManager {
     var model = LocationModel()
     
     @MainActor
-    func startLoaction() async -> Bool{
+    func startLoaction() async -> (String,String){
         return await withCheckedContinuation { continuation in
             SLProgressHUD.showWindowesLoading()
             let locationMananger = CLLocationManager()
             let locationPublisher = locationMananger.publisher(for: \.location).compactMap{$0}
             let _ = locationPublisher.sink {[weak self] location in
-                self?.model.cleared = "\(location.coordinate.latitude)"
-                self?.model.cobra = "\(location.coordinate.longitude)"
+                continuation.resume(returning: ("\(location.coordinate.latitude)","\(location.coordinate.longitude)"))
+//                self?.model.cleared = "\(location.coordinate.latitude)"
+//                self?.model.cobra = "\(location.coordinate.longitude)"
 //                HJPrint("latitude=\(location.coordinate.latitude) longitude=\(location.coordinate.longitude)")
                 let geocoder = CLGeocoder()
                 geocoder.reverseGeocodeLocation(location){[weak self] (placemarks, error) in
@@ -48,9 +49,6 @@ class LocationManager {
                         self?.model.incredible = place.administrativeArea ?? ""
                         self?.model.deadlier = place.locality ?? ""
                         self?.model.jury = place.name ?? ""
-                        continuation.resume(returning: true)
-                    }else{
-                        continuation.resume(returning: false)
                     }
                     SLProgressHUD.hideHUDQueryHUD()
                 }

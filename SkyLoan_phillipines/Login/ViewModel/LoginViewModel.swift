@@ -32,11 +32,10 @@ class LoginViewModel {
         loginEnabled.send(isEnabled)
     }
     
-    func getVerifyCode() {
-        guard !phone.isEmpty else {return }
-        Task{
-            let _: [String:Any]? = await HttpRequestDictionary(LoginAPI.getVerifyCode(pay: phone), showMessage: true)
-        }
+    func getVerifyCode() async -> Bool{
+        guard !phone.isEmpty else {return false}
+        let result: [String:Any]? = await HttpRequestDictionary(LoginAPI.getVerifyCode(pay: phone), showMessage: true)
+        return result != nil
     }
     
     @MainActor

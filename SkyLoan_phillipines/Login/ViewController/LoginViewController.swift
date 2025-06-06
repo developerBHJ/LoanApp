@@ -168,12 +168,15 @@ extension LoginViewController: BaseViewController{
     
     @objc func sendCode(){
         self.view.endEditing(true)
-//        sendButton.startCountdown {}
-        viewModel.getVerifyCode()
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
-        guard ADTool.shared.trackCount < 2 else {return}
-        TrackMananger.shared.trackGoogleMarket()
-        ADTool.shared.trackCount += 1
+        Task{
+            TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
+            if ADTool.shared.trackCount < 2 {
+                TrackMananger.shared.trackGoogleMarket()
+                ADTool.shared.trackCount += 1
+            }
+            guard await viewModel.getVerifyCode() else {return}
+            sendButton.startCountdown {}
+        }
     }
     
     @objc func loginEvent(){

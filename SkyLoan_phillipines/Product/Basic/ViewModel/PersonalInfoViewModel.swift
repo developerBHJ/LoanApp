@@ -35,6 +35,7 @@ class PersonalInfoViewModel {
     }
     
     func saveUserInfo(item: ProductEditItem){
+        guard !item.key.isEmpty else {return}
         if item.value.isEmpty {
             guard let index = editData.firstIndex(where: {$0.key == item.key}) else {return}
             editData.remove(at: index)

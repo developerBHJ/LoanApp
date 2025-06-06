@@ -56,6 +56,8 @@ class HttpRequest{
                             if code == 0{
                                 continuation.resume(returning: .success(data))
                             }else if code == -2{
+                                LoginTool.shared.clearUserData()
+                                LoginTool.shared.showLoginView()
                                 continuation.resume(returning: .failure(SLError.tokenExpired(code: code)))
                             }else{
                                 continuation.resume(returning: .failure(SLError.tokenExpired(code: nil)))

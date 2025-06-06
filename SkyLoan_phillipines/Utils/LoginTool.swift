@@ -26,7 +26,7 @@ class LoginTool {
     }
     
     func showLoginView(completion: (() -> Void)? = nil){
-        guard let topVC = UIViewController.topMost else {return}
+        guard let topVC = UIViewController.topMost, (topVC is LoginViewController) == false else {return}
         let loginVC = LoginViewController()
         loginVC.presentFullScreenAndDisablePullToDismiss()
         topVC.navigationController?.pushViewController(loginVC, animated: true)

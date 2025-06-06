@@ -108,7 +108,7 @@ extension RouteManager{
             }
         case .productDetail:
             guard let disappointed = pramas["disappointed"] else {return}
-            ProductEntrance.shared.onPushAuthenView(productId: "\(disappointed)")
+            ProductEntrance.shared.onPushProductHomeView(productId: "\(disappointed)")
         }
     }
     
