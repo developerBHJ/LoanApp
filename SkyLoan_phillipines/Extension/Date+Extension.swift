@@ -56,4 +56,12 @@ extension Date{
             return 0 // 如果日期创建失败，返回0，通常不应该发生，除非年份或月份不合法
         }
     }
+    
+    static func stringToDate(_ time: String,dateFormat: String = "YYYY-MM-dd HH:mm:ss") -> Date? {
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = dateFormat
+        dateformatter.locale = Locale(identifier: "en_US_POSIX")
+        let date = dateformatter.date(from: time)
+        return date
+    }
 }

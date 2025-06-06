@@ -186,36 +186,20 @@ extension TrackDeviceModel{
         return model
     }
     
-    static func getFreeMemory() -> UInt64 {
-        var vmStats = vm_statistics64()
-        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size)
-        let result = withUnsafeMutablePointer(to: &vmStats) {
-            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
-                host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
-            }
-        }
-        if result == KERN_SUCCESS {
-            let freePages = vmStats.free_count
-            let pageSize = vm_page_size
-            return UInt64(freePages) * UInt64(pageSize)
-        }
-        return 0
-    }
-    
     static func getTotalDiskSpace() -> Int64? {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: paths.last!) else {
-            return nil
+        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()),
+              let space = systemAttributes[.systemSize] as? Int64 else {
+            return 0
         }
-        return systemAttributes[.systemSize] as? Int64
+        return space
     }
     
     static func getFreeDiskSpace() -> Int64? {
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: paths.last!) else {
-            return nil
+        guard let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()),
+              let freeSpace = systemAttributes[.systemFreeSize] as? Int64 else {
+            return 0
         }
-        return systemAttributes[.systemFreeSize] as? Int64
+        return freeSpace
     }
     
     static func systemFreeMemory() -> UInt64 {

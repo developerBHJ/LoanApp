@@ -58,7 +58,7 @@ extension String{
         if !self.contains("?") {
             path = self + "?" + PublicParamas().toURLStrings()
         }else{
-            path = self + PublicParamas().toURLStrings()
+            path = self + "&" + PublicParamas().toURLStrings()
         }
         if let encodedURL = path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),let url = URL(string: encodedURL){
             return url

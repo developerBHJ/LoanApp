@@ -79,6 +79,11 @@ extension ContactsViewController: CNContactPickerDelegate{
         if let firstPhone = contact.phoneNumbers.first {
             phone = firstPhone.value.stringValue
         }
+        if fullName.isEmpty || phone.isEmpty {
+            let message = "The name and phone number of the contact person cannot be empty"
+            SLProgressHUD.showToast(message: message)
+            return
+        }
         viewModel.saveUserInfo(key: viewModel.currentKey,name: fullName,phone: phone)
         self.viewModel.updateEditData()
         self.listView.reloadData()

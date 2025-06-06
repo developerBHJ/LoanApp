@@ -109,7 +109,9 @@ extension IDCardViewController: IDCardViewEventDelegate{
             guard await viewModel.confirmUserInfo(parama: paramas) else {return}
             TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
             TrackMananger.shared.trackRisk(type: .idInfo, productId: viewModel.productId)
-            ProductEntrance.shared.onPushAuthenView()
+            self.hideProductAlertView() {
+                ProductEntrance.shared.onPushAuthenView()
+            }
         }
     }
     
@@ -137,7 +139,11 @@ extension IDCardViewController: IDCardViewEventDelegate{
     }
     
     private func showBirthDayPickerView(){
-        let alertView = DatePickerView.init(frame: .zero,model: .init(valueChanged: {[weak self] date in
+        var birthDay = Date()
+        if let stuff = self.viewModel.resultModel?.stuff{
+            birthDay = Date.stringToDate(stuff,dateFormat: "dd-MM-yyyy") ?? Date()
+        }
+        let alertView = DatePickerView.init(frame: .zero,model: .init(currentDate:birthDay,valueChanged: {[weak self] date in
             self?.viewModel.resultModel?.stuff = date
         }))
         let alertVC = ProductAlertViewController(model: .init(titleImage: "icon_Date_Selection",contentView: alertView, bgImage:"icon_product_alertBg1",contentHeight: 400.ratio(),confirmCompletion: {

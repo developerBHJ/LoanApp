@@ -73,11 +73,6 @@ extension HomeRomaticCell: FSPagerViewDelegate,FSPagerViewDataSource{
         cell.configData(data: item)
         return cell
     }
-    
-    func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
-        let item = model.banner[index]
-        model.didSelected?(item.linkUrl)
-    }
 }
 
 extension HomeRomaticCell{

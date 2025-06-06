@@ -8,6 +8,7 @@
 import UIKit
 import WebKit
 import MessageUI
+import StoreKit
 
 class WebViewController: UIViewController,BaseViewController {
     var url : String?{
@@ -140,7 +141,7 @@ extension WebViewController{
         if webView.canGoBack {
             webView.goBack()
         }else{
-            super.popNavigation(animated: animated)
+            navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -148,7 +149,7 @@ extension WebViewController{
         bridge?.registerHandler(JSMethod.uploadRiskLoan.rawValue) { params in
             if let list = params as? [String]{
                 let productId = list.first ?? ""
-                TrackMananger.shared.trackRisk(type: .authenSelect, productId: productId)
+                TrackMananger.shared.trackRisk(type: .finish, productId: productId)
             }
         }
         
@@ -209,8 +210,10 @@ extension WebViewController:WKUIDelegate,WKNavigationDelegate{
 
 extension WebViewController{
     func openAppStoreRatingPage() {
-        guard let appStoreURL = URL(string: kAppStoreRatingPage) else {return}
-        UIApplication.shared.open(appStoreURL)
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .filter({ $0.activationState == .foregroundActive })
+            .first as? UIWindowScene else {return}
+        SKStoreReviewController.requestReview(in: windowScene)
     }
     
     func sendEmail(email: String) {

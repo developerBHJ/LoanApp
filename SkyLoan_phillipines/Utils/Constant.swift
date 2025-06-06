@@ -58,8 +58,6 @@ let kH5Host = "http://8.220.149.161:9993"
 let kH5Host1 = "https://8.220.149.161:9993"
 let kApiHost = "http://8.220.149.161:9993/skyloanapi"
 let kLocaleLanguage = JourneyLocale.en
-/// 系统评分页面
-let kAppStoreRatingPage = "https://itunes.apple.com/app/id123456789?action=write-review"
 
 enum HtmlPath: String {
     /// 隐私协议

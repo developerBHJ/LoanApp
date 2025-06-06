@@ -16,8 +16,8 @@ class DatePickerView: UIView {
     }
     
     init(frame: CGRect,model: Model = .init()) {
-        super.init(frame: frame)
         self.model = model
+        super.init(frame: frame)
         setupUI()
         applyModel()
     }
@@ -141,7 +141,14 @@ extension DatePickerView{
             make.height.equalTo(model.contentHeight)
         }
         self.pickerView.reloadAllComponents()
-        self.pickerView(pickerView, didSelectRow: 0, inComponent: 2)
+        let dateCom = Calendar.current.dateComponents([.year, .month, .day],   from: self.model.currentDate)
+        let currentYear = dateCom.year ?? 0
+        let currentMonths = dateCom.month ?? 0
+        let currentDay = dateCom.day ?? 0
+        let currentYearIndex = currentDateCom.year! - currentYear
+        self.pickerView.selectRow(currentYearIndex, inComponent: 2, animated: true)
+        self.pickerView.selectRow(currentMonths - 1, inComponent: 1, animated: true)
+        self.pickerView.selectRow(currentDay - 1, inComponent: 0, animated: true)
     }
     
     private func howManyDays(inThisYear year: Int, withMonth month: Int) -> Int {
@@ -153,6 +160,7 @@ extension DatePickerView{
 extension DatePickerView{
     struct Model {
         var contentHeight = 200.ratio()
+        var currentDate: Date = Date()
         var valueChanged: ((String)-> Void)? = nil
     }
 }

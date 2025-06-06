@@ -56,7 +56,6 @@ class HomePageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        ADTool.shared.registerIDFA()
         viewModel.eventDelegate = self
         RouteManager.shared.regisetrRoutes()
         Task{

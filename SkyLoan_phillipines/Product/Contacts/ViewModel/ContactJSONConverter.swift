@@ -22,14 +22,10 @@ struct ContactJSONManager {
         do {
             try store.enumerateContacts(with: request) { contact, _ in
                 var contactDict = [String: Any]()
-                contactDict["firstName"] = contact.givenName
-                contactDict["lastName"] = contact.familyName
-                let phones = contact.phoneNumbers.map {
-                    ["label": $0.label?.replacingOccurrences(of: "_$!<", with: "")
-                        .replacingOccurrences(of: ">!$_", with: "") ?? "other",
-                     "number": $0.value.stringValue]
-                }
-                contactDict["phones"] = phones
+                let name = "\(contact.givenName) \(contact.familyName)"
+                let phones = contact.phoneNumbers.map { $0.value.stringValue }
+                contactDict["nowadays"] = name
+                contactDict["pay"] = phones
                 contactsArray.append(contactDict)
             }
             let jsonData = try JSONSerialization.data(

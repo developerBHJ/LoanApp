@@ -71,9 +71,7 @@ class HomePageViewModel {
                 self?.eventDelegate?.onPushWebView(url: url)
             }
         }
-        let model = HomeRomaticCell.Model.init(banner: items) {[weak self] url in
-            self?.eventDelegate?.onPushWebView(url: url)
-        }
+        let model = HomeRomaticCell.Model.init(banner: items)
         let sectionMoldel = UITableSectionModel(cellType: HomeRomaticCell.self,cellDatas: [model])
         return sectionMoldel
     }

@@ -79,13 +79,22 @@ class PermissionHandle {
         return await withCheckedContinuation { continuation in
             let store = CNContactStore()
             let status = CNContactStore.authorizationStatus(for: .contacts)
-            if status == .authorized{
-                continuation.resume(returning: true)
-            }else{
+            switch status {
+            case .notDetermined:
                 store.requestAccess(for: .contacts){granted, error in
                     let status = CNContactStore.authorizationStatus(for: .contacts)
                     continuation.resume(returning: status == .authorized)
                 }
+            case .restricted:
+                continuation.resume(returning: false)
+            case .denied:
+                continuation.resume(returning: false)
+            case .authorized:
+                continuation.resume(returning: true)
+            case .limited:
+                continuation.resume(returning: false)
+            @unknown default:
+                break
             }
         }
     }

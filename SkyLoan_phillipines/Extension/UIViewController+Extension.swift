@@ -37,6 +37,13 @@ extension UIViewController{
         topVC.dismiss(animated: false,completion: completion)
     }
     
+    func hideProductAlertView(completion: (()-> Void)? = nil){
+        guard let topVC = UIViewController.topMost as? ProductAlertViewController else {
+            return
+        }
+        topVC.dismiss(animated: false,completion: completion)
+    }
+    
    @objc func popNavigation(animated: Bool = true){
         if let _ = self.presentingViewController {
             dismiss(animated: animated)
