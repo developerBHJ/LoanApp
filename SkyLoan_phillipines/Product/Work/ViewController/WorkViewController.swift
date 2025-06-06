@@ -23,7 +23,7 @@ class WorkViewController: AuthenticationBaseController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
+        TrackMananger.shared.startTime(type: .workInfo)
         IQKeyboardManager.shared().isEnabled = true
     }
     

@@ -149,6 +149,8 @@ extension WebViewController{
         bridge?.registerHandler(JSMethod.uploadRiskLoan.rawValue) { params in
             if let list = params as? [String]{
                 let productId = list.first ?? ""
+                TrackMananger.shared.startTime(type: .finish)
+                TrackMananger.shared.endTime(type: .finish)
                 TrackMananger.shared.trackRisk(type: .finish, productId: productId)
             }
         }

@@ -71,11 +71,11 @@ class ProductEntrance{
     }
     
     private func getNextStepWitdh(orderId: String) async -> String?{
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
         guard !orderId.isEmpty else {return nil}
+        TrackMananger.shared.startTime(type: .apply)
         let result: [String: Any]? = await HttpRequestDictionary(OrderAPI.getOrderDetail(counting: orderId),showLoading: true)
         if let url = result?["somehow"] as? String{
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .apply)
             TrackMananger.shared.trackRisk(type: .apply, productId: productId)
             return url
         }

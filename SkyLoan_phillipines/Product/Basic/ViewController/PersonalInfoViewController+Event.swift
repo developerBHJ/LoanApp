@@ -17,7 +17,7 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
     override func nextEvent() {
         Task{
             guard await viewModel.saveBasicInfo() else {return}
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .personal)
             TrackMananger.shared.trackRisk(type: .personal, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()
         }

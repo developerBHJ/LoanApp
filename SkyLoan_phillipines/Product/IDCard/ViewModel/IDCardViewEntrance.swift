@@ -66,7 +66,7 @@ class IDCardViewEntrance {
             completion?(nil)
             return
         }
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
+        TrackMananger.shared.startTime(type: .authenSelect)
         var types: [String] = []
         infoModel.detectives.forEach { list in
             list.forEach { type in
@@ -82,7 +82,7 @@ class IDCardViewEntrance {
         }))
         let alertVC = ProductAlertViewController(model: .init(titleImage: "icon_product_authenType_title",contentView: selectedView,buttonImage: "icon_product_alert_button_yes",confirmCompletion: {[weak self] in
             completion?(VertifyType.init(rawValue: selectedType ?? ""))
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .authenSelect)
             TrackMananger.shared.trackRisk(type: .authenSelect, productId: self?.productId ?? "")
         }))
         topVC.present(alertVC, animated: true)

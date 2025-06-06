@@ -23,7 +23,7 @@ class ReceiptViewController: AuthenticationBaseController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
+        TrackMananger.shared.startTime(type: .receipt)
         IQKeyboardManager.shared().isEnabled = true
     }
     

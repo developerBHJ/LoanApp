@@ -108,8 +108,7 @@ extension RouteManager{
             }
         case .productDetail:
             guard let disappointed = pramas["disappointed"] else {return}
-            let productVC = ProductHomeViewController.init(productId: "\(disappointed)", orderNum: "")
-            UIViewController.topMost?.navigationController?.pushViewController(productVC, animated: true)
+            ProductEntrance.shared.onPushAuthenView(productId: "\(disappointed)")
         }
     }
     

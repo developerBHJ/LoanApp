@@ -17,7 +17,7 @@ extension ReceiptViewController: ReceiptViewEventDelegate{
     override func nextEvent() {
         Task{
             guard await viewModel.saveBasicInfo() else {return}
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .receipt)
             TrackMananger.shared.trackRisk(type: .receipt, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()
         }

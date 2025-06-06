@@ -34,6 +34,7 @@ class TrackMananger {
     var launchTime: TimeInterval = 0
     
     var deviceModel: TrackDeviceModel = .init()
+    var trackTimeData: [Int: [String: TimeInterval]] = [:]
     
     func trackGoogleMarket(){
         Task{
@@ -52,6 +53,28 @@ class TrackMananger {
         Settings.shared.displayName = dic["yuouou"]
         Settings.shared.appURLSchemeSuffix = dic["chinbook"]
         ApplicationDelegate.shared.application(UIApplication.shared)
+    }
+
+    func startTime(type: TrackRiskType){
+        if var time = trackTimeData[type.rawValue] {
+            time["startTime"] = CFAbsoluteTimeGetCurrent()
+            trackTimeData[type.rawValue] = time
+        }else{
+            var time: [String: TimeInterval] = [:]
+            time["startTime"] = CFAbsoluteTimeGetCurrent()
+            trackTimeData[type.rawValue] = time
+        }
+    }
+    
+    func endTime(type: TrackRiskType){
+        if var time = trackTimeData[type.rawValue] {
+            time["endTime"] = CFAbsoluteTimeGetCurrent()
+            trackTimeData[type.rawValue] = time
+        }else{
+            var time: [String: TimeInterval] = [:]
+            time["endTime"] = CFAbsoluteTimeGetCurrent()
+            trackTimeData[type.rawValue] = time
+        }
     }
     
     private func resetTimer(){
@@ -82,6 +105,12 @@ class TrackMananger {
             paramas["shot"] = ADTool.shared.idfaString
             paramas["cobra"] = LocationManager.shared.model.cobra
             paramas["cleared"] = LocationManager.shared.model.cleared
+            var startTime: TimeInterval = 0
+            var endTime: TimeInterval = 0
+            if let dic = trackTimeData[type.rawValue]{
+                startTime = dic["startTime"] ?? 0
+                endTime = dic["endTime"] ?? 0
+            }
             paramas["jackal"] = startTime
             paramas["giftdrawn"] = endTime
             paramas["needle"] = randomUUIDString()

@@ -17,7 +17,7 @@ extension ContactsViewController: ContactsViewEventDelegate{
     override func nextEvent() {
         Task{
             guard await viewModel.saveBasicInfo() else {return}
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .contacts)
             trackContactsInfo()
             TrackMananger.shared.trackRisk(type: .contacts, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()

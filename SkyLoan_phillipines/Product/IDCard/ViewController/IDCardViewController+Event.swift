@@ -17,10 +17,11 @@ protocol IDCardViewEventDelegate{
 extension IDCardViewController: IDCardViewEventDelegate{
     
     func pickerImage() {
-        TrackMananger.shared.startTime = CFAbsoluteTimeGetCurrent()
         if viewModel.viewType == .face{
             takeImage(type: 1)
+            TrackMananger.shared.startTime(type: .face)
         }else{
+            TrackMananger.shared.startTime(type: .idInfo)
             if viewModel.detailModel.general == 2{
                 takeImage(type: 1)
             }else{
@@ -91,7 +92,7 @@ extension IDCardViewController: IDCardViewEventDelegate{
             if viewModel.viewType == .idCard{
                 showConfirmInfoAlertView()
             }else {
-                TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+                TrackMananger.shared.endTime(type: .face)
                 TrackMananger.shared.trackRisk(type: .face, productId: viewModel.productId)
                 ProductEntrance.shared.onPushAuthenView()
             }
@@ -107,7 +108,7 @@ extension IDCardViewController: IDCardViewEventDelegate{
         paramas["less"] = viewModel.cardType?.rawValue ?? ""
         Task{
             guard await viewModel.confirmUserInfo(parama: paramas) else {return}
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .idInfo)
             TrackMananger.shared.trackRisk(type: .idInfo, productId: viewModel.productId)
             self.hideProductAlertView() {
                 ProductEntrance.shared.onPushAuthenView()

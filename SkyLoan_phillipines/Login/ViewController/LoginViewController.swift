@@ -178,7 +178,8 @@ extension LoginViewController: BaseViewController{
     
     @objc func loginEvent(){
         Task{
-            let _ = await viewModel.login()
+            let result = await viewModel.login()
+            guard result else {return}
             TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
             completion?()
             self.navigationController?.popViewController(animated: true)

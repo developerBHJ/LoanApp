@@ -39,6 +39,7 @@ class LocationManager {
             let _ = locationPublisher.sink {[weak self] location in
                 self?.model.cleared = "\(location.coordinate.latitude)"
                 self?.model.cobra = "\(location.coordinate.longitude)"
+//                HJPrint("latitude=\(location.coordinate.latitude) longitude=\(location.coordinate.longitude)")
                 let geocoder = CLGeocoder()
                 geocoder.reverseGeocodeLocation(location){[weak self] (placemarks, error) in
                     if let placemarks = placemarks, let place = placemarks.first{

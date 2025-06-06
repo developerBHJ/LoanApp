@@ -16,7 +16,7 @@ extension WorkViewController: WorkInfoViewEventDelegate{
     override func nextEvent() {
         Task{
             guard await viewModel.saveBasicInfo() else {return}
-            TrackMananger.shared.endTime = CFAbsoluteTimeGetCurrent()
+            TrackMananger.shared.endTime(type: .workInfo)
             TrackMananger.shared.trackRisk(type: .workInfo, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()
         }
