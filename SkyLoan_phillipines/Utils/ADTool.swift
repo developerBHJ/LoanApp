@@ -20,10 +20,13 @@ class ADTool {
         Task{
             let delay = UInt64(1.5) * 1_000_000_000
             try await Task.sleep(nanoseconds: delay)
+            defer{
+                if self.trackCount < 2{
+                    TrackMananger.shared.trackGoogleMarket()
+                    self.trackCount += 1
+                }
+            }
             guard await registerIDFA() else {return}
-            guard self.trackCount < 2 else {return}
-            TrackMananger.shared.trackGoogleMarket()
-            self.trackCount += 1
         }
     }
     

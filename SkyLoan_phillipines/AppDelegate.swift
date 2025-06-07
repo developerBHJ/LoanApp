@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         if let start = launchStartTime {
-            let duration = Date().timeIntervalSince(start)
+            let duration = Int(Date().timeIntervalSince(start))
             TrackMananger.shared.launchTime = duration
         }
     }

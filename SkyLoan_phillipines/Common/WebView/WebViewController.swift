@@ -222,9 +222,10 @@ extension WebViewController{
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self // 设置代理
-            mail.setToRecipients([email]) // 收件人地址
+            let emailPath = email.components(separatedBy: ":").last ?? ""
+            mail.setToRecipients([emailPath]) // 收件人地址
             let subject = "APP:\(appName)\nPhone:\(LoginTool.shared.getUserName())"
-            mail.setSubject(subject)
+            mail.setMessageBody(subject, isHTML: false)
             present(mail, animated: true)
         }else{
             showCustomAlert(title: "Friendly Tips", message: "Unable to send email, please check the email account settings on your device.")

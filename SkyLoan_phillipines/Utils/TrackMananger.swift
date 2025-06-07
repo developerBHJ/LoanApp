@@ -9,6 +9,8 @@ import Foundation
 import FBSDKCoreKit
 import Network
 import DeviceKit
+import MachO
+import CoreLocation
 
 enum TrackRiskType: Int {
     case register = 1
@@ -29,18 +31,19 @@ class TrackMananger {
     var longitude: CGFloat = 0
     /// 经度
     var latitude: CGFloat = 0
-    var startTime: TimeInterval = 0
-    var endTime: TimeInterval = 0
-    var launchTime: TimeInterval = 0
+    var startTime: Int = 0
+    var endTime: Int = 0
+    var launchTime: Int = 0
     
     var deviceModel: TrackDeviceModel = .init()
-    var trackTimeData: [Int: [String: TimeInterval]] = [:]
-    
+    var trackTimeData: [Int: [String: Int]] = [:]
+    var manager = LocationManager()
+    var defaultCoordinate = CLLocationCoordinate2D.init()
+
     func trackGoogleMarket(){
         Task{
             let paramas = ["paralyzing": ADTool.shared.idfvString,"acts":ADTool.shared.idfaString]
             let result: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackGoogleMarket(dic: paramas))
-            resetTimer()
             if let paramas = result?["tclbook"] as? [String: String]{
                 registerFaceBook(dic: paramas)
             }
@@ -57,22 +60,22 @@ class TrackMananger {
     
     func startTime(type: TrackRiskType){
         if var time = trackTimeData[type.rawValue] {
-            time["startTime"] = CFAbsoluteTimeGetCurrent()
+            time["startTime"] = Int(Date().timeIntervalSince1970)
             trackTimeData[type.rawValue] = time
         }else{
-            var time: [String: TimeInterval] = [:]
-            time["startTime"] = CFAbsoluteTimeGetCurrent()
+            var time: [String: Int] = [:]
+            time["startTime"] = Int(Date().timeIntervalSince1970)
             trackTimeData[type.rawValue] = time
         }
     }
     
     func endTime(type: TrackRiskType){
         if var time = trackTimeData[type.rawValue] {
-            time["endTime"] = CFAbsoluteTimeGetCurrent()
+            time["endTime"] = Int(Date().timeIntervalSince1970)
             trackTimeData[type.rawValue] = time
         }else{
-            var time: [String: TimeInterval] = [:]
-            time["endTime"] = CFAbsoluteTimeGetCurrent()
+            var time: [String: Int] = [:]
+            time["endTime"] = Int(Date().timeIntervalSince1970)
             trackTimeData[type.rawValue] = time
         }
     }
@@ -82,9 +85,13 @@ class TrackMananger {
         startTime = 0
     }
     
-    func trackLoacationInfo(paramas: [String: Any]){
-        Task{
-            let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackLocationInfo(dic: paramas))
+    func trackLoacationInfo(){
+        manager = LocationManager()
+        manager.requestLocation() { model in
+            Task{
+                HJPrint("location 90=\(model)")
+                let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackLocationInfo(dic: model.toDictionary() ?? [:]))
+            }
         }
     }
     
@@ -96,33 +103,42 @@ class TrackMananger {
     }
     
     func trackRisk(type: TrackRiskType,productId: String){
-        Task{
+        manager = LocationManager()
+        manager.requestLocation() {[weak self] model in
+            HJPrint("location 106=\(model)")
             var paramas: [String: Any] = [:]
             paramas["awful"] = productId
             paramas["causes"] = type.rawValue
             paramas["ass"] = ""
             paramas["gun"] = ADTool.shared.idfvString
             paramas["shot"] = ADTool.shared.idfaString
-            paramas["cobra"] = LocationManager.shared.model.cobra
-            paramas["cleared"] = LocationManager.shared.model.cleared
-            var startTime: TimeInterval = 0
-            var endTime: TimeInterval = 0
-            if let dic = trackTimeData[type.rawValue]{
-                startTime = dic["startTime"] ?? 0
-                endTime = dic["endTime"] ?? 0
+            paramas["cobra"] = model.cobra
+            paramas["cleared"] = model.cleared
+            var startTime: Int = 0
+            var endTime: Int = 0
+            if let dic = self?.trackTimeData[type.rawValue]{
+                startTime = Int(dic["startTime"] ?? 0)
+                endTime = Int(dic["endTime"] ?? 0)
             }
             paramas["jackal"] = startTime
             paramas["giftdrawn"] = endTime
             paramas["needle"] = randomUUIDString()
+            self?.configDataAndTrackRisk(type: type, paramas: paramas)
+        }
+    }
+    
+    private func configDataAndTrackRisk(type: TrackRiskType,paramas: [String: Any]){
+        Task{
             let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackRiskInfo(dic: paramas))
-            resetTimer()
+            if type == .register{
+                resetTimer()
+            }
         }
     }
     
     func tackContactsInfo(paramas: [String: String]){
         Task{
             let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackContacts(dic: paramas))
-            resetTimer()
         }
     }
     
@@ -208,10 +224,9 @@ extension TrackDeviceModel{
     
     static func getDreamyModel() -> DreamyModel{
         var model = DreamyModel.init()
-        let totalMemory = ProcessInfo.processInfo.physicalMemory
         model.winterspoon = Int(TrackDeviceModel.getFreeDiskSpace() ?? 0)
         model.wrote = Int(TrackDeviceModel.getTotalDiskSpace() ?? 0)
-        model.attentively = Int(totalMemory)
+        model.attentively = Int(TrackDeviceModel.getTotalMemory())
         model.instantaneous = Int(TrackDeviceModel.getAvailableMemory())
         return model
     }
@@ -234,18 +249,35 @@ extension TrackDeviceModel{
     
     static func getAvailableMemory() -> UInt64 {
         var vmStats = vm_statistics64()
-        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size)/4
+        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size) / 4
+        let result = withUnsafeMutablePointer(to: &vmStats) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
+            }
+        }
+        if result == KERN_SUCCESS {
+            let pageSize = vm_kernel_page_size
+            let freeMem = UInt64(vmStats.free_count) * UInt64(pageSize)
+            return freeMem
+        }
+        return 0
+    }
+    
+    static func getTotalMemory() -> UInt64{
+        var vmStats = vm_statistics64()
+        var count = mach_msg_type_number_t(MemoryLayout<vm_statistics64>.size / MemoryLayout<integer_t>.size)
         let result = withUnsafeMutablePointer(to: &vmStats) {
             $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
                 host_statistics64(mach_host_self(), HOST_VM_INFO64, $0, &count)
             }
         }
-        guard result == KERN_SUCCESS else {
-            return 0
+        if result == KERN_SUCCESS {
+            let totalPages = vmStats.free_count + vmStats.active_count +
+            vmStats.inactive_count + vmStats.wire_count
+            let totalMemory = UInt64(totalPages) * UInt64(vm_kernel_page_size)
+            return totalMemory
         }
-        let freePages = UInt64(vmStats.free_count)
-        let pageSize = UInt64(vm_page_size)
-        return freePages * pageSize
+        return 0
     }
 }
 

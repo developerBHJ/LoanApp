@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreLocation
 
 protocol HomePageEventDelegate {
     func onPushWebView(url: String)
@@ -47,9 +46,9 @@ extension HomePageViewController: HomePageEventDelegate{
         Task{
             let result = await chekPermissions()
             guard result else {return}
-            await updateLocation()
-            self.animationType = .noneAnimation
-            self.navigationController?.pushViewController(OrderViewController(), animated: true)
+            updateLocation()
+            animationType = .noneAnimation
+            navigationController?.pushViewController(OrderViewController(), animated: true)
         }
     }
     
@@ -57,7 +56,7 @@ extension HomePageViewController: HomePageEventDelegate{
         Task{
             let result = await chekPermissions()
             guard result else {return}
-            await updateLocation()
+            self.updateLocation()
             RouteManager.shared.routeTo(url)
         }
     }
@@ -66,7 +65,7 @@ extension HomePageViewController: HomePageEventDelegate{
         Task{
             let result = await chekPermissions()
             guard result else {return}
-            await updateLocation()
+            self.updateLocation()
             ProductEntrance.shared.apply(productId: productId)
         }
     }
@@ -79,9 +78,9 @@ extension HomePageViewController: HomePageEventDelegate{
             Task{
                 let result = await chekPermissions()
                 guard result else {return}
-                await updateLocation()
+                updateLocation()
                 self.animationType = .noneAnimation
-                guard let productId = viewModel.infoModel.romance?.winning?.first?.confidential else {return}
+                guard let productId = self.viewModel.infoModel.romance?.winning?.first?.confidential else {return}
                 ProductEntrance.shared.apply(productId: "\(productId)")
             }
         case .contact:
@@ -90,49 +89,11 @@ extension HomePageViewController: HomePageEventDelegate{
     }
     
     @MainActor
-    func updateLocation() async{
-        let location = await startLoaction()
-        self.viewModel.location.cleared = location.0
-        self.viewModel.location.cobra = location.1
-        if viewModel.location.cleared.isEmpty {
-            viewModel.location.cleared = LocationManager.shared.model.cleared
-        }
-        if viewModel.location.cobra.isEmpty {
-            viewModel.location.cobra = LocationManager.shared.model.cobra
-        }
-        if TrackMananger.shared.startTime > 0{
-            TrackMananger.shared.trackRisk(type: .register, productId: "")
-        }
-        TrackMananger.shared.trackLoacationInfo(paramas: viewModel.location.toDictionary() ?? [:])
+    func updateLocation(){
+        TrackMananger.shared.trackLoacationInfo()
         TrackMananger.shared.trackDeviceInfo()
-//        HJPrint("latitude=\(viewModel.location.cleared) longitude=\(viewModel.location.cobra)")
-    }
-    
-    @MainActor
-    func startLoaction() async -> (String,String){
-        return await withCheckedContinuation { continuation in
-            SLProgressHUD.showWindowesLoading()
-            let locationMananger = CLLocationManager()
-            let locationPublisher = locationMananger.publisher(for: \.location).compactMap{$0}
-            let _ = locationPublisher.sink {[weak self] location in
-                continuation.resume(returning: ("\(location.coordinate.latitude)","\(location.coordinate.longitude)"))
-                LocationManager.shared.model.cleared = "\(location.coordinate.latitude)"
-                LocationManager.shared.model.cobra = "\(location.coordinate.longitude)"
-                //                self?.model.cleared = "\(location.coordinate.latitude)"
-                //                self?.model.cobra = "\(location.coordinate.longitude)"
-                //                HJPrint("latitude=\(location.coordinate.latitude) longitude=\(location.coordinate.longitude)")
-                let geocoder = CLGeocoder()
-                geocoder.reverseGeocodeLocation(location){[weak self] (placemarks, error) in
-                    if let placemarks = placemarks, let place = placemarks.first{
-                        self?.viewModel.location.astonishing = place.isoCountryCode ?? ""
-                        self?.viewModel.location.doubt = place.country ?? ""
-                        self?.viewModel.location.incredible = place.administrativeArea ?? ""
-                        self?.viewModel.location.deadlier = place.locality ?? ""
-                        self?.viewModel.location.jury = place.name ?? ""
-                    }
-                    SLProgressHUD.hideHUDQueryHUD()
-                }
-            }
-        }
+        guard TrackMananger.shared.startTime > 0 else {return}
+        TrackMananger.shared.trackRisk(type: .register, productId: "")
     }
 }
+

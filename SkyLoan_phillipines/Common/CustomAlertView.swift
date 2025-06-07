@@ -60,6 +60,7 @@ class CustomAlertView: UIViewController {
         button.setImage(UIImage(named: "icon_alert_checkBox_sel"), for: .selected)
         button.setImage(UIImage(named: "icon_alert_checkBox_sel"), for: .highlighted)
         button.setBackgroundImage(UIImage(named: "icon_alert_chekBox"), for: .normal)
+        button.hitTestEdgeInsets = .init(top: -20, left: -20, bottom: -20, right: -20)
         return button
     }()
     

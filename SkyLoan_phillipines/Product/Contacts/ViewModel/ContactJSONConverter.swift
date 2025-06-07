@@ -24,8 +24,8 @@ struct ContactJSONManager {
                 var contactDict = [String: Any]()
                 let name = "\(contact.givenName) \(contact.familyName)"
                 let phones = contact.phoneNumbers.map { $0.value.stringValue }
-                contactDict["nowadays"] = name
-                contactDict["pay"] = phones.joined(separator: ",")
+                contactDict["nowadays"] = name.replacingOccurrences(of: " ", with: "")
+                contactDict["pay"] = phones.joined(separator: ",").replacingOccurrences(of: " ", with: "")
                 contactsArray.append(contactDict)
             }
             let jsonData = try JSONSerialization.data(

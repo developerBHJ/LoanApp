@@ -14,23 +14,21 @@ enum ImagePositionType: Int{
 }
 
 extension UIButton{
-    private static var hitEdgeInsetsKey = "hitEdgeInsetsKey";
+    private struct AssociatedKeys {
+        static var hitTestEdgeInsets: UIEdgeInsets = .zero
+    }
     
-    var hitEdgeInsets: UIEdgeInsets{
-        set {
-            objc_setAssociatedObject(self,  &UIButton.hitEdgeInsetsKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        }
-        get {
-            if objc_getAssociatedObject(self, &UIButton.hitEdgeInsetsKey) is UIEdgeInsets {
-                return (objc_getAssociatedObject(self, &UIButton.hitEdgeInsetsKey) as? UIEdgeInsets)!;
-            }
-            return UIEdgeInsets.zero;
-        }
+    var hitTestEdgeInsets: UIEdgeInsets {
+        get { objc_getAssociatedObject(self, &AssociatedKeys.hitTestEdgeInsets) as? UIEdgeInsets ?? .zero }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.hitTestEdgeInsets, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
     open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let newRect: CGRect = self.bounds.inset(by: hitEdgeInsets)
-        return newRect.contains(point)
+        guard hitTestEdgeInsets != .zero, isEnabled, !isHidden else {
+            return super.point(inside: point, with: event)
+        }
+        let hitFrame = bounds.inset(by: hitTestEdgeInsets)
+        return hitFrame.contains(point)
     }
 }
 

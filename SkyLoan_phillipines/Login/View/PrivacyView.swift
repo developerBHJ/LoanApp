@@ -21,7 +21,7 @@ class PrivacyView: UIView {
     lazy var checBox: UIButton = {
         let button = UIButton(type: .custom)
         button.addTarget(self, action: #selector(checkBoxEvent(sender:)), for: .touchUpInside)
-        button.hitEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
+        button.hitTestEdgeInsets = .init(top: -10, left: -10, bottom: -10, right: -10)
         return button
     }()
     
