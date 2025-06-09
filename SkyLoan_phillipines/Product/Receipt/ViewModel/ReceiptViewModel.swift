@@ -47,6 +47,10 @@ class ReceiptViewModel{
             return ReceiptListItemView.Model.init(title: item.feel,nameViewModel: .init(key: item.article,content: content,placeHolder: item.feel,isPicker: item.bow != .text,keyBordType: item.clear,options: item.definitely ?? [],valueChanged: {[weak self] key, value in
                 let item = ProductEditItem.init(key: key,value: value)
                 self?.saveUserInfo(item: item)
+            },didEndEditting: { [weak self] key, value in
+                let item = ProductEditItem.init(key: key,value: value)
+                self?.saveUserInfo(item: item)
+                self?.eventDelegate?.refreshData()
             },pickCompletion: {[weak self] key, options in
                 self?.eventDelegate?.showAlertView(isAddress: item.bow == .citySelect,title: item.feel, key: key, options: options)
             }))

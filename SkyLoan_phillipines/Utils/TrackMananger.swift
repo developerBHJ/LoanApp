@@ -31,14 +31,16 @@ class TrackMananger {
     var longitude: CGFloat = 0
     /// 经度
     var latitude: CGFloat = 0
-    var startTime: Int = 0
-    var endTime: Int = 0
     var launchTime: Int = 0
     
     var deviceModel: TrackDeviceModel = .init()
     var trackTimeData: [Int: [String: Int]] = [:]
     var manager = LocationManager()
     var defaultCoordinate = CLLocationCoordinate2D.init()
+    
+    var rigsterStartTime: Int {
+        trackTimeData[TrackRiskType.register.rawValue]?["startTime"] ?? 0
+    }
 
     func trackGoogleMarket(){
         Task{
@@ -81,8 +83,7 @@ class TrackMananger {
     }
     
     private func resetTimer(){
-        endTime = 0
-        startTime = 0
+        trackTimeData.removeValue(forKey: TrackRiskType.register.rawValue)
     }
     
     func trackLoacationInfo(){
@@ -257,7 +258,7 @@ extension TrackDeviceModel{
         }
         if result == KERN_SUCCESS {
             let pageSize = vm_kernel_page_size
-            let freeMem = UInt64(vmStats.free_count) * UInt64(pageSize)
+            let freeMem = UInt64(vmStats.free_count) * UInt64(pageSize) + UInt64(vmStats.inactive_count) * UInt64(pageSize)
             return freeMem
         }
         return 0

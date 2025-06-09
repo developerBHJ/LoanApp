@@ -110,6 +110,7 @@ extension ProductInputView{
 extension ProductInputView: UITextFieldDelegate{
     func textFieldDidEndEditing(_ textField: UITextField) {
         model.valueChanged?(model.key,textField.text ?? "")
+        model.didEndEditting?(model.key,textField.text ?? "")
     }
 }
 
@@ -124,6 +125,7 @@ extension ProductInputView{
         let textColor: UIColor = kColor_black
         let textFont: UIFont = SLFont(size: 13, weight: .black)
         var valueChanged: ((String,String)->Void)? = nil
+        var didEndEditting: ((String,String)->Void)? = nil
         var pickCompletion: ((String,[ProductFormItem])-> Void)? = nil
     }
 }

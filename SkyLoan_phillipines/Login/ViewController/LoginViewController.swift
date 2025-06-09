@@ -169,7 +169,7 @@ extension LoginViewController: BaseViewController{
     @objc func sendCode(){
         self.view.endEditing(true)
         Task{
-            TrackMananger.shared.startTime = Int(Date().timeIntervalSince1970)
+            TrackMananger.shared.startTime(type: .register)
             if ADTool.shared.trackCount < 2 {
                 TrackMananger.shared.trackGoogleMarket()
                 ADTool.shared.trackCount += 1
@@ -183,7 +183,7 @@ extension LoginViewController: BaseViewController{
         Task{
             let result = await viewModel.login()
             guard result else {return}
-            TrackMananger.shared.endTime = Int(Date().timeIntervalSince1970)
+            TrackMananger.shared.endTime(type: .register)
             completion?()
             self.navigationController?.popViewController(animated: true)
         }

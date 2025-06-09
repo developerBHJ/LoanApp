@@ -92,7 +92,7 @@ extension HomePageViewController: HomePageEventDelegate{
     func updateLocation(){
         TrackMananger.shared.trackLoacationInfo()
         TrackMananger.shared.trackDeviceInfo()
-        guard TrackMananger.shared.startTime > 0 else {return}
+        guard TrackMananger.shared.rigsterStartTime > 0 else {return}
         TrackMananger.shared.trackRisk(type: .register, productId: "")
     }
 }

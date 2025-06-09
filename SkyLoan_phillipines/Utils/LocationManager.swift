@@ -69,16 +69,16 @@ class LocationManager: NSObject {
     }
     
     private func setDefaultLocation(){
-        locationModel.cleared = "\(TrackMananger.shared.defaultCoordinate.longitude)"
-        locationModel.cobra = "\(TrackMananger.shared.defaultCoordinate.latitude)"
+        locationModel.cleared = "\(TrackMananger.shared.defaultCoordinate.latitude)"
+        locationModel.cobra = "\(TrackMananger.shared.defaultCoordinate.longitude)"
     }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        locationModel.cleared = "\(location.coordinate.longitude)"
-        locationModel.cobra = "\(location.coordinate.latitude)"
+        locationModel.cleared = "\(location.coordinate.latitude)"
+        locationModel.cobra = "\(location.coordinate.longitude)"
         TrackMananger.shared.defaultCoordinate = location.coordinate
         reverseGeocodeLocation(coordinate: location.coordinate)
     }
