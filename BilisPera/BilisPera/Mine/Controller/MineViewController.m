@@ -39,7 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
         _tableView.estimatedSectionHeaderHeight = 0;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     }
     return _tableView;
 }

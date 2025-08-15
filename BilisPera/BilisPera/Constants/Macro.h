@@ -26,6 +26,8 @@
 // 导航栏高度
 #define kNavigationBarHeight (44 + kStatusBarHeight)
 
+#define kCustomTabBarH (kRatio(75) + kRatio(10) + kSafeAreaBottomHeight)
+
 #define kWeakSelf __weak typeof(self) weakSelf = self;
 #define kUserDefaultSet(obj,key) [[NSUserDefaults standardUserDefaults]setObject:obj forKey:key]
 #define kUserDefaultRmove(key) [[NSUserDefaults standardUserDefaults]removeObjectForKey:key]
@@ -56,9 +58,10 @@
 
 #define kH5Path(path) [NSString stringWithFormat:@"%@%@",kH5Host,path]
 
-
 typedef void(^simpleCompletion)(void);
 typedef void(^simpleBoolCompletion)(BOOL);
+typedef void(^simpleStringCompletion)(NSString *);
+typedef void(^simpleIntCompletion)(NSInteger);
 
 static NSString *tokenKey = @"token";
 static NSString *userNameKey = @"userName";

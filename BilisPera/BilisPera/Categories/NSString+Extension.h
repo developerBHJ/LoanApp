@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSURL *)getHtmlUrl;
 - (NSAttributedString *)addUnderline;
 - (NSString *)safePhoneNumberWithLength:(NSInteger)lg;
+- (CGFloat)getWidthWithFont:(UIFont *)font height:(CGFloat)height;
 
 @end
 

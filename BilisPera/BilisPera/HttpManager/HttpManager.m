@@ -18,9 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared {
     static HttpManager *_shared = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken,
-                  ^{
-        _shared = [[self alloc] init];
+    dispatch_once(&onceToken,^{
+        _shared = [[HttpManager alloc] init];
     });
     return _shared;
 }

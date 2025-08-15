@@ -218,7 +218,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textColor = kColor_FF9C00;
-        _titleLabel.font = [UIFont systemFontOfSize:kRatio(26) weight:UIFontWeightSemibold];
+        _titleLabel.font = kFontSemibold(26);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.numberOfLines = 0;
     }

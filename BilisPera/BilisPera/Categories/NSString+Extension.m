@@ -55,6 +55,19 @@
     return [self stringByReplacingCharactersInRange:NSMakeRange(3, lg) withString:replacement];
 }
 
+- (CGFloat)getWidthWithFont:(UIFont *)font height:(CGFloat)height {
+    if (self.length == 0) {
+        return 0;
+    }
+    UILabel *label = [[UILabel alloc] init];
+    label.frame = CGRectMake(0, 0, CGFLOAT_MAX, height);
+    label.font = font;
+    NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:self
+                                attributes:@{NSFontAttributeName: font}];
+    label.attributedText = attStr;
+    [label sizeToFit];
+    return label.frame.size.width;
+}
 
 
 

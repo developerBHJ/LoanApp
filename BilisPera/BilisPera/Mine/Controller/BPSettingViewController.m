@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) BPSettingHeaderView *headerView;
 @property (nonatomic, strong) BPSettingViewModel *viewModel;
 @property (nonatomic, strong) BPSettingFooterView *footerView;
+@property (nonatomic, assign) BOOL isAgree;
 
 @end
 
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.navigationItem.title = @"settings";
+    self.isAgree = NO;
     [self configViewModel];
     [self configUI];
 }
@@ -41,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
         _tableView.estimatedSectionHeaderHeight = 0;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
         [_tableView setScrollEnabled:NO];
     }
     return _tableView;
@@ -136,7 +137,13 @@ NS_ASSUME_NONNULL_BEGIN
     BPAlertViewModel *model = [[BPAlertViewModel alloc] initWith:BPAlertViewTypeExit];
     kWeakSelf;
     model.confirmCompletion = ^{
-        [weakSelf dismisCustomAlertView:nil];
+        [weakSelf dismisCustomAlertView:^{
+            [weakSelf.viewModel logOut:^(BOOL success) {
+                if (success) {
+                    [weakSelf logOutSuccess];
+                }
+            }];
+        }];
     };
     model.cancelCompletion = ^{
         [weakSelf dismisCustomAlertView:nil];
@@ -148,17 +155,28 @@ NS_ASSUME_NONNULL_BEGIN
     BPAlertViewModel *model = [[BPAlertViewModel alloc] initWith:BPAlertViewTypeCancellation];
     kWeakSelf;
     model.confirmCompletion = ^{
-        [weakSelf dismisCustomAlertView:nil];
+        if (weakSelf.isAgree) {
+            [weakSelf dismisCustomAlertView:^{
+                [weakSelf.viewModel logOff:^(BOOL success) {
+                    [weakSelf logOutSuccess];
+                }];
+            }];
+        }
     };
     model.cancelCompletion = ^{
         [weakSelf dismisCustomAlertView:nil];
     };
     model.selectedCompletion = ^(BOOL selected) {
-        
+        weakSelf.isAgree = selected;
     };
     [self  showCustomAlertViewWith:model];
 }
 
+-(void)logOutSuccess{
+    [self popNavigation:YES];
+    [[LoginTools shared] cleanUserData];
+    [[Routes shared] changeRootView];
+}
 
 @end
 

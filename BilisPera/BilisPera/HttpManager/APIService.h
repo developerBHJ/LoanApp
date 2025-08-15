@@ -18,6 +18,11 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     GetVerfyCode = 0,
     LoginAndRegister = 1,
     GoogleMarket,
+    UserLogOut,
+    UserLogOff,
+    HomePageData,
+    Apply,
+    ProductDetail,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {

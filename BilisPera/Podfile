@@ -10,6 +10,7 @@ target 'BilisPera' do
   pod 'MJExtension'
   pod 'DeviceKit'
   pod 'MBProgressHUD','~> 1.2.0'
+  pod 'SDCycleScrollView'
 
 end
 

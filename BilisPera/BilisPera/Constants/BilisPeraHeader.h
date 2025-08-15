@@ -13,6 +13,7 @@
 #import "MJRefresh/MJRefresh.h"
 #import "DeviceKit/DeviceKit-Swift.h"
 #import "Masonry/Masonry.h"
+#import "SDCycleScrollView/SDCycleScrollView.h"
 
 #import "BaseViewController.h"
 #import "UIColor+_Extension.h"
@@ -37,7 +38,8 @@
 #import "BaseTableViewCell.h"
 #import "UIStackView+Extension.h"
 #import "HtmlPath.h"
-
+#import "ProductHandle.h"
+#import "UIImage+Extension.h"
 
 
 

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
     static LoginTools *_shared = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _shared = [[self alloc] init];
+        _shared = [[LoginTools alloc] init];
     });
     return _shared;
 }

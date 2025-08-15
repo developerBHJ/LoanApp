@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger,BPTrackRiskType) {
 
 @property (nonatomic, assign, readonly) NSInteger registerStartTime;
 
+-(void)configData;
 // 保存埋点时间
 -(void)saveTrackTime:(BPTrackRiskType)type start:(BOOL)start;
 // 获取埋点时间

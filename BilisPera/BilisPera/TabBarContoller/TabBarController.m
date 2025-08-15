@@ -26,7 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)configTabBar{
     [self setValue:[CustomTabBar new] forKey:@"tabBar"];
-    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColor.whiteColor,NSFontAttributeName: [UIFont systemFontOfSize:14 weight: UIFontWeightRegular]} forState:UIControlStateNormal];
+    [[UITabBar appearance] setShadowImage:nil];
+    [[UITabBar appearance] setBackgroundImage:nil];
+    [UITabBarItem.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName: UIColor.whiteColor,NSFontAttributeName: [UIFont systemFontOfSize:14 weight: UIFontWeightMedium]} forState:UIControlStateNormal];
 }
 
 - (void)addChildViewController:(UIViewController *)childController title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selectedImage{
@@ -37,6 +39,13 @@ NS_ASSUME_NONNULL_BEGIN
     nav.tabBarItem.imageInsets = UIEdgeInsetsMake(-10, 0, 0, 0);
     nav.tabBarItem.titlePositionAdjustment = UIOffsetMake(0, -15);
     [self addChildViewController:nav];
+}
+
+- (void)viewDidLayoutSubviews{
+    [super viewDidLayoutSubviews];
+    CGRect rect = self.tabBar.frame;
+    rect = CGRectMake(kRatio(16), kScreenH - kCustomTabBarH, kScreenW - kRatio(32), kRatio(75));
+    self.tabBar.frame = rect;
 }
 
 @end

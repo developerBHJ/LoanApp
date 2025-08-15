@@ -11,6 +11,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation BaseModel
 
+- (void)setValue:(nullable id)value forUndefinedKey:(NSString *)key{
+    
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

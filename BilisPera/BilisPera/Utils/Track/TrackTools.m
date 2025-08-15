@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,
            strong) NSMutableDictionary<NSNumber *,NSMutableDictionary<NSString *,NSNumber *> *> *trackTime;
 @property (nonatomic, assign) CLLocationCoordinate2D defaultCoordinate;
-@property (nonatomic, assign) TrackDeviceModel *deviceModel;
+@property (nonatomic, strong) TrackDeviceModel *deviceModel;
 
 @end
 
@@ -27,21 +27,16 @@ NS_ASSUME_NONNULL_BEGIN
     static TrackTools *_shared = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _shared = [[self alloc] init];
+        _shared = [[TrackTools alloc] init];
     });
     return _shared;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        self.defaultCoordinate = CLLocationCoordinate2DMake(0, 0);
-        self.latitude = 0;
-        self.longitude = 0;
-        self.deviceModel = [[TrackDeviceModel alloc] init];
-    }
-    return self;
+-(void)configData{
+    self.defaultCoordinate = CLLocationCoordinate2DMake(0, 0);
+    self.latitude = 0;
+    self.longitude = 0;
+    self.deviceModel = [[TrackDeviceModel alloc] init];
 }
 
 -(NSInteger)registerStartTime{

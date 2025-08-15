@@ -23,6 +23,21 @@ NS_ASSUME_NONNULL_BEGIN
         case GoogleMarket:
             url = @"/sudden/airand";
             break;
+        case UserLogOut:
+            url = @"/sudden/chance";
+            break;
+        case UserLogOff:
+            url = @"/sudden/chance";
+            break;
+        case HomePageData:
+            url = @"/sudden/agreedto";
+            break;
+        case Apply:
+            url = @"/sudden/oneday";
+            break;
+        case ProductDetail:
+            url = @"/sudden/emptystomachone";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }
@@ -30,13 +45,16 @@ NS_ASSUME_NONNULL_BEGIN
 +(NetRequestType)getRequestType:(ServiceAPI)service{
     NetRequestType type = NetRequestType_POST;
     switch (service) {
-        case GetVerfyCode:
-            type = NetRequestType_POST;
+        case UserLogOff:
+            type = NetRequestType_GET;
             break;
-        case LoginAndRegister:
-            type = NetRequestType_POST;
+        case UserLogOut:
+            type = NetRequestType_GET;
             break;
-        case GoogleMarket:
+        case HomePageData:
+            type = NetRequestType_GET;
+            break;
+        default:
             type = NetRequestType_POST;
             break;
     }

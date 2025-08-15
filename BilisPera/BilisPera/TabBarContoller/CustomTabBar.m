@@ -34,11 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    CGRect rect = self.frame;
-    rect.origin.y = kScreenH - kRatio(75) - kSafeAreaBottomHeight;
-    rect.origin.x = kRatio(16);
-    rect.size = CGSizeMake(kScreenW - kRatio(32), kRatio(75));
-    self.frame = rect;
     for (UIView *view in self.subviews) {
         if ([view  isKindOfClass:[NSClassFromString(@"UITabBarButton") class]]) {
             for (UIView *subView in view.subviews) {

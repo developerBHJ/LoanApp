@@ -23,7 +23,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self changeRootViewController:![[LoginTools shared] isFirstLuanch]];
     [self configLanguage];
-    
+    [[TrackTools shared] configData];
+    [[UITabBar appearance] setTranslucent:NO];
     [self.window makeKeyAndVisible];
     return YES;
 }
