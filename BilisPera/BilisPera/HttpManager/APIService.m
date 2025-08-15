@@ -38,6 +38,9 @@ NS_ASSUME_NONNULL_BEGIN
         case ProductDetail:
             url = @"/sudden/emptystomachone";
             break;
+        case OrderList:
+            url = @"/sudden/three";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }

@@ -8,7 +8,7 @@
 #import "OrderListViewController.h"
 #import "OrderListViewModel.h"
 #import "OrderListHeaderView.h"
-
+#import "BPEmptyView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) OrderListViewModel *viewModel;
 @property (nonatomic, strong) OrderListHeaderView *headrView;
+@property (nonatomic, assign) NSInteger currentType;
+@property (nonatomic, strong) BPEmptyView *emptyView;
+@property (nonatomic, assign) BOOL isNotReachable;
 
 @end
 
@@ -25,8 +28,15 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidLoad{
     [super viewDidLoad];
     self.navigationItem.title = @"Order";
+    self.currentType = 4;
     [self configViewModel];
     [self configUI];
+    self.isNotReachable = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 -(void)configViewModel{
@@ -50,20 +60,77 @@ NS_ASSUME_NONNULL_BEGIN
         make.leading.trailing.equalTo(self.view);
         make.bottom.equalTo(self.view).inset(kCustomTabBarH - kTabBarHeight);
     }];
+    [self.view addSubview:self.emptyView];
+    [self.emptyView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.headrView.mas_bottom);
+        make.leading.trailing.equalTo(self.view);
+        make.bottom.equalTo(self.view).inset(kCustomTabBarH - kTabBarHeight);
+    }];
+    kWeakSelf;
+    self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+        [weakSelf reloadData];
+    }];
     OrderListSegementViewItemModel *item1 = [[OrderListSegementViewItemModel alloc] initWith:BPOrderStatusAll completion:^(NSInteger type) {
-        
+        weakSelf.currentType = type;
+        [weakSelf reloadData];
     }];
     OrderListSegementViewItemModel *item2 = [[OrderListSegementViewItemModel alloc] initWith:BPOrderStatusApplying completion:^(NSInteger type) {
-        
+        weakSelf.currentType = type;
+        [weakSelf reloadData];
     }];
     OrderListSegementViewItemModel *item3 = [[OrderListSegementViewItemModel alloc] initWith:BPOrderStatusRepayment completion:^(NSInteger type) {
-        
+        weakSelf.currentType = type;
+        [weakSelf reloadData];
     }];
     OrderListSegementViewItemModel *item4 = [[OrderListSegementViewItemModel alloc] initWith:BPOrderStatusFinish completion:^(NSInteger type) {
-        
+        weakSelf.currentType = type;
+        [weakSelf reloadData];
     }];
     NSArray *items = @[item1,item2,item3,item4];
     self.headrView.items = items;
+}
+
+-(void)reloadData{
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager manager];
+    if (manager.networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
+        [self updateEmptyView:1];
+        self.isNotReachable = YES;
+    }else{
+        kWeakSelf;
+        [self.viewModel reloadDataWith:self.currentType completion:^{
+            [weakSelf.tableView.mj_header endRefreshing];
+            [weakSelf.tableView reloadData];
+            if (weakSelf.viewModel.dataSource.count == 0) {
+                [weakSelf updateEmptyView:0];
+            }else{
+                [weakSelf.tableView setHidden:NO];
+                [weakSelf.emptyView setHidden:YES];
+            }
+        }];
+        self.isNotReachable = NO;
+    }
+}
+
+-(void)refreshEvent{
+    if (self.isNotReachable) {
+        [self reloadData];
+    }else{
+        NSString *url = [NSString stringWithFormat:@"%@%@?productId=%@",
+                         kScheme,
+                         BPRoute.productDetail,
+                         @""];
+        [[Routes shared] routeTo:url];
+    }
+}
+
+-(void)updateEmptyView:(NSInteger)type{
+    if (type == 0) {// 无数据
+        [self.emptyView updateImage:@"icon_order_empty" message:@"No orders yet." buttonTitle:@"GO Apply"];
+    }else{// 无网络
+        [self.emptyView updateImage:@"icon_net_error" message:@"Network connection failed\nPlease try again" buttonTitle:@"Try Again"];
+    }
+    [self.tableView setHidden:YES];
+    [self.emptyView setHidden:NO];
 }
 
 - (UITableView *)tableView{
@@ -91,6 +158,17 @@ NS_ASSUME_NONNULL_BEGIN
     return _headrView;
 }
 
+- (BPEmptyView *)emptyView{
+    if (!_emptyView) {
+        kWeakSelf;
+        _emptyView = [[BPEmptyView alloc] initWithFrame:CGRectZero emptyImage:@"" message:@"" buttonTitle:@"" completion:^{
+            [weakSelf refreshEvent];
+        }];
+    }
+    [_emptyView setHidden:YES];;
+    return _emptyView;
+}
+
 // MARK: - UITableViewDelegate,UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.viewModel.dataSource.count;
@@ -107,7 +185,6 @@ NS_ASSUME_NONNULL_BEGIN
     [cell configData:setionModel.cellData[indexPath.row]];
     return cell;
 }
-
 
 @end
 

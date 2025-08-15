@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     HomePageData,
     Apply,
     ProductDetail,
+    OrderList,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {

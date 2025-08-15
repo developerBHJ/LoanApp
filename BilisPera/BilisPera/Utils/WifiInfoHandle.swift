@@ -157,5 +157,9 @@ class WifiInfoHandle: NSObject{
         freeifaddrs(ifaddr)
         return address
     }
+    
+   @objc static func isReachable() -> Bool{
+        return WifiInfoHandle .getCellularNetworkGeneration() != NetworkType.other.rawValue;
+    }
 }
 

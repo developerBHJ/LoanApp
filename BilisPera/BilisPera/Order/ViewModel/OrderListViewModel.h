@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OrderListViewModel : NSObject
 
 @property (nonatomic, strong) NSArray *dataSource;
+-(void)reloadDataWith:(NSInteger)type completion:(simpleCompletion)completion;
 
 @end
 

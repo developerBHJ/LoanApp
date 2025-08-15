@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger,OrderListType) {
 @property (nonatomic, strong) NSString *dateStr;
 @property (nonatomic, strong) NSString *buttonTitle;
 @property (nonatomic, strong) NSString *remind;
+@property (nonatomic, strong) NSString *linkUrl;
 @property (nonatomic, assign) OrderListType type;
 @property (nonatomic, strong,readonly) NSString *typeImage;
 @property (nonatomic, strong,readonly) UIColor *typeBackColor;

@@ -1,6 +1,7 @@
 ${PODS_ROOT}/Target Support Files/Pods-BilisPera/Pods-BilisPera-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/AFNetwork/AFNetwork.framework
 ${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework
+${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework
 ${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework
 ${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework
 ${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework

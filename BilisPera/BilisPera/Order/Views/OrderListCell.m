@@ -173,6 +173,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.statusButton setBackgroundImage:kGetImage(self.model.typeImage) forState:UIControlStateNormal];
     UIImage *loanImage = [[UIImage imageNamed:@"icon_home_loan_bg"] imageWithTintColor:self.model.typeBackColor];
     [self.loanButton setBackgroundImage:loanImage forState:UIControlStateNormal];
+    [self.loanButton setTitle:self.model.buttonTitle forState:UIControlStateNormal];
     [self.remindButton setHidden: self.model.type != OrderListTypeDelay  && self.model.type != OrderListTypeRepayment];
     [self.loanButton setHidden: self.model.type == OrderListTypeReview  || self.model.type == OrderListTypeFinish];
     CGFloat buttonWidth = [self.model.buttonTitle getWidthWithFont:kFont(16) height:kRatio(20)] + kRatio(13);

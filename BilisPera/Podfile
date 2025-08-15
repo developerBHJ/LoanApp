@@ -11,6 +11,7 @@ target 'BilisPera' do
   pod 'DeviceKit'
   pod 'MBProgressHUD','~> 1.2.0'
   pod 'SDCycleScrollView'
+  pod 'DZNEmptyDataSet'
 
 end
 
