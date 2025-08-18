@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OrderListViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface OrderListViewController ()<UITableViewDelegate,UITableViewDataSource,OrderListViewItemClickDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) OrderListViewModel *viewModel;
@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)configViewModel{
     self.viewModel = [[OrderListViewModel alloc] init];
+    self.viewModel.delegate = self;
     for (OrderListSectionModel *model in self.viewModel.dataSource) {
         [self.tableView registerClass:model.cellType forCellReuseIdentifier:model.cellId];
     }
@@ -115,11 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self.isNotReachable) {
         [self reloadData];
     }else{
-        NSString *url = [NSString stringWithFormat:@"%@%@?productId=%@",
-                         kScheme,
-                         BPRoute.productDetail,
-                         @""];
-        [[Routes shared] routeTo:url];
+        [[Routes shared] backToHomeView];
     }
 }
 
@@ -184,6 +181,13 @@ NS_ASSUME_NONNULL_BEGIN
     BaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:setionModel.cellId forIndexPath:indexPath];
     [cell configData:setionModel.cellData[indexPath.row]];
     return cell;
+}
+
+// MARK: - OrderListViewItemClickDelegate
+- (void)itemClick:(NSString *)orderId{
+    [[ProductHandle shared] onPushOrderDetailView:orderId completion:^(NSString *url) {
+        [[Routes shared] routeTo:url];
+    }];
 }
 
 @end

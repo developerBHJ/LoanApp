@@ -25,6 +25,7 @@
     [self configLanguage];
     [[TrackTools shared] configData];
     [[UITabBar appearance] setTranslucent:NO];
+    [[IQKeyboardManager sharedManager] setEnable:YES];
     [self.window makeKeyAndVisible];
     return YES;
 }

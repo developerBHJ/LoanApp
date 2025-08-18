@@ -11,8 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITableViewCell ()
 
-@property (nonatomic, strong) NSString *reuseId;
+@property (nonatomic, strong,readonly) NSString *reuseId;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

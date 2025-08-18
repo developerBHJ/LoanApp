@@ -19,7 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface HomeNoticeCell : BaseTableViewCell
+@interface HomeNoticeCell : UICollectionViewCell
+
+@property (nonatomic, strong) HomeNoticeCellModel *model;
 
 @end
 

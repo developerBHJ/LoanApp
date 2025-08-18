@@ -62,6 +62,7 @@ typedef void(^simpleCompletion)(void);
 typedef void(^simpleBoolCompletion)(BOOL);
 typedef void(^simpleStringCompletion)(NSString *);
 typedef void(^simpleIntCompletion)(NSInteger);
+typedef void(^simpleObjectCompletion)(id);
 
 static NSString *tokenKey = @"token";
 static NSString *userNameKey = @"userName";

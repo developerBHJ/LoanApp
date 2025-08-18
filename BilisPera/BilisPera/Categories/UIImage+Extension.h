@@ -13,6 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIImage *)imageWithTintColor:(UIColor *)color;
 
+-(NSData *)smartCompressWithMaxKB:(NSInteger)maxKB;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

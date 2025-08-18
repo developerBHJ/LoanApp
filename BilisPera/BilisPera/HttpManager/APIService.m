@@ -41,6 +41,18 @@ NS_ASSUME_NONNULL_BEGIN
         case OrderList:
             url = @"/sudden/three";
             break;
+        case OrderDetail:
+            url = @"/sudden/behind";
+            break;
+        case GetIdInfo:
+            url = @"/sudden/paced";
+            break;
+        case UploadImage:
+            url = @"/sudden/mostfavour";
+            break;
+        case SaveUserInfo:
+            url = @"/sudden/stale";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }
@@ -57,6 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
         case HomePageData:
             type = NetRequestType_GET;
             break;
+        case GetIdInfo:
+            type = NetRequestType_GET;
+            break;
         default:
             type = NetRequestType_POST;
             break;
@@ -69,6 +84,9 @@ NS_ASSUME_NONNULL_BEGIN
     switch (service) {
         case GetVerfyCode:
             type = BPRequestContentTypeFormURLEncoded;
+            break;
+        case UploadImage:
+            type = BPRequestContentTypeMultipartFormData;
             break;
         default:
             type = BPRequestContentTypeFormURLEncoded;

@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         case BPRequestContentTypeMultipartFormData:
             manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+            [manager.requestSerializer setValue:@"Content-Type:multipart/form-data" forHTTPHeaderField:@"Content-Type"];
             break;
         case BPRequestContentTypeJSON:
             manager.requestSerializer = [AFJSONRequestSerializer serializer];
@@ -111,10 +112,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)handleFailure:(NSError * _Nonnull)error failure:(requestFailureBlock)failure{
     NSData *data = error.userInfo[@"com.alamofire.serialization.response.error.data"];
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        failure(error,dic);
-    });
+    if (data) {
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            failure(error,dic);
+        });
+    }
     [BPProressHUD hideHUDQueryHUDWithView:nil];
 }
 

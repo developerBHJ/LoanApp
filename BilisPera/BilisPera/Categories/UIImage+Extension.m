@@ -24,4 +24,28 @@
     return newImage;
 }
 
+
+-(NSData *)smartCompressWithMaxKB:(NSInteger)maxKB{
+    NSInteger maxLength = maxKB * 1024;
+    CGFloat compression = 1.0;
+    NSData *data = UIImageJPEGRepresentation(self, compression);
+    if (!data) return nil;
+    if (data.length < maxLength) {
+        return data;
+    }
+    CGFloat max = 1.0;
+    CGFloat min = 0.0;
+    for (int i = 0; i < 6; i++) {
+        compression = (max + min) / 2;
+        data = UIImageJPEGRepresentation(self, compression);
+        if ((CGFloat)data.length < (CGFloat)maxLength * 0.9) {
+            min = compression;
+        } else if (data.length > maxLength) {
+            max = compression;
+        } else {
+            break;
+        }
+    }
+    return data;
+}
 @end

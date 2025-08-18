@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HomeNoticeCell ()
 
-@property (nonatomic, strong) HomeNoticeCellModel *model;
 @property (nonatomic, strong) UIView *contentBgView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIImageView *leftImageView;
@@ -35,8 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation HomeNoticeCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
         [self configUI];
     }
     return self;
@@ -46,8 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
     self.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:self.contentBgView];
     [self.contentBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.trailing.equalTo(self.contentView).inset(kRatio(16));
-        make.top.equalTo(self.contentView).offset(kRatio(12));
+        make.leading.trailing.equalTo(self.contentView);
+        make.top.equalTo(self.contentView);
         make.bottom.equalTo(self.contentView);
     }];
     
@@ -87,12 +88,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setModel:(HomeNoticeCellModel *)model{
     _model = model;
     self.titleLabel.text = self.model.title;
-}
-
-- (void)configData:(id)data{
-    if ([data isKindOfClass:[HomeNoticeCellModel class]]) {
-        self.model = data;
-    }
 }
 
 

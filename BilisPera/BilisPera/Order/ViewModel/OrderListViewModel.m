@@ -63,6 +63,12 @@ NS_ASSUME_NONNULL_BEGIN
                               orderInfo.forwe.hens];
             model.linkUrl = [NSString stringWithFormat:@"%@",
                              orderInfo.forwe.nearest];
+            kWeakSelf;
+            model.completion = ^(NSString *productId) {
+                if ([weakSelf.delegate respondsToSelector:@selector(itemClick:)]) {
+                    [weakSelf.delegate itemClick:productId];
+                }
+            };
             [tempArray addObject:model];
         }
         OrderListSectionModel *section = [[OrderListSectionModel alloc] initWith:[OrderListCell class] cellData:tempArray];
@@ -75,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)reloadDataWith:(NSInteger)type completion:(simpleCompletion)completion{
     self.orderList = [[NSArray alloc] init];
     kWeakSelf;
-    [[HttpManager shared] requestWithService:OrderList parameters:@{@"dipping":@(type)} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:OrderList parameters:@{@"dipping":@(type)} showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         NSArray *list = response.couldsee[@"andwalked"];
         if (list) {
             weakSelf.orderList = [OrderListModel mj_objectArrayWithKeyValuesArray:list];

@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     if ([urlString hasPrefix:@"http"] || [urlString hasPrefix:@"https"]) {
-        NSURL *url = [NSURL URLWithString:urlString];
+        NSURL *url = [urlString getHtmlUrl];
         if (url) {
             [self handleURL:url];
         }
@@ -157,8 +157,8 @@ NS_ASSUME_NONNULL_BEGIN
         }
         return;
     }else if ([route isEqual:BPRoute.productDetail]){
-        NSString *productId = [NSString stringWithFormat:@"%@",params[@"productId"]];
-        [[ProductHandle shared] onPushDetailView:productId];
+        NSString *productId = [NSString stringWithFormat:@"%@",params[@"buy"]];
+        [[ProductHandle shared] onPushDetailHomeView:productId];
         return;
     }
 }
@@ -182,6 +182,13 @@ NS_ASSUME_NONNULL_BEGIN
     BaseNavigationController *nav = (BaseNavigationController *)tabVC.selectedViewController;
     OrderListViewController *orderVC = (OrderListViewController *)nav.childViewControllers.firstObject;
     orderVC.defaultStatus = type;
+}
+
+-(void)backToHomeView{
+    TabBarController *tabVC = (TabBarController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+    if (tabVC) {
+        tabVC.selectedIndex = 0;
+    }
 }
 
 @end

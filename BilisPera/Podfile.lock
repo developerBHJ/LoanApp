@@ -17,13 +17,13 @@ PODS:
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
   - DeviceKit (5.6.0)
-  - DZNEmptyDataSet (1.8.1)
   - FBAEMKit (18.0.0):
     - FBSDKCoreKit_Basics (= 18.0.0)
   - FBSDKCoreKit (18.0.0):
     - FBAEMKit (= 18.0.0)
     - FBSDKCoreKit_Basics (= 18.0.0)
   - FBSDKCoreKit_Basics (18.0.0)
+  - IQKeyboardManager (6.5.19)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.2)
@@ -37,8 +37,8 @@ PODS:
 DEPENDENCIES:
   - AFNetwork
   - DeviceKit
-  - DZNEmptyDataSet
   - FBSDKCoreKit
+  - IQKeyboardManager
   - Masonry (~> 1.1.0)
   - MBProgressHUD (~> 1.2.0)
   - MJExtension
@@ -51,10 +51,10 @@ SPEC REPOS:
     - AFNetwork
     - AFNetworking
     - DeviceKit
-    - DZNEmptyDataSet
     - FBAEMKit
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
+    - IQKeyboardManager
     - Masonry
     - MBProgressHUD
     - MJExtension
@@ -66,10 +66,10 @@ SPEC CHECKSUMS:
   AFNetwork: 0dbdb2ffb4a7770b3d1802dc85b50ab31263f2c2
   AFNetworking: cb604b1c2bded0871f5f61f5d53653739e841d6b
   DeviceKit: 9f2e0b68984a384f864b0f4e40a54bae43636bd8
-  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FBAEMKit: e34530df538b8eb8aeb53c35867715ba6c63ef0c
   FBSDKCoreKit: d3f479a69127acebb1c6aad91c1a33907bcf6c2f
   FBSDKCoreKit_Basics: 017b6dc2a1862024815a8229e75661e627ac1e29
+  IQKeyboardManager: c8665b3396bd0b79402b4c573eac345a31c7d485
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: e97d164cb411aa9795cf576093a1fa208b4a8dd8
@@ -77,6 +77,6 @@ SPEC CHECKSUMS:
   SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
 
-PODFILE CHECKSUM: 40e4705dd0df84855900a1374ad7a0dba3d1a082
+PODFILE CHECKSUM: 55c2c8020f6a16a4d3a5415206013f06a6466868
 
 COCOAPODS: 1.16.2

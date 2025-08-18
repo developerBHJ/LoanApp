@@ -124,8 +124,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)onPushProductDetail:(NSString *)prodcutId{
-    NSString *url = [NSString stringWithFormat:@"%@%@?productId=%@",kScheme,BPRoute.productDetail,prodcutId];
-    [[Routes shared] routeTo:url];
+    [[ProductHandle shared] onPushDetailView:prodcutId];
 }
 
 - (void)kingKongItemClick:(HomeKingKongType)type{

@@ -12,10 +12,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol OrderListViewItemClickDelegate <NSObject>
+
+-(void)itemClick:(NSString *)orderId;
+
+@end
+
 @interface OrderListViewModel : NSObject
 
 @property (nonatomic, strong) NSArray *dataSource;
 -(void)reloadDataWith:(NSInteger)type completion:(simpleCompletion)completion;
+@property (nonatomic, weak) id <OrderListViewItemClickDelegate> delegate;;
 
 @end
 

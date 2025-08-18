@@ -37,6 +37,8 @@ typedef void (^RouteHandler)(NSURL *url, NSDictionary<NSString *, NSString *> *p
 -(void)changeRootView;
 // 跳转order页面
 -(void)onPushOrderView:(BPOrderStatus)type;
+// 到首页
+-(void)backToHomeView;
 
 
 @end

@@ -36,7 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
     headerModel.title = @"with numerous discounts !";
     headerModel.rate = [NSString stringWithFormat:@"%@",model.camping];
     headerModel.duration = [NSString stringWithFormat:@"%@",model.thetrouble];
-    headerModel.amount = [NSString stringWithFormat:@"%@%@",@"₱",model.supplied];
+    headerModel.amount = [NSString stringWithFormat:@"%@%@",
+                          @"₱",
+                          model.supplied];
     headerModel.productId = [NSString stringWithFormat:@"%ld",model.rice];
     headerModel.buttonTitle = [NSString stringWithFormat:@"%@",model.thesage];
     kWeakSelf;
@@ -91,20 +93,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(HomeSectionModel *)configLargeSection{
     kWeakSelf;
-    NSString *url = [NSString stringWithFormat:@"%@%@",kScheme,BPRoute.productDetail];
     HomeLargeItemViewModel *model = [[HomeLargeItemViewModel alloc] initWith:@"Exclusive offers for new users!" imageName:@"icon_home_recommond" completion:^{
-        if ([weakSelf.deleagete respondsToSelector:@selector(onpushOtherView:)]) {
-            [weakSelf.deleagete onpushOtherView:url];
+        if ([weakSelf.deleagete respondsToSelector:@selector(onPushProductDetail:)]) {
+            [weakSelf.deleagete onPushProductDetail:@""];
         }
     }];
     HomeLargeItemViewModel *model1 = [[HomeLargeItemViewModel alloc] initWith:@"Easy operation, no worries about loans" imageName:@"icon_home_recommond1" completion:^{
-        if ([weakSelf.deleagete respondsToSelector:@selector(onpushOtherView:)]) {
-            [weakSelf.deleagete onpushOtherView:url];
+        if ([weakSelf.deleagete respondsToSelector:@selector(onPushProductDetail:)]) {
+            [weakSelf.deleagete onPushProductDetail:@""];
         }
     }];
     HomeLargeItemViewModel *model2 = [[HomeLargeItemViewModel alloc] initWith:@"Personalized loan solution for you" imageName:@"icon_home_recommond2" completion:^{
-        if ([weakSelf.deleagete respondsToSelector:@selector(onpushOtherView:)]) {
-            [weakSelf.deleagete onpushOtherView:url];
+        if ([weakSelf.deleagete respondsToSelector:@selector(onPushProductDetail:)]) {
+            [weakSelf.deleagete onPushProductDetail:@""];
         }
     }];
     HomeLargeCellModel *cellModel = [[HomeLargeCellModel alloc] initWith:@[model,
@@ -116,12 +117,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(HomeSectionModel *)configNoticeSection:(NSArray<HomePageNoticeItemModel *> *)list{
     kWeakSelf;
-    HomeNoticeCellModel *cellModel = [[HomeNoticeCellModel alloc] initWith:@"Your order is overdue, please pay as soon as possible." completion:^{
-        if ([weakSelf.deleagete respondsToSelector:@selector(onpushOtherView:)]) {
-            [weakSelf.deleagete onpushOtherView:@""];
-        }
-    }];
-    HomeSectionModel *sectionModel = [[HomeSectionModel alloc] initWith:[HomeNoticeCell class] cellData:@[cellModel]];
+    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < list.count; i ++) {
+        HomePageNoticeItemModel *item = list[i];
+        HomeNoticeCellModel *model = [[HomeNoticeCellModel alloc] initWith:item.forbreakfast completion:^{
+            if ([weakSelf.deleagete respondsToSelector:@selector(onpushOtherView:)]) {
+                [weakSelf.deleagete onpushOtherView:[NSString stringWithFormat:@"%@",
+                                                     item.improbable]];
+            }
+        }];
+        [tempArray addObject:model];
+    }
+    HomeNoticeBannerCellModel *cellModel = [[HomeNoticeBannerCellModel alloc] init];
+    cellModel.items = tempArray;
+    HomeSectionModel *sectionModel = [[HomeSectionModel alloc] initWith:[HomeNoticeBannerCell class] cellData:@[cellModel]];
     return sectionModel;
 }
 
@@ -130,9 +139,12 @@ NS_ASSUME_NONNULL_BEGIN
     kWeakSelf;
     for (HomePageProductModel *model in list) {
         NSString *name = [NSString stringWithFormat:@"%@",model.stew];
-        NSString *rateStr = [NSString stringWithFormat:@"%@",model.staunchfriend];
+        NSString *rateStr = [NSString stringWithFormat:@"%@",
+                             model.staunchfriend];
         NSString *durationStr = [NSString stringWithFormat:@"%@",model.plucky];
-        NSString *amountStr = [NSString stringWithFormat:@"%@%@",@"₱",model.shrugged];
+        NSString *amountStr = [NSString stringWithFormat:@"%@%@",
+                               @"₱",
+                               model.shrugged];
         NSString *amountDesc = [NSString stringWithFormat:@"%@",model.bring];
         NSString *productId = [NSString stringWithFormat:@"%ld",model.rice];
         HomeProductListCellModel *cellModel = [[HomeProductListCellModel alloc] initWith:name rate:rateStr duration:durationStr amount:amountStr completion:^(NSString *productId) {
@@ -150,7 +162,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)reloadData:(simpleCompletion)completion{
     kWeakSelf;
-    [[HttpManager shared] requestWithService:HomePageData parameters:@{} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:HomePageData parameters:@{} showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         weakSelf.pageModel = [HomePageModel mj_objectWithKeyValues:response.couldsee];
         [weakSelf encodeData];
         completion();
@@ -158,20 +170,6 @@ NS_ASSUME_NONNULL_BEGIN
                 NSDictionary * _Nonnull errorDictionary) {
         completion();
     }];
-    
-//    [[HttpManager shared] requestWithService:Apply parameters:@{@"buy":@"2",@"athand":[NSString randomString],@"mules":[NSString randomString]} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-//        completion();
-//    } failure:^(NSError * _Nonnull error,
-//                NSDictionary * _Nonnull errorDictionary) {
-//        completion();
-//    }];
-//    
-//    [[HttpManager shared] requestWithService:ProductDetail parameters:@{@"buy":@"2",@"pitched":[NSString randomString],@"usefulto":[NSString randomString]} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-//        completion();
-//    } failure:^(NSError * _Nonnull error,
-//                NSDictionary * _Nonnull errorDictionary) {
-//        completion();
-//    }];
 }
 
 -(void)encodeData{

@@ -12,7 +12,7 @@
 #import "HomeCommonQuestionsCell.h"
 #import "HomeLargeCell.h"
 #import "HomeProductListCell.h"
-#import "HomeNoticeCell.h"
+#import "HomeNoticeBannerCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

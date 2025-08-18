@@ -24,6 +24,10 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     Apply,
     ProductDetail,
     OrderList,
+    OrderDetail,
+    GetIdInfo,
+    UploadImage,
+    SaveUserInfo,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {
