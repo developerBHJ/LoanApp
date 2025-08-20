@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _currentStep = 1;
+        _currentStep = 0;
         _activeColor = kWhiteColor;
         _inactiveColor = kColor_FDE7F1;
         _activeTextColor = kBlackColor;
@@ -64,6 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
     for (int i = 0; i < 5; i++) {
         UIColor *fillColor = (i < _currentStep) ? _activeColor : _inactiveColor;
         UIColor *textColor = (i < _currentStep) ? _activeTextColor : _inactiveTextColor;
+        if (_currentStep == 0) {
+            fillColor = _inactiveColor;
+            textColor = _inactiveTextColor;
+        }
         // 绘制外圆
         CGRect circleRect = CGRectMake(centers[i].x - nodeDiameter/2,
                                        centers[i].y - nodeDiameter/2,
@@ -85,7 +89,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)setCurrentStep:(NSInteger)currentStep {
-    _currentStep = MAX(1, MIN(5, currentStep));
+    _currentStep = MAX(0, MIN(5, currentStep));
     [self setNeedsDisplay];
 }
 

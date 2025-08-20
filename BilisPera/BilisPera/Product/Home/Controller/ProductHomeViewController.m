@@ -100,6 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)configViewModel{
     self.viewModel = [[ProductHomeViewModel alloc] init];
+    self.viewModel.productId = self.productId;
     [self.tableView registerClass:[ProductHomeHeaderView class] forCellReuseIdentifier:[[ProductHomeHeaderView alloc] init].reuseId];
     [self.tableView registerClass:[ProductHomeStepCell class] forCellReuseIdentifier:[[ProductHomeStepCell alloc] init].reuseId];
 }
@@ -126,7 +127,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void)nextStep{
-    [[ProductHandle shared] onPushNextStep:self.productId];
+    [[ProductHandle shared] onPushNextStep:self.productId type:@""];
 }
 @end
 

@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
     [[Routes shared] registerRoutes];
     [self configViewModel];
     [self configUI];
+    [[ProductHandle shared] requestAddressList];
 }
 
 - (void)viewDidAppear:(BOOL)animated{

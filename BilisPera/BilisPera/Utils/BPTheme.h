@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kColor_FBC4DD [UIColor colorWithHex:0xFBC4DD]
 #define kColor_FDE7F1 [UIColor colorWithHex:0xFDE7F1]
 #define kColor_BEBEBE [UIColor colorWithHex:0xBEBEBE]
+#define kColor_777777 [UIColor colorWithHex:0x777777]
 
 
 @interface BPTheme : NSObject

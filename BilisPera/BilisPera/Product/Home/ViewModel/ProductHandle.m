@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
     }else if([style isEqualToString:@"changedl"]){
         temp = BPProductFormStyleText;
     }else if([style isEqualToString:@"changedm"]){
-        temp = BPProductFormStyleSelected;
+        temp = BPProductFormStyleCitySelected;
     }
     return temp;
 }
@@ -145,23 +145,23 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
--(void)onPushNextStep:(NSString *)productId{
+-(void)onPushNextStep:(NSString *)productId type:(NSString *)type{
     kWeakSelf;
     [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
         if (model.packed && model.packed.trading.length > 0) {
             BPProductStep nextStep = [[ProductHandle shared] getProductStepWith:model.packed.trading];
             weakSelf.isCompleted = NO;
             [weakSelf enterNextStepViewWith:productId step:nextStep title:[NSString stringWithFormat:@"%@",
-                                                                           model.packed.enclosed]];
+                                                                           model.packed.enclosed] type:type];
         }else{
             weakSelf.isCompleted = YES;
         }
     }];
 }
 
--(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title{
+-(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type{
     if (step == BPProductStepFaceId ) {
-        [ProdcutAuthenticationTypeViewModel onPushAuthAuthenticationView:productId title:title];
+        [ProdcutAuthenticationTypeViewModel onPushAuthAuthenticationView:productId title:title type:type];
     }else if (step == BPProductStepBasic){
         ProductPersonalViewController *personalVC = [[ProductPersonalViewController alloc] initWith:productId title:title];
         [[UIViewController topMost].navigationController pushViewController:personalVC animated:YES];
@@ -178,11 +178,24 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)saveUserInfoWithParamaters:(NSDictionary *)paramaters completion:(simpleBoolCompletion)completion{
-    [[HttpManager shared] requestWithService:SaveUserInfo parameters:paramaters showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:SaveUserInfo parameters:paramaters showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         completion(YES);
     } failure:^(NSError * _Nonnull error,
                 NSDictionary * _Nonnull errorDictionary) {
         completion(NO);
+    }];
+}
+
+-(void)requestAddressList{
+    kWeakSelf;
+    [[HttpManager shared] requestWithService:GetUserAddress parameters:@{} showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+        NSArray *list = response.couldsee[@"andwalked"];
+        if (list) {
+            weakSelf.addressList = [BPAddressModel mj_objectArrayWithKeyValuesArray:list];
+        }
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+            
     }];
 }
 

@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
         case BPProductFormStyleEnum:
             image = @"iocn_arrow_black";
             break;
-        case BPProductFormStyleSelected:
+        case BPProductFormStyleCitySelected:
             image = @"iocn_arrow_black";
             break;
     }

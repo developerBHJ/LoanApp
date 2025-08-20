@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *birthDay;
 
 -(void)uplodaImage:(NSString *)productId image:(UIImage *)image completion:(simpleObjectCompletion)completion;
+-(void)configData;
 
 @end
 

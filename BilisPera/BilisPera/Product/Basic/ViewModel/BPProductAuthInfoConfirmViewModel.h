@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<BPProductAuthInfoConfirmViewDelegate> delegate;
 
 -(void)reloadData;
+-(void)configData;
 
 @end
 

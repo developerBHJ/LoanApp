@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
-+(void)onPushAuthAuthenticationView:(NSString *)productId title:(NSString *)title{
++(void)onPushAuthAuthenticationView:(NSString *)productId title:(NSString *)title type:(NSString *)type{
     [ProdcutAuthenticationTypeViewModel queryAuthAuthenticationDetail:productId completion:^(ProductAuthenticationIdInfo *model) {
         if (model.loins.building == 1 && model.whereshe == 1) {// 证件认证已完成 、人脸认证已完成
             ProdcutAuthenticationResultViewController *resultVC = [[ProdcutAuthenticationResultViewController alloc] initWith:productId title:title];
@@ -91,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
             ProdcutAuthenticationTypeViewController *typeVC = [[ProdcutAuthenticationTypeViewController alloc] initWith:productId title:title];
             [[UIViewController topMost].navigationController pushViewController:typeVC animated:YES];
         }else{
-            ProdcutIdFaceIDViewController *faceIdVC = [[ProdcutIdFaceIDViewController alloc] initWith:productId title:title];
+            ProdcutIdFaceIDViewController *faceIdVC = [[ProdcutIdFaceIDViewController alloc] initWith:productId title:title type:type];
             [[UIViewController topMost].navigationController pushViewController:faceIdVC animated:YES];
         }
     }];

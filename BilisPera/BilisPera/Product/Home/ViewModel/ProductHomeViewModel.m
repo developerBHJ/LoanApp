@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     self = [super init];
     if (self) {
+        self.productId = productId;
         [self configData];
     }
     return self;
@@ -45,10 +46,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(ProductSectionModel *)configStepSection{
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+    NSInteger progres = 0;
     for (int i = 0; i < self.detailModel.palisade.count; i ++) {
         ProductDetailStepModel *stepModel = self.detailModel.palisade[i];
-        ProductStepBannerItemViewModel *itemModel = [[ProductStepBannerItemViewModel alloc] initWith:[[ProductHandle shared] getProductStepWith:stepModel.trading] finished:(stepModel.building == 1) completion:^(NSInteger step) {
-            
+        if (stepModel.building == 1) {
+            progres += 1;
+        }
+        __block ProductStepBannerItemViewModel *itemModel = [[ProductStepBannerItemViewModel alloc] initWith:[[ProductHandle shared] getProductStepWith:stepModel.trading] finished:(stepModel.building == 1) completion:^(NSInteger step) {
+            [[ProductHandle shared] enterNextStepViewWith:self.productId step:step title:itemModel.title type:@""];
         }];
         [tempArray addObject:itemModel];
     }
@@ -57,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
     cellModel.title = @"Complete The Identity Verification";
     cellModel.imageName = @"";
     cellModel.buttonTitle = @"Go for certification";
+    cellModel.progress = progres;
     ProductSectionModel *section = [[ProductSectionModel alloc] initWith:[ProductHomeStepCell class] cellData:@[cellModel]];
     return section;
 }

@@ -10,9 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BPProductAuthInfoConfirmViewController : BaseViewController
+@interface BPProductAuthInfoConfirmViewController : ProdcutBaseViewController
 
-- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId;
+- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId type:(NSString *)type completion:(simpleObjectCompletion)completion;
 
 @end
 

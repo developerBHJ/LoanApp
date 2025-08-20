@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (self) {
         self.step = step;
         self.finished = finished;
-        self.completion = self.completion;
+        self.completion = completion;
     }
     return self;
 }

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ProdcutBaseViewController.h"
+#import "ProductContactsViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

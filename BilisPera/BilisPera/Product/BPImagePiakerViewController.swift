@@ -37,6 +37,7 @@ class BPImagePiakerViewController: UIViewController {
     }
     
     // MARK: - 相机配置
+    @MainActor
     private func setupCamera() {
         captureSession = AVCaptureSession()
         captureSession.sessionPreset = .photo

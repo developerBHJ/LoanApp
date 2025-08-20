@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *buttonTitle;
 @property (nonatomic, strong) NSString *imageName;
+@property (nonatomic, assign) NSInteger progress;
 
 @end
 

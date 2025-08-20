@@ -8,5 +8,7 @@
 #ifndef BilisPera_Bridging_Header_h
 #define BilisPera_Bridging_Header_h
 
+#import "BPAddressModel.h"
+
 
 #endif /* BilisPera_Bridging_Header_h */

@@ -18,20 +18,30 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) BPProductAuthInfoConfirmViewModel *viewModel;
 @property (nonatomic, strong) UIButton *nextButton;
 @property (nonatomic, strong) ProductAuthenIndetyInfoModel *model;
-@property (nonatomic, strong) NSString *productId;
 @property (nonatomic, strong) UILabel *tipsLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *closeButton;
+@property (nonatomic, strong) NSMutableDictionary *parmaters;
+@property (nonatomic, copy) simpleObjectCompletion completion;
+@property (nonatomic, strong) NSString *type;
 
 @end
 
 @implementation BPProductAuthInfoConfirmViewController
 
 
-- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId{
+- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId type:(NSString *)type completion:(simpleObjectCompletion)completion{
     if (self = [super init]) {
         self.model = model;
         self.productId = productId;
+        self.completion = completion;
+        self.type = type;
+        self.parmaters = [[NSMutableDictionary alloc] initWithDictionary:@{@"alsowith":@"",
+                                                                           @"wounds":@"",
+                                                                           @"tongues":@"",
+                                                                           @"everyonehad":@"11",
+                                                                           @"whispered":[NSString randomString],
+                                                                           @"tender":type}];
     }
     return self;
 }
@@ -103,7 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)configViewModel{
     self.viewModel = [[BPProductAuthInfoConfirmViewModel alloc] init];
     self.viewModel.infoModel = self.model;
-    [self.viewModel reloadData];
+    [self.viewModel configData];
     self.viewModel.delegate = self;
     [self.tableView registerClass:[ProdcutAuthenticationUserInfoCell class] forCellReuseIdentifier:[[ProdcutAuthenticationUserInfoCell alloc] init].reuseId];
 }
@@ -147,7 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_backButton) {
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.backgroundColor = [UIColor colorWithHex:0x111111 alpha:0.6];
-        [_backButton addTarget:self action:@selector(tapEvent) forControlEvents:UIControlEventTouchUpInside];
+        [_backButton addTarget:self action:@selector(closeEvent) forControlEvents:UIControlEventTouchUpInside];
     }
     return _backButton;
 }
@@ -218,11 +228,16 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)nextStep{
-    [[ProductHandle shared] onPushNextStep:self.productId];
-}
-
--(void)tapEvent{
-    [self dismissViewControllerAnimated:false completion:nil];
+    if (self.viewModel.userName.length == 0 || self.viewModel.idNumber.length == 0 || self.viewModel.birthDay.length == 0) {
+        return;
+    }
+    self.parmaters[@"tongues"] = self.viewModel.userName;
+    self.parmaters[@"alsowith"] = self.viewModel.birthDay;
+    self.parmaters[@"wounds"] = self.viewModel.idNumber;
+    kWeakSelf;
+    [self dismissViewControllerAnimated:NO completion:^{
+        weakSelf.completion(weakSelf.parmaters);
+    }];
 }
 
 -(void)closeEvent{
@@ -230,8 +245,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 // MARK: - BPProductAuthInfoConfirmViewDelegate
 - (void)pickerDate{
-    [self showCustomAlertViewWith:[[BPAlertViewModel alloc] init]];
+    kWeakSelf;
+    [self showDatePickerView:self.viewModel.birthDay selectedDate:^(NSString *dateStr) {
+        weakSelf.viewModel.birthDay = dateStr;
+        [weakSelf.viewModel reloadData];
+        [weakSelf.tableView reloadData];
+    }];
 }
+
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ProductDetailModel.h"
+#import "BPAddressModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger,BPProductStep) {
@@ -20,7 +21,7 @@ typedef NS_ENUM(NSInteger,BPProductStep) {
 typedef NS_ENUM(NSInteger,BPProductFormStyle) {
     BPProductFormStyleEnum =1,
     BPProductFormStyleText,
-    BPProductFormStyleSelected,
+    BPProductFormStyleCitySelected,
 };
 
 typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
@@ -28,6 +29,9 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 @interface ProductHandle : NSObject
 
 + (instancetype)shared;
+
+@property (nonatomic, strong) NSArray<BPAddressModel *> *addressList;
+
 // 申请
 -(void)onPushDetailView:(NSString *)productId;
 // 进认证首页
@@ -40,10 +44,13 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 -(BPProductFormStyle)getProductFormStyleWith:(NSString *)style;
 // 查询认证列表数据
 -(void)queryProductDetail:(NSString *)productId completion:(productDetailList)completion;
+-(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type;
 // 进行下一项认证
--(void)onPushNextStep:(NSString *)productId;
+-(void)onPushNextStep:(NSString *)productId type:(NSString *)type;
 // 提交用户信息
 -(void)saveUserInfoWithParamaters:(NSDictionary *)paramaters completion:(simpleBoolCompletion)completion;
+// 获取地址列表
+-(void)requestAddressList;
 
 @end
 

@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BPProductAlertViewController ()
 
 @property (nonatomic, strong) UIView *contentBgView;
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIButton *confirmButton;
 @property (nonatomic, strong) BPAlertHeasderView *headerView;
 @property (nonatomic, strong) UIButton *backButton;
@@ -34,14 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear: animated];
-    [self configUI];
-}
-
 - (void)viewDidLoad{
     [super viewDidLoad];
-//    [self configUI];
+    [self configUI];
 }
 
 - (void)viewDidLayoutSubviews{
@@ -75,6 +71,14 @@ NS_ASSUME_NONNULL_BEGIN
         make.height.mas_equalTo(kRatio(46));
         make.width.mas_equalTo(kRatio(224));
     }];
+    
+    [self.contentBgView addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentBgView).offset(kRatio(78));
+        make.leading.trailing.equalTo(self.contentBgView);
+        make.bottom
+            .equalTo(self.contentBgView).inset(kRatio(62));
+    }];
 }
 
 -(void)tapEvent{
@@ -94,6 +98,13 @@ NS_ASSUME_NONNULL_BEGIN
         _contentBgView.backgroundColor = kColor_FFDDE8;
     }
     return _contentBgView;
+}
+
+- (UIView *)contentView{
+    if (!_contentView) {
+        _contentView = [[UIView alloc] init];
+    }
+    return _contentView;
 }
 
 - (UIButton *)confirmButton{
@@ -122,25 +133,26 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setModel:(BPProductAlertViewControllerModel *)model{
     _model = model;
     self.headerView.model = model.headerModel;
-    for (UIView *subView in self.contentBgView.subviews) {
+    for (UIView *subView in self.contentView.subviews) {
         [subView removeFromSuperview];
     }
     CGFloat bottomSpace = self.model.needConfirm ? kRatio(75) : kRatio(62);
     if (model.contentView) {
-        [self.contentBgView addSubview:model.contentView];
+        [self.contentView addSubview:model.contentView];
         [model.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.contentBgView).offset(kRatio(78));
-            make.leading.trailing.equalTo(self.contentBgView);
+            make.top.equalTo(self.contentView);
+            make.leading.trailing.equalTo(self.contentView);
             make.bottom
-                .equalTo(self.contentBgView).inset(bottomSpace);
+                .equalTo(self.contentView);
         }];
     }
-    
-    [self.contentBgView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height
-            .mas_greaterThanOrEqualTo(model.contentHeight + kRatio(52) + kRatio(26) + bottomSpace);
+    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom
+            .equalTo(self.contentBgView).inset(bottomSpace);;
     }];
-    
+    [self.contentBgView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(kRatio(78) + bottomSpace + model.contentHeight);
+    }];
     [self.confirmButton setHidden:!self.model.needConfirm];
     [self.view setNeedsLayout];
 }

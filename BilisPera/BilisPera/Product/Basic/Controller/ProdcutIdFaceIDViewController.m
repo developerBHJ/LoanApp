@@ -132,25 +132,38 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)openCameraView{
-    BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionFront];
     kWeakSelf;
-    pickerVC.completion = ^(UIImage * _Nonnull image) {
-        weakSelf.viewModel.selectedImage = image;
-        [weakSelf dismissViewControllerAnimated:YES completion:^{
-            [weakSelf reloadData];
-        }];
-    };
-    [pickerVC presentFullScreen];
-    [self presentViewController:pickerVC animated:YES completion:nil];
+    [[PermissionTools shared] requestCameraAccessWithCompletion:^(BOOL result) {
+        if (result) {
+            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionFront];
+            pickerVC.completion = ^(UIImage * _Nonnull image) {
+                weakSelf.viewModel.selectedImage = image;
+                [weakSelf dismissViewControllerAnimated:YES completion:^{
+                    [weakSelf reloadData];
+                }];
+            };
+            [pickerVC presentFullScreen];
+            [weakSelf presentViewController:pickerVC animated:YES completion:nil];
+        }else{
+            [self showCustomAlertWithTitle:@"" message:kCameraAlertMessage confirmCompletion:^{
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+            } cancelCompletion:^{
+                
+            }];
+        }
+    }];
 }
 
 -(void)nextStep{
+    kWeakSelf;
     if (self.viewModel.infoModel.whereshe != 1) {
         [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage completion:^(BOOL success) {
-                    
+            if (success) {
+                [[ProductHandle shared] onPushNextStep:self.productId type:weakSelf.type];
+            }
         }];
     }else{
-        [[ProductHandle shared] onPushNextStep:self.productId];
+        [[ProductHandle shared] onPushNextStep:self.productId type:self.type];
     }
 }
 @end

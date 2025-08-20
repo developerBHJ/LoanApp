@@ -7,12 +7,13 @@
 
 #import "ProdcutAuthenticationResultViewController.h"
 #import "ProdcutAuthenticationResultViewModel.h"
+#import "BPProductAuthenResultView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ProdcutAuthenticationResultViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ProdcutAuthenticationResultViewController ()
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) BPProductAuthenResultView *contentView;
 @property (nonatomic, strong) ProdcutAuthenticationResultViewModel *viewModel;
 
 @end
@@ -21,41 +22,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    self.navigationItem.title = @"Successful certification";
+    
+    [self.view addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.view);
+        make.leading.trailing.equalTo(self.view).inset(kRatio(16));
+        make.height.mas_greaterThanOrEqualTo(kRatio(560));
+    }];
+    
+    [self reloadData];
 }
 
-- (UITableView *)tableView{
-    if (!_tableView) {
-        _tableView = [[UITableView alloc] init];
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.separatorColor = [UIColor clearColor];
-        _tableView.estimatedRowHeight = 44.0;
-        _tableView.estimatedSectionFooterHeight = 0;
-        _tableView.estimatedSectionHeaderHeight = 0;
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
+-(void)reloadData{
+    self.viewModel = [[ProdcutAuthenticationResultViewModel alloc] init];
+    kWeakSelf;
+    [self.viewModel reloadData:self.productId completion:^{
+        [weakSelf configData];
+    }];
+}
+
+-(void)configData{
+    BPProductAuthenResultViewModel *model = [[BPProductAuthenResultViewModel alloc] init];
+    model.title = @"Authentication successful";
+    model.subTitle = @"Please check that your information is correct and cannot be changed once submitted";
+    model.rightImageName = @"icon_auth_success";
+    model.imageName = @"";
+    BPProductAuthenResultItemViewModel *item1 = [[BPProductAuthenResultItemViewModel alloc] init:@"Full Name" content:self.viewModel.infoModel.loins.humps.tongues];
+    BPProductAuthenResultItemViewModel *item2 = [[BPProductAuthenResultItemViewModel alloc] init:@"ID NO." content:self.viewModel.infoModel.loins.humps.wounds];
+    BPProductAuthenResultItemViewModel *item3 = [[BPProductAuthenResultItemViewModel alloc] init:@"Brithday" content:self.viewModel.infoModel.loins.humps.alsowith];
+    model.items = @[item1,item2,item3];
+    model.completion = ^{
+        [[ProductHandle shared] onPushNextStep:self.productId type:@""];
+    };
+    self.contentView.model = model;
+}
+
+- (BPProductAuthenResultView *)contentView{
+    if (!_contentView) {
+        _contentView = [[BPProductAuthenResultView alloc] initWithFrame:CGRectZero];
     }
-    return _tableView;
-}
-
-// MARK: - UITableViewDelegate,UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.viewModel.dataSource.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    ProductSectionModel *setionModel = self.viewModel.dataSource[section];
-    return setionModel.cellData.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    ProductSectionModel *setionModel = self.viewModel.dataSource[indexPath.section];
-    BaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:setionModel.cellId forIndexPath:indexPath];
-    [cell configData:setionModel.cellData[indexPath.row]];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    return _contentView;
 }
 
 @end

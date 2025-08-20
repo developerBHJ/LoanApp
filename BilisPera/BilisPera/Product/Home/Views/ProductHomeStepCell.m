@@ -183,6 +183,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.titleLabel.text = self.model.title;
     self.rightImageView.image = kGetImage(self.model.imageName);
     [self.nextButton setTitle:self.model.buttonTitle forState:UIControlStateNormal];
+    self.progressView.currentStep = self.model.progress;
 }
 
 

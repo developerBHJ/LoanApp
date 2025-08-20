@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ProductHomeViewModel : NSObject
 
 @property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) NSString *productId;
 
 -(void)reloadDataWithProductId:(NSString *)productId completion:(simpleCompletion)completion;
 

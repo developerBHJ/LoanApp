@@ -180,46 +180,93 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)pickerDate{
-    
+    kWeakSelf;
+    [self showDatePickerView:self.viewModel.birthDay selectedDate:^(NSString *dateStr) {
+        weakSelf.viewModel.birthDay = dateStr;
+        [weakSelf.viewModel configData];
+        [weakSelf.tableView reloadData];
+    }];
 }
 
 -(void)openCameraView{
-    BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionBack];
     kWeakSelf;
-    pickerVC.completion = ^(UIImage * _Nonnull image) {
-        weakSelf.viewModel.selectedImage = image;
-        [weakSelf dismissViewControllerAnimated:YES completion:^{
-            [weakSelf reloadData];
-        }];
-    };
-    [pickerVC presentFullScreen];
-    [self presentViewController:pickerVC animated:YES completion:nil];
+    [[PermissionTools shared] requestCameraAccessWithCompletion:^(BOOL result) {
+        if (result) {
+            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionBack];
+            pickerVC.completion = ^(UIImage * _Nonnull image) {
+                weakSelf.viewModel.selectedImage = image;
+                [weakSelf dismissViewControllerAnimated:YES completion:^{
+                    [weakSelf reloadData];
+                }];
+            };
+            [pickerVC presentFullScreen];
+            [weakSelf presentViewController:pickerVC animated:YES completion:nil];
+        }else{
+            [self showCustomAlertWithTitle:@"" message:kCameraAlertMessage confirmCompletion:^{
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+            } cancelCompletion:^{
+                
+            }];
+        }
+    }];
 }
 
 -(void)openImageLibraryView{
-    UIImagePickerController *pickerVC = [[UIImagePickerController alloc] init];
-    pickerVC.delegate = self;
-    pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    pickerVC.allowsEditing = NO;
-    [pickerVC presentFullScreen];
-    [self presentViewController:pickerVC animated:YES completion:nil];
+    kWeakSelf;
+    [[PermissionTools shared] requestCameraAccessWithCompletion:^(BOOL result) {
+        if (result) {
+            UIImagePickerController *pickerVC = [[UIImagePickerController alloc] init];
+            pickerVC.delegate = self;
+            pickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            pickerVC.allowsEditing = NO;
+            [pickerVC presentFullScreen];
+            [weakSelf presentViewController:pickerVC animated:YES completion:nil];
+        }else{
+            [self showCustomAlertWithTitle:@"" message:kAlbumAlertMessage confirmCompletion:^{
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+            } cancelCompletion:^{
+                
+            }];
+        }
+    }];
 }
 
 
 -(void)nextStep{
+    if (self.viewModel.userName.length > 0 && self.viewModel.idNumber.length > 0 && self.viewModel.birthDay.length > 0) {
+        NSDictionary *paramas = @{@"alsowith":self.viewModel.birthDay,
+                                  @"wounds":self.viewModel.idNumber,
+                                  @"tongues":self.viewModel.userName,
+                                  @"everyonehad":@"11",
+                                  @"whispered":[NSString randomString],
+                                  @"tender":self.type};
+        [self saveuserInfo:paramas];
+        return;
+    }
     if (self.viewModel.infoModel.loins.building != 1) {
         kWeakSelf;
         [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage  completion:^(id obj) {
             if ([obj isKindOfClass:[ProductAuthenIndetyInfoModel class]]) {
                 ProductAuthenIndetyInfoModel *model = (ProductAuthenIndetyInfoModel *)obj;
-                BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId];
+                BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^(NSDictionary *dic) {
+                    [weakSelf saveuserInfo:dic];
+                }];
                 [confirmVC presentFullScreen];
                 [weakSelf presentViewController:confirmVC animated:NO completion:nil];
             }
         }];
     }else{
-        [[ProductHandle shared] onPushNextStep:self.productId];
+        [[ProductHandle shared] onPushNextStep:self.productId type:self.type];
     }
+}
+
+-(void)saveuserInfo:(NSDictionary *)paramas{
+    kWeakSelf;
+    [[ProductHandle shared] saveUserInfoWithParamaters:paramas completion:^(BOOL success) {
+        if (success) {
+            [[ProductHandle shared] onPushNextStep:self.productId type:weakSelf.type];
+        }
+    }];
 }
 
 // MARK: - UIImagePickerControllerDelegate&UINavigationControllerDelegate

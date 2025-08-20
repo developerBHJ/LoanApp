@@ -53,6 +53,27 @@ NS_ASSUME_NONNULL_BEGIN
         case SaveUserInfo:
             url = @"/sudden/stale";
             break;
+        case GetPersonalInfo:
+            url = @"/sudden/wecontrived";
+            break;
+        case GetUserAddress:
+            url = @"/sudden/address";
+            break;
+        case SavePersonalInfo:
+            url = @"/sudden/immortal";
+            break;
+        case GetUserWorkInfo:
+            url = @"/sudden/conscienceevery";
+            break;
+        case SaveUserWorkInfo:
+            url = @"/sudden/chusan";
+            break;
+        case GetContactInfo:
+            url = @"/sudden/impose";
+            break;
+        case SaveContactInfo:
+            url = @"/sudden/sitting";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }
@@ -70,6 +91,9 @@ NS_ASSUME_NONNULL_BEGIN
             type = NetRequestType_GET;
             break;
         case GetIdInfo:
+            type = NetRequestType_GET;
+            break;
+        case GetUserAddress:
             type = NetRequestType_GET;
             break;
         default:

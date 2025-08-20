@@ -6,13 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ProductSectionModel.h"
+#import "ProdcutAuthenticationTypeViewModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ProdcutAuthenticationResultViewModel : NSObject
 
-@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) ProductAuthenticationIdInfo *infoModel;
+-(void)reloadData:(NSString *)productId completion:(simpleCompletion)completion;
 
 @end
 

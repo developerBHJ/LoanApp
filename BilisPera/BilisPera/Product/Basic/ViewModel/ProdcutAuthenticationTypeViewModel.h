@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ProdcutAuthenticationTypeViewModel : NSObject
 
 @property (nonatomic, strong) NSArray *dataSource;
-+(void)onPushAuthAuthenticationView:(NSString *)productId title:(NSString *)title;
++(void)onPushAuthAuthenticationView:(NSString *)productId title:(NSString *)title type:(NSString *)type;
 -(void)reloadData:(NSString *)productId completion:(simpleCompletion)completion;
 +(void)queryAuthAuthenticationDetail:(NSString *)productId completion:(simpleObjectCompletion)completion;
 

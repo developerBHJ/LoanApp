@@ -28,6 +28,13 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     GetIdInfo,
     UploadImage,
     SaveUserInfo,
+    GetPersonalInfo,
+    GetUserAddress,
+    SavePersonalInfo,
+    GetUserWorkInfo,
+    SaveUserWorkInfo,
+    GetContactInfo,
+    SaveContactInfo,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {

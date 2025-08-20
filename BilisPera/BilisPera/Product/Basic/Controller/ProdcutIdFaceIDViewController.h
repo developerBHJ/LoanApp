@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ProdcutIdFaceIDViewController : ProdcutBaseViewController
 
+- (instancetype)initWith:(NSString *)productId title:(NSString *)title type:(NSString *)type;
+
 @end
 
 NS_ASSUME_NONNULL_END
