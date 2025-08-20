@@ -60,13 +60,11 @@ class WifiUtils {
     
     
     static func isVPNConnected() -> Bool {
-        let manager = NEVPNManager.shared()
-        var isConnected = false
-        manager.loadFromPreferences { error in
-            guard error == nil else { return }
-            isConnected = (manager.connection.status == .connected)
+        guard let dict = CFNetworkCopySystemProxySettings()?.takeRetainedValue() as? [String: Any],
+              let scoped = dict["__SCOPED__"] as? [String: Any] else {
+            return false
         }
-        return isConnected
+        return scoped.keys.contains { $0.hasPrefix("utun") || $0.hasPrefix("tun") }
     }
     
     static func checkSymbolicLink() -> Bool {
@@ -82,24 +80,50 @@ class WifiUtils {
     }
     
     static func getCellularNetworkGeneration() -> NetworkGeneration {
-        let networkInfo = CTTelephonyNetworkInfo()
-        guard let currentRadioTech = networkInfo.serviceCurrentRadioAccessTechnology?.first?.value
-        else { return .other }
-        if #available(iOS 14.1, *) {
-            switch currentRadioTech {
-            case CTRadioAccessTechnologyGPRS, CTRadioAccessTechnologyEdge:
-                return .g2
-            case CTRadioAccessTechnologyWCDMA, CTRadioAccessTechnologyHSDPA:
-                return .g3
-            case CTRadioAccessTechnologyLTE:
-                return .g4
-            case CTRadioAccessTechnologyNRNSA, CTRadioAccessTechnologyNR:
-                return .g5
-            default:
-                return .other
-            }
-        } else {
+        guard let reachability = SCNetworkReachabilityCreateWithName(nil, "www.apple.com") else {
             return .other
+        }
+        var flags = SCNetworkReachabilityFlags()
+        SCNetworkReachabilityGetFlags(reachability, &flags)
+        if !flags.contains(.reachable) {
+            return .other
+        }
+        if #available(iOS 14.1, *){
+            if flags.contains(.isWWAN) {
+                let networkInfo = CTTelephonyNetworkInfo()
+                guard let currentRadioTech = networkInfo.serviceCurrentRadioAccessTechnology?.values.first else {
+                    return .other
+                }
+                switch currentRadioTech {
+                case CTRadioAccessTechnologyGPRS, CTRadioAccessTechnologyEdge:
+                    return .g2
+                case CTRadioAccessTechnologyLTE:
+                    return .g4
+                case CTRadioAccessTechnologyNRNSA, CTRadioAccessTechnologyNR:
+                    return .g5
+                default:
+                    return .g3
+                }
+            } else {
+                return .wifi
+            }
+        }else{
+            if flags.contains(.isWWAN) {
+                let networkInfo = CTTelephonyNetworkInfo()
+                guard let currentRadioTech = networkInfo.serviceCurrentRadioAccessTechnology?.values.first else {
+                    return .other
+                }
+                switch currentRadioTech {
+                case CTRadioAccessTechnologyGPRS, CTRadioAccessTechnologyEdge:
+                    return .g2
+                case CTRadioAccessTechnologyLTE:
+                    return .g4
+                default:
+                    return .g3
+                }
+            } else {
+                return .wifi
+            }
         }
     }
     

@@ -12,7 +12,7 @@ import DeviceKit
 import MachO
 import CoreLocation
 
-enum TrackRiskType: Int {
+enum TrackRiskType: Int,BaseEnum {
     case register = 1
     case authenSelect = 2
     case idInfo = 3
@@ -35,16 +35,23 @@ class TrackMananger {
     
     var deviceModel: TrackDeviceModel = .init()
     var trackTimeData: [Int: [String: Int]] = [:]
-    var manager = LocationManager()
     var defaultCoordinate = CLLocationCoordinate2D.init()
+    
+    private var taskPool = AsyncTaskPool(maxConcurrentTasks: 3)
+    
+    init(){
+        Task{
+            await taskPool.waitAll()
+        }
+    }
     
     var rigsterStartTime: Int {
         trackTimeData[TrackRiskType.register.rawValue]?["startTime"] ?? 0
     }
-
+    
     func trackGoogleMarket(){
         Task{
-            let paramas = ["paralyzing": ADTool.shared.idfvString,"acts":ADTool.shared.idfaString]
+            let paramas = ["paralyzing": ADTool.shared.getIDFV(),"acts":ADTool.shared.getIDFA()]
             let result: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackGoogleMarket(dic: paramas))
             if let paramas = result?["tclbook"] as? [String: String]{
                 registerFaceBook(dic: paramas)
@@ -86,13 +93,17 @@ class TrackMananger {
         trackTimeData.removeValue(forKey: TrackRiskType.register.rawValue)
     }
     
+    @MainActor
     func trackLoacationInfo(){
-        manager = LocationManager()
-        manager.requestLocation() { model in
-            Task{
-                HJPrint("location 90=\(model)")
-                let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackLocationInfo(dic: model.toDictionary() ?? [:]))
-            }
+        let _ = LocationManager.shared.requestSingleLocation {[weak self] model, error in
+//            HJPrint("trackRisk1 = \(model)")
+            self?.uploadLocationInfo(body: model?.toDictionary() ?? [:])
+        }
+    }
+    
+    private func uploadLocationInfo(body: [String: Any]){
+        Task{
+            let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackLocationInfo(dic: body))
         }
     }
     
@@ -104,34 +115,30 @@ class TrackMananger {
     }
     
     func trackRisk(type: TrackRiskType,productId: String){
-        manager = LocationManager()
-        manager.requestLocation() {[weak self] model in
-            HJPrint("location 106=\(model)")
-            var paramas: [String: Any] = [:]
-            paramas["awful"] = productId
-            paramas["causes"] = type.rawValue
-            paramas["ass"] = ""
-            paramas["gun"] = ADTool.shared.idfvString
-            paramas["shot"] = ADTool.shared.idfaString
-            paramas["cobra"] = model.cobra
-            paramas["cleared"] = model.cleared
+        let _ = LocationManager.shared.requestSingleLocation() {[weak self] model, error in
+//            HJPrint("trackRisk = \(type) \(model)")
+            var trackModel = TrackRiskModel()
+            trackModel.awful = productId
+            trackModel.causes = type.rawValue
+            trackModel.ass = ""
+            trackModel.cobra = model?.cobra ?? ""
+            trackModel.cleared = model?.cleared ?? ""
             var startTime: Int = 0
             var endTime: Int = 0
             if let dic = self?.trackTimeData[type.rawValue]{
                 startTime = Int(dic["startTime"] ?? 0)
                 endTime = Int(dic["endTime"] ?? 0)
             }
-            paramas["jackal"] = startTime
-            paramas["giftdrawn"] = endTime
-            paramas["needle"] = randomUUIDString()
-            self?.configDataAndTrackRisk(type: type, paramas: paramas)
+            trackModel.jackal = startTime
+            trackModel.giftdrawn = endTime
+            self?.configDataAndTrackRisk(model: trackModel)
         }
     }
     
-    private func configDataAndTrackRisk(type: TrackRiskType,paramas: [String: Any]){
+    private func configDataAndTrackRisk(model: TrackRiskModel){
         Task{
-            let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackRiskInfo(dic: paramas))
-            if type == .register{
+            let _: [String: Any]? = await HttpRequestDictionary(TrackAPI.trackRiskInfo(dic: model.toDictionary() ?? [:]))
+            if model.causes == TrackRiskType.register.rawValue{
                 resetTimer()
             }
         }
@@ -178,15 +185,17 @@ extension TrackDeviceModel{
     
     static func getEffectModel() -> Effect{
         var effectModel = Effect.init()
-        effectModel.paralyzing = ADTool.shared.idfvString
-        effectModel.acts = ADTool.shared.idfaString
+        effectModel.paralyzing = ADTool.shared.getIDFV()
+        effectModel.acts = ADTool.shared.getIDFA()
         let wifiModel = TrackDeviceModel.getAnalystModel()
         effectModel.existence = wifiModel.expression?.existence ?? ""
         effectModel.deadly = WifiUtils.isProxyEnabled() ? 1 : 0
         effectModel.snake = WifiUtils.isVPNConnected() ? 1 : 0
         effectModel.tree = WifiUtils.checkSymbolicLink() ? 1:0
         effectModel.boomslang = WifiUtils.isSimulator ? 1 : 0
-        effectModel.typus = JourneyLocale.en.rawValue
+        let languages = UserDefaults.standard.object(forKey: "AppleLanguages") as? [String]
+        let currentLanguage = languages?.first ?? "en"
+        effectModel.typus = currentLanguage
         effectModel.dispholidus = WifiUtils.getCarrierName() ?? ""
         effectModel.poisonous = Int(Date().timeIntervalSince1970)
         effectModel.venom = WifiUtils.getCellularNetworkGeneration().rawValue
@@ -204,7 +213,7 @@ extension TrackDeviceModel{
         model.preparation = Int(kScreenW)
         model.dipped = Device.current.name ?? ""
         model.sent = UIDevice.current.model
-        model.fatal = Device.current.localizedModel ?? ""
+        model.fatal = Device.identifier
         model.poisons = "\(Device.current.diagonal)"
         model.rare = UIDevice.current.systemVersion
         return model

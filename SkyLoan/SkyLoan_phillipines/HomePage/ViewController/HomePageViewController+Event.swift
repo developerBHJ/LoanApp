@@ -21,7 +21,7 @@ extension HomePageViewController: HomePageEventDelegate{
             if result{
                 return true
             }else{
-                showCustomAlert(title: "", message: "To use Sky Loan,you must enable location permissions to use the Appfunctions normally", confirmCompletion:  {
+                showCustomAlert(title: "", message: LocalizationConstants.Alert.alertMessage_location, confirmCompletion:  {
                     RouteManager.shared.routeTo("blue://sky.yes.app/lasagnaGiraf")
                 })
                 return false
@@ -32,21 +32,25 @@ extension HomePageViewController: HomePageEventDelegate{
     }
     
     @objc func showDrawerView(){
-        self.animationType = .rlScanAnimation
-        let profileVC = ProfileViewController()
-        profileVC.completion = {
-            _ = LoginTool.shared.checkLogin()
+        Task{
+            let result = await chekPermissions()
+            guard result else {return}
+            self.animationType = .rlScanAnimation
+            let profileVC = ProfileViewController()
+            profileVC.completion = {
+                _ = LoginTool.shared.checkLogin()
+            }
+            let navVC = BaseNavigationController(rootViewController: profileVC)
+            navVC.presentFullScreenAndDisablePullToDismiss()
+            self.present(navVC, animated: true)
         }
-        let navVC = BaseNavigationController(rootViewController: profileVC)
-        navVC.presentFullScreenAndDisablePullToDismiss()
-        self.present(navVC, animated: true)
     }
     
     @objc func onPushOrderView() {
         Task{
             let result = await chekPermissions()
             guard result else {return}
-            updateLocation()
+//            updateLocation()
             animationType = .noneAnimation
             navigationController?.pushViewController(OrderViewController(), animated: true)
         }
@@ -73,7 +77,7 @@ extension HomePageViewController: HomePageEventDelegate{
     func kingKongEvent(type: HomeKingKongCell.ButtonType) {
         switch type {
         case .condition:
-            RouteManager.shared.routeTo(HtmlPath.loanAgreement.url)
+            RouteManager.shared.routeTo(HtmlPath.privacy.url)
         case .detail:
             Task{
                 let result = await chekPermissions()

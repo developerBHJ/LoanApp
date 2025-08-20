@@ -18,7 +18,6 @@ extension ContactsViewController: ContactsViewEventDelegate{
         Task{
             guard await viewModel.saveBasicInfo() else {return}
             TrackMananger.shared.endTime(type: .contacts)
-            trackContactsInfo()
             TrackMananger.shared.trackRisk(type: .contacts, productId: viewModel.productId)
             ProductEntrance.shared.onPushAuthenView()
         }
@@ -47,8 +46,9 @@ extension ContactsViewController: ContactsViewEventDelegate{
                 picker.delegate = self
                 picker.predicateForEnablingContact = NSPredicate(format: "phoneNumbers.@count > 0")
                 present(picker, animated: true)
+                trackContactsInfo()
             }else{
-                showCustomAlert(title: "", message: "To use Sky Loan,you must enable contacts permissions to use the Appfunctions normally", confirmCompletion:  {
+                showCustomAlert(title: "", message: LocalizationConstants.Alert.alertMessage_contacts, confirmCompletion:  {
                     RouteManager.shared.routeTo("blue://sky.yes.app/lasagnaGiraf")
                 })
             }

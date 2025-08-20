@@ -29,3 +29,10 @@
 "alert_cancellation_button_confirm" = "Confirm account cancellation";
 
 "selecte_city_toast" = "Please select the complete address";
+
+"alert_message_location" = "To verify that you are located within Sky Loan’s service area and to safeguard the security of your loan application, we require access to your location data.";
+"alert_message_camera" = "To complete identity verification, Sky Loan needs camera permission to take a photo of your ID and a live selfie.";
+"alert_message_photos" = "For secure identity verification, Sky Loan needs permission to access your photos. We'll only use this to scan your ID document.";
+"alert_message_contacts" = "For faster loan approval, we require full contacts access rather than limited permission. This allows us to properly verify your information and serve you better.";
+
+

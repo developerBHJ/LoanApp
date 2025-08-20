@@ -54,9 +54,9 @@ let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? S
 /// appName
 let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? ""
 
-let kH5Host = "http://8.220.149.161:9993"
-let kH5Host1 = "https://8.220.149.161:9993"
-let kApiHost = "http://8.220.149.161:9993/skyloanapi"
+let kH5Host = "https://papasin-lending-services.com"
+let kH5Host1 = "https://papasin-lending-services.com"
+let kApiHost = "https://papasin-lending-services.com/skyloanapi"
 let kLocaleLanguage = JourneyLocale.en
 
 enum HtmlPath: String {

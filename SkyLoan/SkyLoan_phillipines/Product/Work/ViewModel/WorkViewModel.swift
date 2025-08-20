@@ -13,8 +13,10 @@ class WorkViewModel {
     var itemList: [PersonalBasicModel] = []
     var editData: [ProductEditItem] = []
     var eventDelegate: WorkInfoViewEventDelegate?
-    var fullAddress: String = ""
-    var cityName: String = ""
+    var selectedProvince: String = ""
+    var selectedCity: String = ""
+    var selectedStreet: String = ""
+    var nextStep: Int = 0
     
     func reloadData() async{
         guard !productId.isEmpty else {return}
@@ -53,14 +55,8 @@ class WorkViewModel {
     func updateEditData(){
         let array = self.itemList.map { model in
             let content = editData.first(where: {$0.key == model.article})?.value ?? ""
-//            let needSecond = (model.article == addressKey)
-            let needSecond = false
-            return  PersonalBasicInfoItemView.Model(title: model.feel,placeHolder: model.tea,content: content,keyBordType: model.clear,isPicker: model.bow != .text,key: model.article,options: model.definitely ?? [],needSecond: needSecond,secondPlaceHolder:LocalizationConstants.Product.fullAddressPlaceHolder, secondContent: fullAddress,valueChanged: {[weak self] key, value in
+            return  PersonalBasicInfoItemView.Model(title: model.feel,placeHolder: model.tea,content: content,keyBordType: model.clear,isPicker: model.bow != .text,key: model.article,options: model.definitely ?? [],secondPlaceHolder:LocalizationConstants.Product.fullAddressPlaceHolder,valueChanged: {[weak self] key, value in
                 self?.eventDelegate?.saveUserInfo(key: key, value: value)
-            }, secondValueChanged: {[weak self] key, value in
-                guard let self else {return}
-                self.fullAddress = value
-                self.saveUserInfo(item: .init(key: key,value: self.fullAddress + cityName))
             },pickCompletion:  {[weak self] options in
                 self?.eventDelegate?.showAlertView(isAddress:model.bow == .citySelect,title: model.feel,key: model.article, options: options)
             })

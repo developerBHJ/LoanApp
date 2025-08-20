@@ -53,15 +53,18 @@ extension ProfileViewController{
     
     func loginOff(){
         let model = CustomAlertView.Model.init(type: .cancellation,closeCompletion: nil,confirmCompletion: {[weak self] in
-            guard self?.viewModel.loginOffPrivary == true else {return}
-            self?.hideCustomAlertView(){
-                Task{
-                    if await self?.viewModel.logOff() == true{
-                        LoginTool.shared.clearUserData()
-                        self?.popNavigation()
-                        NotificationCenter.default.post(name:  Notification.Name.Login.logOff, object: nil)
+            if self?.viewModel.loginOffPrivary == true {
+                self?.hideCustomAlertView(){
+                    Task{
+                        if await self?.viewModel.logOff() == true{
+                            LoginTool.shared.clearUserData()
+                            self?.popNavigation()
+                            NotificationCenter.default.post(name:  Notification.Name.Login.logOff, object: nil)
+                        }
                     }
                 }
+            }else{
+                SLProgressHUD.showToast(message: LocalizationConstants.Profile.cancellation_tips)
             }
         }) {[weak self] in
             self?.hideCustomAlertView()

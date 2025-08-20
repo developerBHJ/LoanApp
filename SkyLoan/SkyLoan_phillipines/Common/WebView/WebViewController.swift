@@ -71,7 +71,7 @@ class WebViewController: UIViewController,BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.removeCache()
+//        self.removeCache()
         hiddenNavigationBar = true
     }
     
@@ -109,7 +109,8 @@ extension WebViewController{
     }
     
     func loadRequest(){
-        let request = URLRequest.init(url: URL.init(string: url!)!, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
+        let decodedString = url?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let request = URLRequest.init(url: URL.init(string: decodedString!)!, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 30)
         self.webView.load(request)
     }
     

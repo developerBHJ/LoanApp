@@ -24,24 +24,17 @@ class WorkViewController: AuthenticationBaseController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         TrackMananger.shared.startTime(type: .workInfo)
-        IQKeyboardManager.shared().isEnabled = true
-    }
-    
-    override func popNavigation(animated: Bool = true) {
-        if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
-            navigationController?.popToViewController(rootVC, animated: true)
-        }else{
-            super.popNavigation(animated: animated)
-        }
     }
     
     var viewModel: WorkViewModel = .init()
-    private var navTitle: String = ""
     
     lazy var headerView: PersonalBasicHeaderView = {
         let view = PersonalBasicHeaderView(frame: .init(x: 0, y: 0, width: kScreenW, height: 113.ratio()))
         return view
     }()
+    
+    var addressView: AddressPickerView?
+
 }
 
 extension WorkViewController{

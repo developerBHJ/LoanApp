@@ -13,6 +13,10 @@ class PersonalInfoViewModel {
     var itemList: [PersonalBasicModel] = []
     var editData: [ProductEditItem] = []
     var eventDelegate: PersonalInfoViewEventDelegate?
+    var selectedProvince: String = ""
+    var selectedCity: String = ""
+    var selectedStreet: String = ""
+    var nextStep: Int = 0
     
     func reloadData() async{
         guard !productId.isEmpty else {return}

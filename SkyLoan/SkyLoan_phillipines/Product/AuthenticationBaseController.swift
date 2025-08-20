@@ -12,11 +12,41 @@ class AuthenticationBaseController: UIViewController,BaseViewController {
         super.viewDidLoad()
         
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         hiddenNavigationBar = true
     }
     
+    @MainActor
+    override func popNavigation(animated: Bool = true) {
+        Task{
+            if  await ProductEntrance.shared.checkFinished() {
+                if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
+                    navigationController?.popToViewController(rootVC, animated: true)
+                }else{
+                    popNavigation(animated: animated)
+                }
+            }else{
+                let model = CustomAlertView.Model.init(type: .stay,closeCompletion: nil,confirmCompletion: {[weak self] in
+                    self?.hideCustomAlertView(){
+                        if let rootVC = self?.navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
+                            self?.navigationController?.popToViewController(rootVC, animated: true)
+                        }else{
+                            self?.popNavigation(animated: animated)
+                        }
+                    }
+                }) {
+                    [weak self] in
+                    self?.hideCustomAlertView()
+                }
+                showCustomAlert(model: model)
+            }
+        }
+    }
+    
+    var navTitle: String = ""
+
     lazy var navBar: CustomNavigationBar = {
         let view = CustomNavigationBar(frame: .init(x: 0, y: 0, width: kScreenW, height: kNavigationBarH))
         return view

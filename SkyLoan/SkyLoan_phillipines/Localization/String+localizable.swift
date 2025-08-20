@@ -66,6 +66,14 @@ extension LocalizationConstants{
         static var cancellation_privacy = "alert_cancellation_privacy"
         @Localized(tableName: LocalizationConstants.localizableFileName)
         static var selectedCityToast = "selecte_city_toast"
+        @Localized(tableName: LocalizationConstants.localizableFileName)
+        static var alertMessage_location = "alert_message_location"
+        @Localized(tableName: LocalizationConstants.localizableFileName)
+        static var alertMessage_camera = "alert_message_camera"
+        @Localized(tableName: LocalizationConstants.localizableFileName)
+        static var alertMessage_photos = "alert_message_photos"
+        @Localized(tableName: LocalizationConstants.localizableFileName)
+        static var alertMessage_contacts = "alert_message_contacts"
     }
     
     enum HomePage {
@@ -90,6 +98,8 @@ extension LocalizationConstants{
         static var list_logOff = "list_logOff"
         @Localized(tableName: LocalizationConstants.profile)
         static var profile_version = "profile_version"
+        @Localized(tableName: LocalizationConstants.profile)
+        static var cancellation_tips = "cancellation_tips"
     }
     
     enum Order {
@@ -161,5 +171,9 @@ extension LocalizationConstants{
         static var nextStep = "product_next_step"
         @Localized(tableName: LocalizationConstants.product)
         static var fullAddressPlaceHolder = "product_company_address_placeholder"
+        @Localized(tableName: LocalizationConstants.product)
+        static var preview_save = "product_preview_button_save"
+        @Localized(tableName: LocalizationConstants.product)
+        static var preview_retake = "product_preview_button_retake"
     }
 }

@@ -26,6 +26,14 @@ class ProductHomeViewController: AuthenticationBaseController {
         listView.mj_header?.beginRefreshing()
     }
     
+    override func popNavigation(animated: Bool = true) {
+        if let _ = self.presentingViewController {
+            dismiss(animated: animated)
+        }else{
+            navigationController?.popViewController(animated: animated)
+        }
+    }
+    
     var viewModel = ProductViewModel()
     
     lazy var headerView: ProductHomeHeaderView = {

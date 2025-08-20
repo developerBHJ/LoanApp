@@ -27,56 +27,88 @@ struct LocationModel: BaseModel {
 }
 
 class LocationManager: NSObject {
-    private let operationQueue = DispatchQueue(label: "com.location.tracker.queue")
-    private var timeoutWorkItem: DispatchWorkItem?
-    private var manager: CLLocationManager?
-    private var completionHandlers = [((LocationModel) -> Void)]()
-    private let duration: TimeInterval = 30
-    private let geocoder = CLGeocoder()
-    private var locationModel = LocationModel.init()
+    private var activeRequests: [UUID: SingleLocationRequest] = [:]
+    private let lockQueue = DispatchQueue(label: "com.location.service.lock")
     
-    override init() {
-        manager = CLLocationManager()
-        super.init()
-        manager?.delegate = self
-        manager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-    }
-    
-    func requestLocation(completion: @escaping (LocationModel) -> Void) {
-        operationQueue.async { [weak self] in
-            guard let self = self else { return }
-            self.completionHandlers.append(completion)
-            
-            self.timeoutWorkItem = DispatchWorkItem {
-                self.setDefaultLocation()
-                self.executeCompletions(with: self.locationModel)
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: self.timeoutWorkItem!)
-            DispatchQueue.main.async {
-                self.manager?.requestLocation()
+    func requestSingleLocation(timeOut: Bool = true,completion: @escaping (LocationModel?, Error?) -> Void) -> UUID? {
+        let requestId = UUID()
+        let manager = CLLocationManager()
+        let request = SingleLocationRequest(
+            manager: manager,
+            timeOut: timeOut,
+            completion: completion,
+            requestId: requestId
+        )
+        
+        manager.delegate = request
+        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        
+        lockQueue.sync {
+            activeRequests[requestId] = request
+        }
+        Task{
+            await MainActor.run {
+                request.startLocationRequest()
             }
         }
+        return requestId
     }
     
-    private func executeCompletions(with model: LocationModel) {
-        operationQueue.async { [weak self] in
-            guard let self = self else { return }
-            self.timeoutWorkItem?.cancel()
-            self.completionHandlers.forEach { $0(model) }
-            self.completionHandlers.removeAll()
+    func cancelRequest(id: UUID) {
+        cleanRequest(id: id)
+    }
+    
+    func cleanRequest(id: UUID) {
+        lockQueue.sync {
+            guard let request = activeRequests[id] else { return }
+            request.manager.stopUpdatingLocation()
+            request.manager.delegate = nil
+            activeRequests[id] = nil
         }
-    }
-    
-    private func setDefaultLocation(){
-        locationModel.cleared = "\(TrackMananger.shared.defaultCoordinate.latitude)"
-        locationModel.cobra = "\(TrackMananger.shared.defaultCoordinate.longitude)"
     }
 }
 
-extension LocationManager: CLLocationManagerDelegate {
+private class SingleLocationRequest: NSObject, CLLocationManagerDelegate {
+    let manager: CLLocationManager
+    let completion: (LocationModel?, Error?) -> Void
+    let requestId: UUID
+    let duration: TimeInterval = 6
+    let timeOut: Bool
+    let geocoder = CLGeocoder()
+    var locationModel = LocationModel.init()
+    var timeoutWorkItem: DispatchWorkItem?
+    
+    init(manager: CLLocationManager,timeOut: Bool,
+         completion: @escaping (LocationModel?, Error?) -> Void,
+         requestId: UUID) {
+        self.manager = manager
+        self.completion = completion
+        self.requestId = requestId
+        self.timeOut = timeOut
+        super.init()
+    }
+    
+    @MainActor
+    func startLocationRequest() {
+        manager.delegate = self
+        manager.startUpdatingLocation()
+        self.timeoutWorkItem = DispatchWorkItem {
+            [weak self] in
+            guard let self else {return}
+            self.setDefaultLocation()
+            self.completion(self.locationModel,nil)
+            LocationManager.shared.cleanRequest(id: requestId)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: self.timeoutWorkItem!)
+        if self.timeOut {
+            
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
+        manager.stopUpdatingLocation()
         locationModel.cleared = "\(location.coordinate.latitude)"
         locationModel.cobra = "\(location.coordinate.longitude)"
         TrackMananger.shared.defaultCoordinate = location.coordinate
@@ -85,7 +117,9 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         setDefaultLocation()
-        executeCompletions(with: locationModel)
+        completion(locationModel, error)
+        manager.stopUpdatingLocation()
+        LocationManager.shared.cleanRequest(id: requestId)
     }
     
     func reverseGeocodeLocation(coordinate: CLLocationCoordinate2D){
@@ -96,7 +130,18 @@ extension LocationManager: CLLocationManagerDelegate {
             self.locationModel.incredible = place.administrativeArea ?? (place.locality ?? "")
             self.locationModel.deadlier = place.locality ?? ""
             self.locationModel.jury = place.name ?? ""
-            self.executeCompletions(with: locationModel)
+            completion(locationModel,nil)
+            LocationManager.shared.cleanRequest(id: requestId)
         }
     }
+    
+    private func setDefaultLocation(){
+        locationModel.cleared = "\(TrackMananger.shared.defaultCoordinate.latitude)"
+        locationModel.cobra = "\(TrackMananger.shared.defaultCoordinate.longitude)"
+    }
 }
+
+extension LocationManager {
+    static let shared = LocationManager()
+}
+

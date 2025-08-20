@@ -32,3 +32,5 @@
 "product_authen_result_birthday" = "Date of Birth";
 "product_next_step" = "Next step";
 "product_company_address_placeholder" = "Please Enter The Full Address";
+"product_preview_button_save" = "save";
+"product_preview_button_retake" = "retake";

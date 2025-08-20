@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum UploadService {
-    case uploadProfile(image: UIImage, meta: [String: Any])
+    case uploadProfile(image: Data, meta: [String: Any])
 }
 
 extension UploadService: TargetType{
@@ -31,9 +31,8 @@ extension UploadService: TargetType{
     var task: Task{
         switch self {
         case .uploadProfile(let image, let meta):
-            guard let imageData = image.smartCompress(maxKB: 500) else {return .requestPlain}
             var formData = [MultipartFormData]()
-            formData.append(.init(provider: .data(imageData), name: "disguise",fileName: "disguise-\(randomUUIDString()).jpg",mimeType: "image/jpeg"))
+            formData.append(.init(provider: .data(image), name: "disguise",fileName: "disguise-\(randomUUIDString()).jpg",mimeType: "image/jpeg"))
             for (key,vaue) in meta {
                 formData.append(.init(provider: .data("\(vaue)".data(using: .utf8)!), name: "\(key)"))
             }

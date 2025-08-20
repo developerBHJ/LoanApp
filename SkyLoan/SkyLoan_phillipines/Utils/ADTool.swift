@@ -12,8 +12,7 @@ import UIKit
 
 class ADTool {
     static let shared = ADTool()
-    let idfvString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
-    var idfaString: String = ""
+   private let idfvString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
     var trackCount: Int = 0
     
     func registerIDFAAndTrack(){
@@ -36,7 +35,9 @@ class ADTool {
         case .authorized:
             // 用户已授权，可以访问IDFA
             let idfa = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-            ADTool.shared.idfaString = idfa
+            if let idfaData = idfa.data(using: .utf8) {
+                _ = KeychainWrapper.save(key: "IDFA", data: idfaData)
+            }
             if let idfvData = self.idfvString.data(using: .utf8){
                 _ = KeychainWrapper.save(key: "IDFV", data: idfvData)
             }
@@ -48,5 +49,14 @@ class ADTool {
         @unknown default:
             return false
         }
+    }
+    
+    func getIDFV() -> String{
+        guard let data = KeychainWrapper.load(key: "IDFV"),let string = String(data: data, encoding: .utf8) else { return ""}
+        return string
+    }
+    
+    func getIDFA() -> String{
+        ASIdentifierManager.shared().advertisingIdentifier.uuidString
     }
 }

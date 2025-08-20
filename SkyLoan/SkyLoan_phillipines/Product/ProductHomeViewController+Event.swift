@@ -23,6 +23,7 @@ extension ProductHomeViewController: ProductHomeEventDelegate{
     
     func itemClick(model: ProductListModel){
         if model.late == 1{
+            ProductEntrance.shared.nextTitle = model.feel
             ProductEntrance.shared.onPushAuthenView(type: model.fast)
         }else{
             ProductEntrance.shared.onPushAuthenView()

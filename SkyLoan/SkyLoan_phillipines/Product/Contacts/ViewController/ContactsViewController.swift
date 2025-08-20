@@ -26,7 +26,6 @@ class ContactsViewController: AuthenticationBaseController {
     }
     
     var viewModel: ContactsViewModel = .init()
-    private var navTitle: String = ""
     
     lazy var headerView: PersonalBasicHeaderView = {
         let view = PersonalBasicHeaderView(frame: .init(x: 0, y: 0, width: kScreenW, height: 113.ratio()))
@@ -71,14 +70,6 @@ extension ContactsViewController{
     func updateHeaderView(){
         let model =  PersonalBasicHeaderView.Model.init(title: navTitle,imageName: "icon_product_basic",current: viewModel.editData.count,total: viewModel.itemList.count)
         headerView.model = model
-    }
-    
-    override func popNavigation(animated: Bool = true) {
-        if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
-            navigationController?.popToViewController(rootVC, animated: true)
-        }else{
-            super.popNavigation(animated: animated)
-        }
     }
 }
 

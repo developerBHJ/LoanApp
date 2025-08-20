@@ -272,7 +272,7 @@ extension CustomAlertView{
     private func updateButton(sender: UIButton){
         guard selectedButton != sender else {return }
         if model.type == .cancellation {
-            let image = UIImage(named: "icon_alert_button")?.stretchableCenter()
+            let image = UIImage(named: "icon_product_item_bg")
             sender.setBackgroundImage(image, for: .normal)
             sender.setTitleColor(kColor_black, for: .normal)
             sender.titleLabel?.font = SLFont(size: 15, weight: .black)
@@ -280,6 +280,8 @@ extension CustomAlertView{
             selectedButton?.setTitleColor(kColor_C3C3C3, for: .normal)
             selectedButton?.titleLabel?.font = SLFont(size: 14, weight: .black)
         }else{
+            sender.setBackgroundImage(UIImage(named: "icon_alert_button"), for: .normal)
+            selectedButton?.setBackgroundImage(UIImage(named: "icon_alert_button"), for: .normal)
             selectedButton?.alpha = 0.5
             sender.alpha = 1.0
         }

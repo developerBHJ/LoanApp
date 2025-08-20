@@ -99,6 +99,12 @@ extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
                 months = Array(1...currentMonth)
             }
             pickerView.reloadComponent(1)
+            let preMonthIndex = self.selectedMonth - 1
+            if preMonthIndex > months.count{
+                self.pickerView.selectRow(preMonthIndex - 1, inComponent: 1, animated: false)
+            }else{
+                self.pickerView.selectRow(preMonthIndex, inComponent: 1, animated: false)
+            }
         }
         if component == 1 {
             let year: Int = pickerView.selectedRow(inComponent: 2) + currentDateCom.year!
@@ -114,6 +120,12 @@ extension DatePickerView: UIPickerViewDelegate,UIPickerViewDataSource{
                 self.days = Array(1 ... days)
             }
             pickerView.reloadComponent(0)
+            let preDayIndex = self.selectedDay - 1
+            if preDayIndex > self.days.count {
+                self.pickerView.selectRow(preDayIndex - 1, inComponent: 0, animated: false)
+            }else{
+                self.pickerView.selectRow(preDayIndex, inComponent: 0, animated: false)
+            }
         }
     }
 }
@@ -149,6 +161,9 @@ extension DatePickerView{
         self.pickerView.selectRow(currentYearIndex, inComponent: 2, animated: true)
         self.pickerView.selectRow(currentMonths - 1, inComponent: 1, animated: true)
         self.pickerView.selectRow(currentDay - 1, inComponent: 0, animated: true)
+        self.pickerView(pickerView, didSelectRow: currentYearIndex, inComponent: 2)
+        self.pickerView(pickerView, didSelectRow: currentMonths - 1, inComponent: 1)
+        self.pickerView(pickerView, didSelectRow: currentDay - 1, inComponent: 0)
     }
     
     private func howManyDays(inThisYear year: Int, withMonth month: Int) -> Int {

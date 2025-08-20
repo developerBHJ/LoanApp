@@ -33,6 +33,9 @@ extension IDCardViewController: IDCardViewEventDelegate{
     func showAlertView(){
         let alertView = SelectedImageAlertView(frame: .zero,model: .init(selectedCompletion: {[weak self] type in
             self?.viewModel.imageSource = type
+            self?.hideProductAlertView {
+                self?.takeImage(type: self?.viewModel.imageSource ?? 0)
+            }
         }))
         let alertVC = ProductAlertViewController(model: .init(titleImage: "icon_Upload method",contentView: alertView, bgImage:"icon_product_alertBg1",confirmCompletion: {
             [weak self] in
@@ -41,11 +44,26 @@ extension IDCardViewController: IDCardViewEventDelegate{
         present(alertVC, animated: true)
     }
     
+    @MainActor
     func takeImage(type: Int) {
-        if type == 1{
-            setupCamera()
-        }else{
-            selectedImageFromPhotoLibrary()
+        Task{
+            if type == 1{
+                if await PermissionHandle.shared.requestCameraAccess(){
+                    setupCamera()
+                }else{
+                    showCustomAlert(title: "", message: LocalizationConstants.Alert.alertMessage_camera, confirmCompletion:  {
+                        RouteManager.shared.routeTo("blue://sky.yes.app/lasagnaGiraf")
+                    })
+                }
+            }else{
+                if await PermissionHandle.shared.requestPhotoLibraryAccess(){
+                    selectedImageFromPhotoLibrary()
+                }else{
+                    showCustomAlert(title: "", message: LocalizationConstants.Alert.alertMessage_photos, confirmCompletion:  {
+                        RouteManager.shared.routeTo("blue://sky.yes.app/lasagnaGiraf")
+                    })
+                }
+            }
         }
     }
     
@@ -53,7 +71,7 @@ extension IDCardViewController: IDCardViewEventDelegate{
     func setupCamera(){
         Task{
             guard await PermissionHandle.shared.requestCameraAccess() else {return}
-            let imagePicker = CustomCameraViewController(position: self.viewModel.viewType == .face ? .front : .back)
+            let imagePicker = CustomCameraViewController(position: self.viewModel.viewType == .face ? .front : .back,canFlip: self.viewModel.viewType != .face)
             imagePicker.delegate = self
             imagePicker.presentFullScreenAndDisablePullToDismiss()
             present(imagePicker, animated: true)
@@ -75,7 +93,11 @@ extension IDCardViewController: IDCardViewEventDelegate{
         if viewModel.viewType == .result {
             popNavigation()
         }else if viewModel.viewType == .idCard || viewModel.viewType == .face{
-            uploadImage()
+            if viewModel.selectedImage != nil {
+                uploadImage()
+            }else{
+                pickerImage()
+            }
         }
     }
     
@@ -157,11 +179,8 @@ extension IDCardViewController: IDCardViewEventDelegate{
     
     private func updateConfirmView(){
         self.configConfirmView()
-        self.confirmAlertVC.model = .init(title: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(),autoDismiss: false,closeCompletion: {
-            IQKeyboardManager.shared().isEnabled = true
-        },confirmCompletion: {
+        self.confirmAlertVC.model = .init(title: "icon_Identity Information",contentView: confirmView,contentHeight: 400.ratio(),autoDismiss: false,confirmCompletion: {
             [weak self] in
-            IQKeyboardManager.shared().isEnabled = true
             self?.saveAuthenInfo()
         })
     }
@@ -170,20 +189,26 @@ extension IDCardViewController: IDCardViewEventDelegate{
 extension IDCardViewController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage{
-            viewModel.pickedImage = image
-            viewModel.selectedImage = image
+        dismiss(animated: false) {
+            [weak self] in
+            if let image = info[.originalImage] as? UIImage{
+                self?.viewModel.pickedImage = image
+                self?.viewModel.selectedImage = image
+            }
+            self?.reloadData()
+            self?.uploadImage()
         }
-        dismiss(animated: true)
-        reloadData()
     }
 }
 
 extension IDCardViewController: CustomCameraViewDelegate{
     func didFinishPickingImage(image: UIImage) {
-        dismiss(animated: true)
-        viewModel.pickedImage = image
-        viewModel.selectedImage = image
-        reloadData()
+        dismiss(animated: false) {
+            [weak self] in
+            self?.viewModel.pickedImage = image
+            self?.viewModel.selectedImage = image
+            self?.reloadData()
+            self?.uploadImage()
+        }
     }
 }

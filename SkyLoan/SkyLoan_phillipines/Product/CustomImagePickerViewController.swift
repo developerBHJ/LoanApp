@@ -24,6 +24,14 @@ class CustomCameraViewController: UIViewController {
     private let flashButton = UIButton()
     private var position: AVCaptureDevice.Position = .back
     
+    private lazy var flipButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "camera.rotate"), for: .normal)
+        button.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
+        button.tintColor = UIColor.white
+        return button
+    }()
+    
     lazy var navBar: CustomNavigationBar = {
         let view = CustomNavigationBar(frame: .init(x: 0, y: 0, width: kScreenW, height: kNavigationBarH))
         view.backButton.setImage(UIImage(named: "icon_back")?.withTintColor(.white,renderingMode: .alwaysOriginal), for: .normal)
@@ -31,10 +39,12 @@ class CustomCameraViewController: UIViewController {
     }()
     
     var delegate: CustomCameraViewDelegate?
+    var canFlip: Bool = false
     
-    convenience init(position: AVCaptureDevice.Position){
+    convenience init(position: AVCaptureDevice.Position,canFlip: Bool = false){
         self.init()
         self.position = position
+        self.canFlip = canFlip
     }
     
     override func viewDidLoad() {
@@ -84,17 +94,48 @@ class CustomCameraViewController: UIViewController {
     }
     // MARK: - UI设置
     private func setupUI() {
+        view.backgroundColor = .black
         // 拍照按钮配置
-        captureButton.frame = CGRect(x: view.center.x - 35, y: view.bounds.height - 100, width: 70, height: 70)
+        captureButton.frame = CGRect(x: view.center.x - 35.ratio(), y: view.bounds.height - 100.ratio(), width: 70.ratio(), height: 70.ratio())
         captureButton.backgroundColor = .white
-        captureButton.layer.cornerRadius = 35
+        captureButton.layer.cornerRadius = 35.ratio()
         captureButton.addTarget(self, action: #selector(captureButtonTapped), for: .touchUpInside)
         view.addSubview(captureButton)
         view.addSubview(navBar)
+        view.addSubview(flipButton)
+        flipButton.snp.makeConstraints { make in
+            make.centerY.equalTo(captureButton.snp.centerY)
+            make.trailing.equalToSuperview().inset(60.ratio())
+            make.width.height.equalTo(44.ratio())
+        }
+        flipButton.isHidden = !canFlip
     }
     
     @objc private func captureButtonTapped() {
         capturePhoto()
+    }
+    
+    @objc private func flipCamera() {
+        captureSession.beginConfiguration()
+        defer { captureSession.commitConfiguration() }
+        guard let currentInput = captureSession.inputs.first as? AVCaptureDeviceInput,
+              let newCamera = currentCamera?.position == .back ?
+                AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) :
+                AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        else { return }
+        do {
+            let newInput = try AVCaptureDeviceInput(device: newCamera)
+            captureSession.removeInput(currentInput)
+            
+            if captureSession.canAddInput(newInput) {
+                captureSession.addInput(newInput)
+                currentCamera = newCamera
+            } else {
+                captureSession.addInput(currentInput)
+            }
+        } catch {
+            print("切换摄像头失败: \(error)")
+        }
     }
 }
 
@@ -105,6 +146,10 @@ extension CustomCameraViewController: AVCapturePhotoCaptureDelegate {
                      error: Error?) {
         guard let imageData = photo.fileDataRepresentation(),
               let image = UIImage(data: imageData) else { return }
-        delegate?.didFinishPickingImage(image: image)
+        let preview = PreviewViewController(image: image) {[weak self] image in
+            self?.delegate?.didFinishPickingImage(image: image)
+        }
+        preview.presentFullScreenAndDisablePullToDismiss()
+        present(preview, animated: true)
     }
 }

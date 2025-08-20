@@ -24,19 +24,9 @@ class ReceiptViewController: AuthenticationBaseController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         TrackMananger.shared.startTime(type: .receipt)
-        IQKeyboardManager.shared().isEnabled = true
-    }
-    
-    override func popNavigation(animated: Bool = true) {
-        if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
-            navigationController?.popToViewController(rootVC, animated: true)
-        }else{
-            super.popNavigation(animated: animated)
-        }
     }
     
     var viewModel: ReceiptViewModel = .init()
-    private var navTitle: String = ""
     
     lazy var headerView: PersonalBasicHeaderView = {
         let view = PersonalBasicHeaderView(frame: .init(x: 0, y: 0, width: kScreenW, height: 113.ratio()))

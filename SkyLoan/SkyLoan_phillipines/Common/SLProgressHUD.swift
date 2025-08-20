@@ -20,6 +20,7 @@ class SLProgressHUD {
         hud.label.text = message
         hud.label.font = SLFont(size: 12, weight: .regular)
         hud.margin = 10.0
+        hud.label.numberOfLines = 0
         guard autoHide else {return}
         hud.hide(animated: true, afterDelay: 3)
     }
@@ -36,6 +37,7 @@ class SLProgressHUD {
         hud.label.text = message
         hud.label.font = SLFont(size: 12, weight: .regular)
         hud.margin = 10.0
+        hud.label.numberOfLines = 0
         hud.hide(animated: true, afterDelay: 3)
     }
     

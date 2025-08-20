@@ -30,16 +30,6 @@ class IDCardViewController: AuthenticationBaseController {
         viewModel.eventDelegate = self
     }
     
-    override func popNavigation(animated: Bool = true) {
-        if let rootVC = navigationController?.children.first(where: {$0 is ProductHomeViewController}) {
-            navigationController?.popToViewController(rootVC, animated: true)
-        }else{
-            super.popNavigation(animated: animated)
-        }
-    }
-    
-    
-    private var navTitle = ""
     var viewModel: IDCardViewModel = .init()
     
     lazy var headerView: ProductHomeHeaderView = {

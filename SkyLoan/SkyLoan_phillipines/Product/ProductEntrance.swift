@@ -11,7 +11,7 @@ import UIKit
 class ProductEntrance{
     static let shared = ProductEntrance()
     private var productId: String = ""
-    private var nextTitle: String = ""
+    var nextTitle: String = ""
     private var orderId: String = ""
     
     @MainActor
@@ -24,6 +24,14 @@ class ProductEntrance{
                 RouteManager.shared.routeTo(url)
             }
         }
+    }
+    
+    func checkFinished() async -> Bool {
+        guard let model = await getNextStep(productId: self.productId,showLoading: false) else {return false}
+        if let _ = model.brain{
+            return false
+        }
+        return true
     }
     
     func onPushAuthenView(productId: String = ""){
@@ -65,9 +73,9 @@ class ProductEntrance{
         return nil
     }
     
-    private func getNextStep(productId: String) async -> ProductDetailModel?{
+    private func getNextStep(productId: String,showLoading: Bool = true) async -> ProductDetailModel?{
         guard !productId.isEmpty else {return nil}
-        let detailModel: ProductDetailModel = await HttpRequest(ProductAPI.getProductDetail(disappointed: productId),showLoading: true)
+        let detailModel: ProductDetailModel = await HttpRequest(ProductAPI.getProductDetail(disappointed: productId),showLoading: showLoading)
         if let ass = detailModel.confusion?.ass{
             self.orderId = ass
         }

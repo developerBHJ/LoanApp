@@ -22,6 +22,7 @@ class CustomNavigationBar: UIView {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "icon_back"), for: .normal)
         button.addTarget(self, action: #selector(backEvent), for: .touchUpInside)
+        button.hitTestEdgeInsets = .init(top: -10, left: -10, bottom: -10, right: -10)
         return button
     }()
     

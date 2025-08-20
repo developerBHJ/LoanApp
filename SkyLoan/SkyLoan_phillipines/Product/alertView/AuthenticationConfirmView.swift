@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import IQKeyboardManager
 
 class AuthenticationConfirmView: UIView {
     override init(frame: CGRect) {
@@ -20,7 +19,6 @@ class AuthenticationConfirmView: UIView {
         self.model = model
         setupUI()
         applyModel()
-        IQKeyboardManager.shared().isEnabled = false
     }
     
     required init?(coder: NSCoder) {
@@ -41,6 +39,7 @@ class AuthenticationConfirmView: UIView {
         view.estimatedSectionFooterHeight = 0
         view.estimatedRowHeight = 44.ratio()
         view.showsVerticalScrollIndicator = false
+        view.isScrollEnabled = false
         return view
     }()
 }

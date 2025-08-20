@@ -55,20 +55,19 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
                 await LoginTool.shared.requestAddressList()
             }
         }
-        var selectedAddress: String?
-        var isFullAddress: Bool = false
-        let selectedView = AddressPickerView.init(frame: .zero, model: .init(valueChanged: { address,result in
-            selectedAddress = address
-            isFullAddress = result
-            HJPrint(selectedAddress)
+        viewModel.selectedProvince = ""
+        viewModel.selectedCity = ""
+        viewModel.selectedStreet = ""
+        let selectedView = AddressPickerView.init(frame: .zero, model: .init(currentProvince: viewModel.selectedProvince,currentCity: viewModel.selectedCity,currentStreet: viewModel.selectedStreet,valueChanged: {[weak self] province,city,street in
+            self?.viewModel.nextStep = (province == nil) ?  0 :  ((city == nil) ? 1 : 2)
+            self?.viewModel.selectedProvince = province ?? ""
+            self?.viewModel.selectedCity = city ?? ""
+            self?.viewModel.selectedStreet = street ?? ""
         }))
-        let alertVC = ProductAlertViewController(model: .init(titleImage:"icon_select Address",contentView: selectedView,buttonImage: "icon_product_alert_button_yes",isAddressView: true,confirmCompletion: {
+        addressView = selectedView
+        let alertVC = ProductAlertViewController(model: .init(titleImage:"icon_select Address",contentView: selectedView,buttonImage: "icon_product_alert_button_yes",autoDismiss: false,isAddressView: true,confirmCompletion: {
             [weak self] in
-            if isFullAddress{
-                self?.saveUserInfo(key: key, value: selectedAddress ?? "")
-            }else{
-                SLProgressHUD.showToast(message: LocalizationConstants.Alert.selectedCityToast)
-            }
+            self?.saveFullAddress(key: key,dismiss: true)
         }))
         present(alertVC, animated: true)
     }
@@ -83,5 +82,20 @@ extension PersonalInfoViewController: PersonalInfoViewEventDelegate{
         self.viewModel.updateEditData()
         self.listView.reloadData()
         self.updateHeaderView()
+    }
+    
+    @MainActor
+    private func saveFullAddress(key: String,dismiss: Bool = false){
+        let province = self.viewModel.selectedProvince
+        let city = self.viewModel.selectedCity
+        let street = self.viewModel.selectedStreet
+        let selectedAddress = province + "-" + city + "-" + street
+        if province.isEmpty == false,city.isEmpty == false,street.isEmpty == false,dismiss{
+            self.hideProductAlertView {
+                self.saveUserInfo(key: key, value: selectedAddress)
+            }
+        }else{
+            addressView?.updateStep(step: viewModel.nextStep)
+        }
     }
 }

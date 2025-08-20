@@ -15,7 +15,7 @@ protocol OrderViewEventDelegate{
 
 extension OrderViewController: OrderViewEventDelegate{
     func onPushApplyView() {
-        RouteManager.shared.routeTo("blue://sky.yes.app/octopusTarra")
+        self.popNavigation()
     }
     
     func refreshData(type: Int) {

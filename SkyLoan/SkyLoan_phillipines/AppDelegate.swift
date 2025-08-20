@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import IQKeyboardManager
+import FBSDKCoreKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,6 +34,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let start = launchStartTime {
             let duration = Int(Date().timeIntervalSince(start))
             TrackMananger.shared.launchTime = duration
+        }
+    }
+    
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if let _ = url.scheme{
+            RouteManager.shared.routeTo(url.absoluteString)
+            return true
+        } else {
+           return ApplicationDelegate.shared.application(
+                app,
+                open: url,
+                sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+                annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+            )
         }
     }
 }

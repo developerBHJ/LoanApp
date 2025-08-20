@@ -23,6 +23,7 @@ class AddressPickerView: UIView {
         self.pickerView(self.pickerView, didSelectRow: 0, inComponent: 0)
         pickerView.selectRow(0, inComponent: 0, animated: false)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -139,20 +140,16 @@ extension AddressPickerView: UIPickerViewDelegate,UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if selectedType == 0,model.dataSource.count > row{
             selectedProvince = model.dataSource[row]
-            leftButton.setTitle(selectedProvince?.nowadays, for: .normal)
-            let address = selectedProvince?.nowadays ?? ""
-            model.valueChanged?(address,false)
+            selectedCity = nil
+            selectedStreet = nil
         }else if selectedType == 1,selectedProvince?.trust.count ?? 0 > row{
             selectedCity = selectedProvince?.trust[row]
-            middleButton.setTitle(selectedCity?.nowadays, for: .normal)
-            let address = (selectedProvince?.nowadays ?? "")  + " " + (selectedCity?.nowadays ?? "")
-            model.valueChanged?(address,false)
+            selectedStreet = nil
         }else if selectedCity?.trust.count ?? 0 > row{
             selectedStreet = selectedCity?.trust[row]
-            rightButton.setTitle(selectedStreet?.nowadays, for: .normal)
-            let address = (selectedProvince?.nowadays ?? "") + "-" + (selectedCity?.nowadays ?? "") + "-" +  (selectedStreet?.nowadays ?? "")
-            model.valueChanged?(address,true)
         }
+        updateButtons()
+        model.valueChanged?(selectedProvince?.nowadays,selectedCity?.nowadays,selectedStreet?.nowadays)
     }
 }
 
@@ -170,25 +167,25 @@ extension AddressPickerView{
         lineView.snp.makeConstraints { make in
             make.top.equalTo(headerView.snp.bottom).offset(10.ratio())
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1.ratio())
+            make.height.equalTo(0.5)
         }
         addSubview(pickerView)
         pickerView.snp.makeConstraints { make in
             make.top.equalTo(lineView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(0)
+            make.height.equalTo(model.contentHeight)
             make.bottom.equalToSuperview()
         }
         addSubview(topLineView)
         topLineView.snp.makeConstraints { make in
             make.bottom.equalTo(pickerView.snp.centerY).offset(-16.ratio())
-            make.height.equalTo(1.ratio())
+            make.height.equalTo(0.5)
             make.leading.trailing.equalToSuperview().inset(46.ratio())
         }
         addSubview(bottomLineView)
         bottomLineView.snp.makeConstraints { make in
             make.top.equalTo(pickerView.snp.centerY).offset(16.ratio())
-            make.height.equalTo(1.ratio())
+            make.height.equalTo(0.5)
             make.leading.trailing.equalToSuperview().inset(46.ratio())
         }
     }
@@ -196,6 +193,15 @@ extension AddressPickerView{
     func applyModel(){
         pickerView.snp.updateConstraints { make in
             make.height.equalTo(model.contentHeight)
+        }
+//        let province = model.dataSource.first{$0.nowadays == model.currentProvince}
+//        let cityModel = province?.trust.first{$0.nowadays == model.currentCity}
+//        let cityIndex = province?.trust.firstIndex{$0.nowadays == model.currentCity} ?? 0
+//        let streetIndex = cityModel?.trust.firstIndex{$0.nowadays == model.currentStreet} ?? 0
+        if model.nextStep == 1 {
+            buttonEvent(sender: middleButton)
+        }else if model.nextStep == 2{
+            buttonEvent(sender: rightButton)
         }
     }
     
@@ -205,13 +211,28 @@ extension AddressPickerView{
         self.pickerView.selectRow(0, inComponent: 0, animated: false)
         self.pickerView(self.pickerView, didSelectRow: 0, inComponent: 0)
     }
+    
+    func updateStep(step: Int){
+        model.nextStep = step
+        applyModel()
+    }
+    
+    func updateButtons(){
+        leftButton.setTitle(selectedProvince?.nowadays ?? "Choose", for: .normal)
+        middleButton.setTitle(selectedCity?.nowadays ?? "Choose", for: .normal)
+        rightButton.setTitle(selectedStreet?.nowadays ?? "Choose", for: .normal)
+    }
 }
 
 extension AddressPickerView{
     struct Model {
         var contentHeight = 200.ratio()
         var dataSource: [AddressModel] = LoginTool.shared.addressList
-        var valueChanged: ((String,Bool)-> Void)? = nil
+        var nextStep: Int = 0
+        var currentProvince: String? = nil
+        var currentCity: String? = nil
+        var currentStreet: String? = nil
+        var valueChanged: ((String?,String?,String?)-> Void)? = nil
     }
 }
 

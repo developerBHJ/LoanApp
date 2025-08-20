@@ -45,6 +45,7 @@ class LoginTool {
     func clearUserData(){
         UserDefaults.standard.set(nil, forKey: tokenKey)
         UserDefaults.standard.set(nil, forKey: userNameKey)
+        ADTool.shared.trackCount = 0
     }
     
     func requestAddressList() async{

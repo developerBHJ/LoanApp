@@ -26,24 +26,51 @@ extension UIImage{
 }
 
 extension UIImage {
-    func smartCompress(maxKB: Int) -> Data? {
-        let maxLength = maxKB * 1024
+    static func compress(
+        image: UIImage,
+        maxSizeKB: Int = 500,
+        maxResolution: CGFloat = 2000
+    ) -> Data? {
+        // 第一步：智能尺寸压缩
+        let resizedImage = resizeIfNeeded(image: image, maxLength: maxResolution)
+        // 第二步：动态质量压缩
+        return binaryQualityCompression(image: resizedImage, maxSizeKB: maxSizeKB)
+    }
+    
+    private static func resizeIfNeeded(image: UIImage, maxLength: CGFloat) -> UIImage {
+        let width = image.size.width
+        let height = image.size.height
+        // 无需调整的情况
+        guard width > maxLength || height > maxLength else { return image }
+        let ratio = min(maxLength/width, maxLength/height)
+        let newSize = CGSize(width: width*ratio, height: height*ratio)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, image.scale)
+        image.draw(in: CGRect(origin: .zero, size: newSize))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? image
+    }
+    
+    private static func binaryQualityCompression(image: UIImage, maxSizeKB: Int) -> Data? {
+        let maxSizeBytes = maxSizeKB * 1024
         var compression: CGFloat = 1.0
-        guard var data = self.jpegData(compressionQuality: compression) else { return nil }
-        if data.count < maxLength { return data }
-        var max: CGFloat = 1.0
-        var min: CGFloat = 0.0
-        for _ in 0..<6 {
-            compression = (max + min) / 2
-            data = self.jpegData(compressionQuality: compression)!
-            if CGFloat(data.count) < CGFloat(maxLength) * 0.9 {
-                min = compression
-            } else if data.count > maxLength {
-                max = compression
+        let compressedData = image.jpegData(compressionQuality: compression)
+        guard var data = compressedData, data.count > maxSizeBytes else {
+            return compressedData
+        }
+        // 二分法渐进压缩（最多6次迭代）
+        var minQuality: CGFloat = 0
+        var maxQuality: CGFloat = 1
+        while data.count >= maxSizeBytes {
+            compression = (maxQuality + minQuality) / 2
+            data = image.jpegData(compressionQuality: compression) ?? Data()
+            
+            if data.count < maxSizeBytes {
+                minQuality = compression
             } else {
-                break
+                maxQuality = compression
             }
         }
-        return data
+        return data.count <= maxSizeBytes ? data : nil
     }
 }

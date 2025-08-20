@@ -18,13 +18,13 @@ class ProductAlertViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         applyModel()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
-    deinit{
-        NotificationCenter.default.removeObserver(self)
-    }
+//    deinit{
+//        NotificationCenter.default.removeObserver(self)
+//    }
     
     lazy var bgImageView: UIImageView = {
         let view = UIImageView()
@@ -123,19 +123,14 @@ extension ProductAlertViewController{
         contentView.removeFromSuperview()
         contentView = model.contentView
         bgImageView.addSubview(contentView)
-        contentView.snp.makeConstraints { make in
-            make.top.equalTo(titleImageView.snp.bottom).offset(40.ratio())
-            make.leading.trailing.equalToSuperview().inset(25.ratio())
-            make.bottom.equalTo(confirmButton.snp.top).offset(-23.ratio())
-        }
         if model.isAddressView{
-            contentView.snp.makeConstraints { make in
+            contentView.snp.remakeConstraints { make in
                 make.top.equalTo(titleImageView.snp.bottom).offset(40.ratio())
                 make.leading.trailing.equalToSuperview()
                 make.bottom.equalTo(confirmButton.snp.top).offset(-23.ratio())
             }
         }else{
-            contentView.snp.makeConstraints { make in
+            contentView.snp.remakeConstraints { make in
                 make.top.equalTo(titleImageView.snp.bottom).offset(40.ratio())
                 make.leading.trailing.equalToSuperview().inset(25.ratio())
                 make.bottom.equalTo(confirmButton.snp.top).offset(-23.ratio())
@@ -189,6 +184,7 @@ extension ProductAlertViewController{
         var contentHeight: CGFloat = 312.ratio()
         var autoDismiss: Bool = true
         var isAddressView: Bool = false
+        var isScrollEnabled: Bool = true
         var closeCompletion: (()-> Void)? = nil
         var confirmCompletion: (()-> Void)? = nil
     }

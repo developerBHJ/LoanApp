@@ -11,4 +11,5 @@
 "list_exit" = "Go Out";
 "list_logOff" = "Account Cancellation";
 "profile_version" = "Version";
+"cancellation_tips" = "Please check the cancellation agreement first";
 
