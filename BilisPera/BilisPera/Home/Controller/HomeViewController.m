@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)onPushProductDetail:(NSString *)prodcutId{
-    [[ProductHandle shared] onPushDetailView:prodcutId];
+    [[ProductHandle shared] applyEvent:prodcutId];
 }
 
 - (void)kingKongItemClick:(HomeKingKongType)type{

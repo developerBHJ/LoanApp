@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *everyonehad;
 
 // 图标
-@property (nonatomic, strong) NSString *consulted;
+@property (nonatomic, strong) NSString *myleader;
 
 
 @end

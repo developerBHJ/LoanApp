@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView).inset(kRatio(24));
+        make.top.equalTo(self.contentView).inset(kRatio(16));
         make.leading.equalTo(self.contentView).inset(kRatio(26));
         make.trailing.equalTo(self.contentView).inset(kRatio(16));
     }];
@@ -52,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textColor = kBlackColor;
         _titleLabel.font = kFont(14);
+        _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
 }

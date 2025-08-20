@@ -89,6 +89,15 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+-(void)applyEvent:(NSString *)productId{
+    kWeakSelf;
+    [self apply:productId completion:^{
+        if (weakSelf.applyInfo.improbable.length > 0) {
+            [[Routes shared] routeTo:weakSelf.applyInfo.improbable];
+        }
+    }];
+}
+
 -(void)apply:(NSString *)productId completion:(simpleCompletion)completion{
     kWeakSelf;
     NSDictionary *paramas = @{@"buy":productId,
@@ -148,7 +157,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)onPushNextStep:(NSString *)productId type:(NSString *)type{
     kWeakSelf;
     [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
-        if (model.packed && model.packed.trading.length > 0) {
+        if (model.thecavalry != 200 && model.improbable.length > 0) {
+            [[Routes shared] routeTo:model.improbable];
+        }else if (model.packed && model.packed.trading.length > 0) {
             BPProductStep nextStep = [[ProductHandle shared] getProductStepWith:model.packed.trading];
             weakSelf.isCompleted = NO;
             [weakSelf enterNextStepViewWith:productId step:nextStep title:[NSString stringWithFormat:@"%@",

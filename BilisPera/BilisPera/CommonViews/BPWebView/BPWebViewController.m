@@ -111,13 +111,16 @@ NS_ASSUME_NONNULL_BEGIN
             NSArray *parmas = (NSArray *)params;
             NSString *productId = [NSString stringWithFormat:@"%@",
                                    parmas.firstObject];
-            
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFinish start:YES];
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFinish start:NO];
+            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeFinish productId:productId];
         }
     }];
     
     [self.jsBridge registerHandler:BPJSMethod.openUrl handler:^(id params) {
         if ([params isKindOfClass: [NSString class]]) {
             NSString *url = [NSString stringWithFormat:@"%@",params];
+            [[Routes shared] routeTo:url];
         }
     }];
     
@@ -126,7 +129,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
     
     [self.jsBridge registerHandler:BPJSMethod.jumpToHome handler:^(id params) {
-        
+        [[Routes shared] backToHomeView];
     }];
     
     [self.jsBridge registerHandler:BPJSMethod.callPhoneMethod handler:^(id params) {

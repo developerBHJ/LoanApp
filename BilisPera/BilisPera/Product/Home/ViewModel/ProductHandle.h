@@ -52,6 +52,9 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 // 获取地址列表
 -(void)requestAddressList;
 
+-(void)applyEvent:(NSString *)productId;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

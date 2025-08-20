@@ -99,6 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImageView *)leftImageView{
     if (!_leftImageView) {
         _leftImageView = [[UIImageView alloc] init];
+        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _leftImageView;
 }

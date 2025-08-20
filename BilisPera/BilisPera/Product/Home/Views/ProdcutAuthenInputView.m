@@ -51,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIImageView *rightView;
 @property (nonatomic, strong) UIButton *tapButton;
+@property (nonatomic, strong) UIImageView *leftImageView;
 
 @end
 
@@ -89,6 +90,13 @@ NS_ASSUME_NONNULL_BEGIN
         make.leading.bottom.trailing.equalTo(self);
     }];
     
+    [self.contentBgView addSubview:self.leftImageView];
+    [self.leftImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentBgView);
+        make.leading.equalTo(self.contentBgView).inset(kRatio(7));
+        make.width.height.mas_equalTo(kRatio(26));
+    }];
+    
     [self.contentBgView addSubview:self.textField];
     [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.contentBgView);
@@ -119,6 +127,15 @@ NS_ASSUME_NONNULL_BEGIN
     self.contentBgView.backgroundColor = self.model.inputBgColor;
     self.rightView.image = kGetImage(self.model.rightImageName);
     [self.tapButton setHidden:self.model.style == BPProductFormStyleText];
+    [self.leftImageView setHidden:YES];
+    CGFloat leftSpace = model.leftImage.length > 0 ? kRatio(40) : kRatio(10);
+    [self.textField mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.contentBgView).inset(leftSpace);
+    }];
+    if (model.leftImage.length > 0) {
+        [self.leftImageView setHidden:NO];
+        [self.leftImageView sd_setImageWithURL:[NSURL URLWithString:model.leftImage]];
+    }
 }
 
 -(void)tapEvent{
@@ -174,6 +191,15 @@ NS_ASSUME_NONNULL_BEGIN
         [_tapButton setHidden:YES];
     }
     return _tapButton;
+}
+
+- (UIImageView *)leftImageView{
+    if (!_leftImageView) {
+        _leftImageView = [[UIImageView alloc] init];
+        _leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [_leftImageView setHidden:YES];
+    }
+    return _leftImageView;
 }
 
 -(void)textValueChanged:(UITextField *)textField{

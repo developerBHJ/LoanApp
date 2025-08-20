@@ -165,7 +165,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)onPushWebView:(NSString *)url {
     BPWebViewController *webView = [[BPWebViewController alloc] init];
-    webView.url = url;
+    webView.url = [[url getHtmlUrl] absoluteString];
     [[UIViewController topMost].navigationController pushViewController:webView animated:YES];
 }
 

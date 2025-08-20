@@ -35,6 +35,12 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     SaveUserWorkInfo,
     GetContactInfo,
     SaveContactInfo,
+    GetBankInfo,
+    SaveBankInfo,
+    UploadLocation,
+    UploadDeviceInfo,
+    UploadContacts,
+    APNPost,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {

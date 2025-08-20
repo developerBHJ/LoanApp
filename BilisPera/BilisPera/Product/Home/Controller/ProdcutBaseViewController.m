@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < options.count; i ++) {
         BPProductFormModel *formModel = options[i];
-        BPAuthenTypeSelectedItemCellModel *item = [[BPAuthenTypeSelectedItemCellModel alloc] initWith:formModel.tongues imageUrl:formModel.consulted isSelected:i == 0];
+        BPAuthenTypeSelectedItemCellModel *item = [[BPAuthenTypeSelectedItemCellModel alloc] initWith:formModel.tongues imageUrl:formModel.myleader isSelected:i == 0];
         [tempArray addObject:item];
     }
     model.dataSource = @[[[ProductSectionModel alloc] initWith:[BPAuthenTypeSelectedItemCell class] cellData:tempArray]];
@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
             selectedCompletion(tempStr);
         }];
     };
-    viewM.headerModel = [[BPAlertHeasderViewModel alloc] initWith:@"Please select a time" needClose:NO completion:^{
+    viewM.headerModel = [[BPAlertHeasderViewModel alloc] initWith:title needClose:YES completion:^{
         [weakSelf dismisProductAlertView:^{}];
     }];
     viewM.contentView = pickerView;

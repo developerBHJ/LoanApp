@@ -74,6 +74,24 @@ NS_ASSUME_NONNULL_BEGIN
         case SaveContactInfo:
             url = @"/sudden/sitting";
             break;
+        case GetBankInfo:
+            url = @"/sudden/found";
+            break;
+        case SaveBankInfo:
+            url = @"/sudden/estates";
+            break;
+        case UploadLocation:
+            url = @"/sudden/librarianship";
+            break;
+        case UploadDeviceInfo:
+            url = @"/sudden/patterns";
+            break;
+        case UploadContacts:
+            url = @"/sudden/spencer";
+            break;
+        case APNPost:
+            url = @"/sudden/officer";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }
@@ -94,6 +112,9 @@ NS_ASSUME_NONNULL_BEGIN
             type = NetRequestType_GET;
             break;
         case GetUserAddress:
+            type = NetRequestType_GET;
+            break;
+        case GetBankInfo:
             type = NetRequestType_GET;
             break;
         default:

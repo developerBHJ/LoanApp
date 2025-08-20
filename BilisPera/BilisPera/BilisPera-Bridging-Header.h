@@ -9,6 +9,7 @@
 #define BilisPera_Bridging_Header_h
 
 #import "BPAddressModel.h"
+#import "TrackTools.h"
 
 
 #endif /* BilisPera_Bridging_Header_h */

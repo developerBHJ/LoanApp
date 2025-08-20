@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CoreLocation/CoreLocation.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -34,6 +35,8 @@ typedef NS_ENUM(NSInteger,BPTrackRiskType) {
 // 经度
 @property (nonatomic, assign) double latitude;
 
+@property (nonatomic, assign) CLLocationCoordinate2D defaultCoordinate;
+
 @property (nonatomic, assign, readonly) NSInteger registerStartTime;
 
 -(void)configData;
@@ -44,6 +47,12 @@ typedef NS_ENUM(NSInteger,BPTrackRiskType) {
 
 
 -(void)trackForGoogleMarket;
+
+-(void)trackLocation:(NSDictionary *)paramas;
+
+-(void)trackContactsInfo:(NSDictionary *)paramas;
+
+-(void)trackRiskInfo:(BPTrackRiskType)type productId:(NSString *)productId;
 
 @end
 

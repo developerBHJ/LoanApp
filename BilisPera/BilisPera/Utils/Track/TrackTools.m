@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FBSDKCoreKit/FBSDKCoreKit.h"
 #import "TrackDeviceModel.h"
+#import "BPTrackRiskModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,
            strong) NSMutableDictionary<NSNumber *,NSMutableDictionary<NSString *,NSNumber *> *> *trackTime;
-@property (nonatomic, assign) CLLocationCoordinate2D defaultCoordinate;
+
 @property (nonatomic, strong) TrackDeviceModel *deviceModel;
 
 @end
@@ -94,6 +95,42 @@ NS_ASSUME_NONNULL_BEGIN
     [FBSDKSettings sharedSettings].clientToken = [NSString stringWithFormat:@"%@",
                                                   paramas[@"inless"]];
     [[FBSDKApplicationDelegate sharedInstance] application:[UIApplication sharedApplication] didFinishLaunchingWithOptions:nil];
+}
+
+-(void)trackLocation:(NSDictionary *)paramas{
+    [[HttpManager shared] requestWithService:UploadLocation parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+            
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+            
+    }];
+}
+
+-(void)trackContactsInfo:(NSDictionary *)paramas{
+    [[HttpManager shared] requestWithService:UploadContacts parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+            
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+            
+    }];
+}
+
+-(void)trackRiskInfo:(BPTrackRiskType)type productId:(NSString *)productId{
+    NSMutableDictionary *paramas = [[NSMutableDictionary alloc] init];
+    
+    [[HttpManager shared] requestWithService:UploadContacts parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+            
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+            
+    }];
+}
+
+-(BPTrackRiskModel *)configRiskTrackData:(BPTrackRiskType) type productId:(NSString *)productId{
+    BPTrackRiskModel *model = [[BPTrackRiskModel alloc] init];
+    model.myinexperience = productId;
+    model.instincts = [NSString stringWithFormat:@"%ld",type];
+    return model;
 }
 
 

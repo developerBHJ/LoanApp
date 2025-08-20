@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
             path = @"/blueberryOn";
             break;
     }
-    return [NSString stringWithFormat:@"%@%@",kH5Host,path];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kH5Host,path]];
 }
 
 @end

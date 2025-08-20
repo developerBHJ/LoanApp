@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
                 [weakSelf.delegate showPickerView:model.resolution title:model.compound values:model.rage isAddress:style == BPProductFormStyleCitySelected];
             }
         } valueChanged:^(NSString *value) {
-            BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:model.resolution value:value general:model.everyonehad];
+            BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:model.resolution value:value general:@""];
             [weakSelf saveEditIndo:item];
         }];
         [tempArray addObject:viewModel];

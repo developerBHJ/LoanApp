@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSString *placeHolder;
 @property (nonatomic, strong) UIColor *inputBgColor;
+@property (nonatomic, strong) NSString *leftImage;
 @property (nonatomic, strong,readonly) NSString *rightImageName;
 @property (nonatomic, copy) simpleCompletion completion;
 @property (nonatomic, copy) simpleStringCompletion valueChanged;
