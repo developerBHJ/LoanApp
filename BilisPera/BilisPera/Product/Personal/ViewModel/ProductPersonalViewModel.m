@@ -66,6 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         kWeakSelf;
         BPProductFormStyle style = [[ProductHandle shared] getProductFormStyleWith:model.hiding];
+        UIKeyboardType keyboardType = (model.toour == 1) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
         ProdcutAuthenInputViewModel *viewModel = [[ProdcutAuthenInputViewModel alloc] initWith:style title:model.enclosed text:content placeHolder:model.compound inputBgColor:kWhiteColor completion:^{
             if ([weakSelf.delegate respondsToSelector:@selector(showPickerView:title:values:isAddress:)]) {
                 [weakSelf.delegate showPickerView:model.resolution title:model.compound values:model.rage isAddress:style == BPProductFormStyleCitySelected];
@@ -74,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
             BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:model.resolution value:value general:@""];
             [weakSelf saveEditIndo:item];
         }];
+        viewModel.keyboardType = keyboardType;
         [tempArray addObject:viewModel];
     }
     ProductAuthenSectionModel *section = [[ProductAuthenSectionModel alloc] initWith:[ProdcutAuthenInputCell class] cellData:tempArray sectionType:0];

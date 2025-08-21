@@ -70,7 +70,6 @@ NS_ASSUME_NONNULL_BEGIN
         if ([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled]) {
             NSString *idfa = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
             self.idfaString = idfa;
-            
             NSData *idfvData = [self.idfvString dataUsingEncoding:NSUTF8StringEncoding];
             if (idfvData) {
                 [KeychainWrapper saveWithKey:@"IDFV" data:idfvData];
@@ -80,6 +79,10 @@ NS_ASSUME_NONNULL_BEGIN
             if (completion) completion(NO);
         }
     }
+}
+
+- (NSString *)idfvString{
+    return [[NSString alloc] initWithData:[KeychainWrapper loadWithKey:@"IDFV"] encoding:NSUTF8StringEncoding] ?: @"";
 }
 
 @end

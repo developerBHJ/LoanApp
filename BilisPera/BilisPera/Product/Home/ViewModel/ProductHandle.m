@@ -193,7 +193,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)saveUserInfoWithParamaters:(NSDictionary *)paramaters completion:(simpleBoolCompletion)completion{
     [[HttpManager shared] requestWithService:SaveUserInfo parameters:paramaters showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-        completion(YES);
+        if (response.resolution == 0) {
+            completion(YES);
+        }
     } failure:^(NSError * _Nonnull error,
                 NSDictionary * _Nonnull errorDictionary) {
         completion(NO);

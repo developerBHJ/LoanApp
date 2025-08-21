@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ADTool : NSObject
 
-@property (nonatomic, copy, readonly) NSString *idfvString;
-@property (nonatomic, copy) NSString *idfaString;
+@property (nonatomic, strong) NSString *idfvString;
+@property (nonatomic, strong) NSString *idfaString;
 @property (nonatomic, assign) NSInteger trackCount;
 
 + (instancetype)shared;

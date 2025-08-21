@@ -76,11 +76,10 @@ NS_ASSUME_NONNULL_BEGIN
         make.height.mas_greaterThanOrEqualTo(kRatio(101));
     }];
     
-    [self.contentView addSubview:self.cameraImageView];
+    [self.contentBgView addSubview:self.cameraImageView];
     [self.cameraImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.trailing.equalTo(self.contentBgView).inset(kRatio(30));
-        make.top.equalTo(self.titleLabel.mas_bottom).inset(kRatio(13));
-        make.height.mas_equalTo(kRatio(168));
+        make.leading.trailing.equalTo(self.idImageView);
+        make.top.bottom.equalTo(self.idImageView);
     }];
 }
 
@@ -90,10 +89,11 @@ NS_ASSUME_NONNULL_BEGIN
     if (self.model.image) {
         self.idImageView.image = self.model.image;
     }else{
-        [self.idImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageUrl] placeholderImage:kGetImage(@"icon_auth_identify")];
+        NSString *imageName = model.isFace ? @"icon_auth_face_bg" : @"icon_auth_identify";
+        [self.idImageView sd_setImageWithURL:[NSURL URLWithString:self.model.imageUrl] placeholderImage:kGetImage(imageName)];
     }
-    CGFloat imageWidth = model.isFace ? kRatio(142) : kRatio(282);
-    CGFloat imageHeight = model.isFace ? kRatio(148) : kRatio(168);
+    CGFloat imageWidth = model.isFace ? kRatio(144) : kRatio(282);
+    CGFloat imageHeight = model.isFace ? kRatio(144) : kRatio(168);
     [self.idImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(imageWidth);
         make.height.mas_equalTo(imageHeight);

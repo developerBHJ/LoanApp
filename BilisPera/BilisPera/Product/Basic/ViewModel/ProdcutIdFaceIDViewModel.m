@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ProductAuthenSectionModel *)configIdentifySection{
-    NSString *imageUrl = @"icon_auth_identify";
+    NSString *imageUrl = @"icon_auth_face_bg";
     if (self.infoModel.whereshe == 1 && self.infoModel.improbable.length > 0) {
         imageUrl = [NSString stringWithFormat:@"%@",
                     self.infoModel.improbable];

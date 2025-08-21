@@ -141,13 +141,16 @@ NS_ASSUME_NONNULL_BEGIN
                 weakSelf.viewModel.selectedImage = image;
                 [weakSelf dismissViewControllerAnimated:YES completion:^{
                     [weakSelf reloadData];
+                    [weakSelf uploadImage];
                 }];
             };
             [pickerVC presentFullScreen];
             [weakSelf presentViewController:pickerVC animated:YES completion:nil];
         }else{
             [self showCustomAlertWithTitle:@"" message:kCameraAlertMessage confirmCompletion:^{
-                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
+                                          kScheme,
+                                          [BPRoute settingPage]]];
             } cancelCompletion:^{
                 
             }];
@@ -156,18 +159,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)nextStep{
+    [self uploadImage];
+}
+
+-(void)uploadImage{
     kWeakSelf;
-    if (self.viewModel.infoModel.whereshe != 1) {
-        [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage completion:^(BOOL success) {
-            if (success) {
-                [[ProductHandle shared] onPushNextStep:self.productId type:weakSelf.type];
-                [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFaceId start:NO];
-                [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeFaceId productId:weakSelf.productId];
-            }
-        }];
-    }else{
-        [[ProductHandle shared] onPushNextStep:self.productId type:self.type];
-    }
+    [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage completion:^(BOOL success) {
+        if (success) {
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFaceId start:NO];
+            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeFaceId productId:weakSelf.productId];
+            [[ProductHandle shared] onPushNextStep:weakSelf.productId type:weakSelf.type];
+        }
+    }];
 }
 @end
 

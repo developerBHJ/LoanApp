@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.inputBgColor = inputBgColor;
         self.completion = completion;
         self.valueChanged = valueChanged;
+        self.keyboardType = UIKeyboardTypeDefault;
     }
     return self;
 }
@@ -124,6 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.titleLabel.text = model.title;
     self.textField.text = model.text;
     self.textField.placeholder = model.placeHolder;
+    self.textField.keyboardType = self.model.keyboardType;
     self.contentBgView.backgroundColor = self.model.inputBgColor;
     self.rightView.image = kGetImage(self.model.rightImageName);
     [self.tapButton setHidden:self.model.style == BPProductFormStyleText];

@@ -130,9 +130,9 @@ NS_ASSUME_NONNULL_BEGIN
     kWeakSelf;
     [self.viewModel saveUserInfoWith:self.productId completion:^(BOOL success) {
         if (success) {
-            [[ProductHandle shared] onPushNextStep:self.productId type:@""];
             [[TrackTools shared] saveTrackTime:BPTrackRiskTypeContacts start:NO];
             [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeContacts productId:weakSelf.productId];
+            [[ProductHandle shared] onPushNextStep:self.productId type:@""];
         }
     }];
 }

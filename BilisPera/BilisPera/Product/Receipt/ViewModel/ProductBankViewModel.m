@@ -47,7 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(ProductAuthenSectionModel *)configHeaderSection{
-    ProductAuthenticationHeaderViewModel *cellModel = [[ProductAuthenticationHeaderViewModel alloc] initWith:@"Bind wallet" subTitle:@"For information security purposes, please provide accurate and complete information." imageName:@"icon_auth_personal"];
+    NSString *imageName = (self.selectedType == 1) ? @"icon_auth_wallet" : @"icon_auth_bank";
+    ProductAuthenticationHeaderViewModel *cellModel = [[ProductAuthenticationHeaderViewModel alloc] initWith:@"Bind wallet" subTitle:@"For information security purposes, please provide accurate and complete information." imageName:imageName];
     ProductAuthenSectionModel *section = [[ProductAuthenSectionModel alloc] initWith:[ProductAuthenticationHeaderView class] cellData:@[cellModel] sectionType:0];
     return section;
 }
@@ -69,6 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
         kWeakSelf;
         BPProductFormStyle style = [[ProductHandle shared] getProductFormStyleWith:model.hiding];
+        UIKeyboardType keyboardType = (model.toour == 1) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
         ProdcutAuthenInputViewModel *viewModel = [[ProdcutAuthenInputViewModel alloc] initWith:style title:model.enclosed text:content placeHolder:model.compound inputBgColor:kWhiteColor completion:^{
             if ([weakSelf.delegate respondsToSelector:@selector(showPickerView:title:values:isAddress:)]) {
                 [weakSelf.delegate showPickerView:model.resolution title:model.compound values:model.rage isAddress:style == BPProductFormStyleCitySelected];
@@ -77,6 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
             BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:model.resolution value:value general:@""];
             [weakSelf saveEditIndo:item];
         }];
+        viewModel.keyboardType = keyboardType;
         [tempArray addObject:viewModel];
     }
     ProductBankListCellModel *cellModel = [[ProductBankListCellModel alloc] initWith:tempArray];
@@ -93,13 +96,14 @@ NS_ASSUME_NONNULL_BEGIN
         __block ProductBankListFormModel *model = list[i];
         NSString *content = @"";
         BPProductFormEditModel *editModel = [self.editData firstWhereWithBlock:^BOOL(BPProductFormEditModel *_Nonnull obj) {
-            return [obj.key isEqual:model.everyonehad];
+            return [obj.key isEqual:model.resolution];
         }];
         if (editModel) {
             content = editModel.value ?: @"";
         }
         kWeakSelf;
         BPProductFormStyle style = [[ProductHandle shared] getProductFormStyleWith:model.hiding];
+        UIKeyboardType keyboardType = (model.toour == 1) ? UIKeyboardTypeNumberPad : UIKeyboardTypeDefault;
         ProdcutAuthenInputViewModel *viewModel = [[ProdcutAuthenInputViewModel alloc] initWith:style title:model.enclosed text:content placeHolder:model.compound inputBgColor:kWhiteColor completion:^{
             if ([weakSelf.delegate respondsToSelector:@selector(showPickerView:title:values:isAddress:)]) {
                 [weakSelf.delegate showPickerView:model.resolution title:model.compound values:model.rage isAddress:style == BPProductFormStyleCitySelected];
@@ -108,6 +112,7 @@ NS_ASSUME_NONNULL_BEGIN
             BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:model.resolution value:value general:@""];
             [weakSelf saveEditIndo:item];
         }];
+        viewModel.keyboardType = keyboardType;
         [tempArray addObject:viewModel];
     }
     ProductAuthenSectionModel *section = [[ProductAuthenSectionModel alloc] initWith:[ProdcutAuthenInputCell class] cellData:tempArray sectionType:0];

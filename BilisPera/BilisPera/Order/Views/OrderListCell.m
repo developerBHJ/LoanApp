@@ -67,8 +67,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel *amountLabel;
 @property (nonatomic, strong) UILabel *dateLabel;
 @property (nonatomic, strong) UIButton *loanButton;
-@property (nonatomic, strong) UIButton *remindButton;
 @property (nonatomic, strong) UIButton *statusButton;
+@property (nonatomic, strong) UIView *remindView;
+@property (nonatomic, strong) UIImageView *remindImageView;
+@property (nonatomic, strong) UILabel *remindLabel;
 
 @end
 
@@ -133,8 +135,8 @@ NS_ASSUME_NONNULL_BEGIN
         make.top.equalTo(self.amountLabel.mas_bottom);
     }];
     
-    [self.contentBgView addSubview:self.remindButton];
-    [self.remindButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.contentBgView addSubview:self.remindView];
+    [self.remindView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.contentBgView).inset(kRatio(12));
         make.top.equalTo(self.dateLabel.mas_bottom).offset(kRatio(10));
         make.bottom.equalTo(self.contentBgView.mas_bottom).offset(-kRatio(7));
@@ -148,6 +150,20 @@ NS_ASSUME_NONNULL_BEGIN
         make.trailing.equalTo(self.contentBgView).inset(kRatio(2));
         make.height.mas_equalTo(kRatio(32));
         make.width.mas_equalTo(kRatio(117));
+    }];
+    
+    [self.remindView addSubview:self.remindImageView];
+    [self.remindImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.remindView).inset(kRatio(16));
+        make.centerY.equalTo(self.remindView);
+        make.width.height.mas_equalTo(kRatio(15));
+    }];
+    
+    [self.remindView addSubview:self.remindLabel];
+    [self.remindLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.remindImageView.mas_trailing).inset(kRatio(5));
+        make.centerY.equalTo(self.remindView);
+        make.trailing.equalTo(self.remindView.mas_trailing).inset(kRatio(35));
     }];
     
     [self.contentBgView setUserInteractionEnabled:YES];
@@ -168,20 +184,20 @@ NS_ASSUME_NONNULL_BEGIN
     self.amountLabel.text = self.model.amount;
     self.amountTitleLabel.text = self.model.amountDesc;
     self.dateLabel.text = self.model.dateStr;
-    [self.remindButton setTitle:self.model.remind forState:UIControlStateNormal];
+    self.remindLabel.text = self.model.remind;
     [self.statusButton setTitle:self.model.status forState:UIControlStateNormal];
     [self.statusButton setBackgroundImage:kGetImage(self.model.typeImage) forState:UIControlStateNormal];
     UIImage *loanImage = [[UIImage imageNamed:@"icon_home_loan_bg"] imageWithTintColor:self.model.typeBackColor];
     [self.loanButton setBackgroundImage:loanImage forState:UIControlStateNormal];
     [self.loanButton setTitle:self.model.buttonTitle forState:UIControlStateNormal];
-    [self.remindButton setHidden: self.model.type != OrderListTypeDelay  && self.model.type != OrderListTypeRepayment];
+    [self.remindView setHidden: self.model.type != OrderListTypeDelay  && self.model.type != OrderListTypeRepayment];
     [self.loanButton setHidden: self.model.type == OrderListTypeReview  || self.model.type == OrderListTypeFinish];
     CGFloat buttonWidth = [self.model.buttonTitle getWidthWithFont:kFont(16) height:kRatio(20)] + kRatio(13);
     [self.statusButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(buttonWidth);
     }];
-    if (self.remindButton.isHidden) {
-        [self.remindButton mas_updateConstraints:^(MASConstraintMaker *make) {
+    if (self.remindView.isHidden) {
+        [self.remindView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(0);
             make.top.equalTo(self.dateLabel.mas_bottom);
             make.bottom
@@ -189,7 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
                 .offset(-kRatio(10));
         }];
     }else{
-        [self.remindButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.remindView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(24);
             make.top.equalTo(self.dateLabel.mas_bottom).offset(kRatio(10));
             make.bottom
@@ -311,19 +327,32 @@ NS_ASSUME_NONNULL_BEGIN
     return _loanButton;
 }
 
-- (UIButton *)remindButton{
-    if (!_remindButton) {
-        _remindButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _remindButton.backgroundColor = [UIColor whiteColor];
-        [_remindButton setTitle:@"" forState:UIControlStateNormal];
-        [_remindButton setTitleColor:kColor_FF3888 forState:UIControlStateNormal];
-        _remindButton.titleLabel.font = kFontMedium(12);
-        _remindButton.layer.cornerRadius = kRatio(12);
-        _remindButton.layer.masksToBounds = YES;
-        [_remindButton setUserInteractionEnabled:NO];
-        [_remindButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+- (UIView *)remindView{
+    if (!_remindView) {
+        _remindView = [[UIView alloc] init];
+        _remindView.backgroundColor = kWhiteColor;
+        _remindView.layer.cornerRadius = kRatio(12);
+        _remindView.layer.masksToBounds = YES;
+        [_remindView setHidden:YES];
     }
-    return _remindButton;
+    return _remindView;
+}
+
+- (UIImageView *)remindImageView{
+    if (!_remindImageView) {
+        _remindImageView = [[UIImageView alloc] init];
+        _remindImageView.image = kGetImage(@"icon_order_tips");
+    }
+    return _remindImageView;
+}
+
+- (UILabel *)remindLabel{
+    if (!_remindLabel) {
+        _remindLabel = [[UILabel alloc] init];
+        _remindLabel.textColor = kColor_FF3888;
+        _remindLabel.font = kFontMedium(12);
+    }
+    return _remindLabel;
 }
 
 - (UIButton *)statusButton{

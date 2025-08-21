@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface BPProductAlertViewController ()
 
 @property (nonatomic, strong) UIView *contentBgView;
+@property (nonatomic, strong) UIImageView *contentBgImageView;
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIButton *confirmButton;
 @property (nonatomic, strong) BPAlertHeasderView *headerView;
@@ -58,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
         make.bottom.equalTo(self.view);
     }];
     
+    [self.contentBgView addSubview:self.contentBgImageView];
+    [self.contentBgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.top.bottom.equalTo(self.contentBgView);
+    }];
+    
     [self.contentBgView addSubview:self.headerView];
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.leading.trailing.equalTo(self.contentBgView);
@@ -90,6 +96,14 @@ NS_ASSUME_NONNULL_BEGIN
         _headerView = [[BPAlertHeasderView alloc] initWithFrame:CGRectZero];
     }
     return _headerView;
+}
+
+- (UIImageView *)contentBgImageView{
+    if (!_contentBgImageView) {
+        _contentBgImageView = [[UIImageView alloc] init];
+        _contentBgImageView.image = kGetImage(@"icon_alert_bg");
+    }
+    return _contentBgImageView;
 }
 
 - (UIView *)contentBgView{

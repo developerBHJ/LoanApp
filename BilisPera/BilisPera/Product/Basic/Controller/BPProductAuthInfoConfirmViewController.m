@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIImageView *contentBgImageView;
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) BPProductAuthInfoConfirmViewModel *viewModel;
@@ -63,6 +64,11 @@ NS_ASSUME_NONNULL_BEGIN
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.view);
         make.leading.trailing.equalTo(self.view).inset(kRatio(12));
+    }];
+    
+    [self.contentView addSubview:self.contentBgImageView];
+    [self.contentBgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.contentView);
     }];
     
     [self.contentView addSubview:self.whiteView];
@@ -126,6 +132,14 @@ NS_ASSUME_NONNULL_BEGIN
         _contentView.layer.masksToBounds = YES;
     }
     return _contentView;
+}
+
+- (UIImageView *)contentBgImageView{
+    if (!_contentBgImageView) {
+        _contentBgImageView = [[UIImageView alloc] init];
+        _contentBgImageView.image = kGetImage(@"icon_auth_confirm_bg");
+    }
+    return _contentBgImageView;
 }
 
 - (UIView *)whiteView{
@@ -201,7 +215,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_closeButton) {
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeButton.layer.cornerRadius = kRatio(12);
-        [_closeButton setImage:kGetImage(@"") forState:UIControlStateNormal];
+        [_closeButton setImage:kGetImage(@"icon_close") forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeEvent) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;

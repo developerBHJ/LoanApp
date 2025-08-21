@@ -197,14 +197,16 @@ NS_ASSUME_NONNULL_BEGIN
             pickerVC.completion = ^(UIImage * _Nonnull image) {
                 weakSelf.viewModel.selectedImage = image;
                 [weakSelf dismissViewControllerAnimated:YES completion:^{
-                    [weakSelf reloadData];
+                    [weakSelf uploadImage];
                 }];
             };
             [pickerVC presentFullScreen];
             [weakSelf presentViewController:pickerVC animated:YES completion:nil];
         }else{
             [self showCustomAlertWithTitle:@"" message:kCameraAlertMessage confirmCompletion:^{
-                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
+                                          kScheme,
+                                          [BPRoute settingPage]]];
             } cancelCompletion:^{
                 
             }];
@@ -224,7 +226,9 @@ NS_ASSUME_NONNULL_BEGIN
             [weakSelf presentViewController:pickerVC animated:YES completion:nil];
         }else{
             [self showCustomAlertWithTitle:@"" message:kAlbumAlertMessage confirmCompletion:^{
-                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",kScheme,[BPRoute settingPage]]];
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
+                                          kScheme,
+                                          [BPRoute settingPage]]];
             } cancelCompletion:^{
                 
             }];
@@ -244,24 +248,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self saveuserInfo:paramas];
         return;
     }
-    if (self.viewModel.infoModel.loins.building != 1) {
-        kWeakSelf;
-        [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage  completion:^(id obj) {
-            if ([obj isKindOfClass:[ProductAuthenIndetyInfoModel class]]) {
-                [[TrackTools shared] saveTrackTime:BPTrackRiskTypeIdInfo start:NO];
-                [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeIdInfo productId:weakSelf.productId];
-                
-                ProductAuthenIndetyInfoModel *model = (ProductAuthenIndetyInfoModel *)obj;
-                BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^(NSDictionary *dic) {
-                    [weakSelf saveuserInfo:dic];
-                }];
-                [confirmVC presentFullScreen];
-                [weakSelf presentViewController:confirmVC animated:NO completion:nil];
-            }
-        }];
-    }else{
-        [[ProductHandle shared] onPushNextStep:self.productId type:self.type];
-    }
+    [self uploadImage];
 }
 
 -(void)saveuserInfo:(NSDictionary *)paramas{
@@ -273,14 +260,34 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+-(void)uploadImage{
+    kWeakSelf;
+    [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage  completion:^(id obj) {
+        ProductAuthenIndetyInfoModel *model = [[ProductAuthenIndetyInfoModel alloc] init];
+        if ([obj isKindOfClass:[ProductAuthenIndetyInfoModel class]]) {
+            model = (ProductAuthenIndetyInfoModel *)obj;
+        }
+        [[TrackTools shared] saveTrackTime:BPTrackRiskTypeIdInfo start:NO];
+        [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeIdInfo productId:weakSelf.productId];
+        BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^(NSDictionary *dic) {
+            [weakSelf saveuserInfo:dic];
+        }];
+        [confirmVC presentFullScreen];
+        [weakSelf presentViewController:confirmVC animated:NO completion:nil];
+    }];
+}
+
 // MARK: - UIImagePickerControllerDelegate&UINavigationControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info{
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     if (image) {
         self.viewModel.selectedImage = image;
     }
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self reloadData];
+    kWeakSelf;
+    [self dismissViewControllerAnimated:YES completion:^{
+        [weakSelf reloadData];
+        [weakSelf uploadImage];
+    }];
 }
 @end
 

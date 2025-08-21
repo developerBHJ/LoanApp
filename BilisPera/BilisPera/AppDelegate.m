@@ -10,6 +10,7 @@
 #import "GuideViewController.h"
 #import "LoginViewController.h"
 #import "BaseNavigationController.h"
+#import "FBSDKCoreKit/FBSDKCoreKit.h"
 
 @interface AppDelegate ()
 
@@ -37,6 +38,15 @@
     if (self.luanchTime) {
         NSInteger duration = [[NSDate date] timeIntervalSinceDate:self.luanchTime];
         [TrackTools shared].launchTime = duration;
+    }
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
+    if ([url scheme]) {
+        [[Routes shared] routeTo:url.absoluteString];
+        return YES;
+    }else{
+        return  [[FBSDKApplicationDelegate sharedInstance] application:app openURL:url sourceApplication:UIApplicationOpenURLOptionsSourceApplicationKey annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
     }
 }
 

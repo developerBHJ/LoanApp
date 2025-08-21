@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
     model.title = @"Authentication successful";
     model.subTitle = @"Please check that your information is correct and cannot be changed once submitted";
     model.rightImageName = @"icon_auth_success";
-    model.imageName = @"";
+    model.imageName = @"icon_auth_result";
     BPProductAuthenResultItemViewModel *item1 = [[BPProductAuthenResultItemViewModel alloc] init:@"Full Name" content:self.viewModel.infoModel.loins.humps.tongues];
     BPProductAuthenResultItemViewModel *item2 = [[BPProductAuthenResultItemViewModel alloc] init:@"ID NO." content:self.viewModel.infoModel.loins.humps.wounds];
     BPProductAuthenResultItemViewModel *item3 = [[BPProductAuthenResultItemViewModel alloc] init:@"Brithday" content:self.viewModel.infoModel.loins.humps.alsowith];

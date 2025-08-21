@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
         for (int i = 0; i < self.orderList.count; i ++) {
             OrderListModel *orderInfo = self.orderList[i];
             OrderListCellModel *model = [[OrderListCellModel alloc] init];
-            model.type = orderInfo.forwe.wepicketed;;
+            model.type = orderInfo.forwe.wepicketed;
             model.name = [NSString stringWithFormat:@"%@",
                           orderInfo.forwe.stew];
             model.amount = [NSString stringWithFormat:@"%@%@",

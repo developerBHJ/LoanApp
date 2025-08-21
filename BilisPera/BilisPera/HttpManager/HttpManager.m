@@ -102,10 +102,10 @@ NS_ASSUME_NONNULL_BEGIN
     }
     NSLog(@"%@",model.couldsee);
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (model.resolution == 0) {
-            success(model);
-        }else if(model.resolution == -2){
+        if(model.resolution == -2){
             [[LoginTools shared] showLoginView:nil];
+        }else{
+            success(model);
         }
     });
 }

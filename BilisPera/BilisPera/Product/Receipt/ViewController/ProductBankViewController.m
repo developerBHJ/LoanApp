@@ -7,6 +7,7 @@
 
 #import "ProductBankViewController.h"
 #import "ProductBankViewModel.h"
+#import "ProductBankFooterView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface ProductBankViewController ()<UITableViewDelegate,UITableViewDataSource,ProductPersonalViewDelegate>
@@ -14,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) ProductBankViewModel *viewModel;
 @property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) ProductBankFooterView *footerView;
+
 
 @end
 
@@ -47,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
             .equalTo(self.view)
             .inset(kSafeAreaBottomHeight + kRatio(60));
     }];
+    self.tableView.tableFooterView = self.footerView;
     
     [self.view addSubview:self.nextButton];
     [self.nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -67,6 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.viewModel reloadData:self.productId completion:^{
         [weakSelf.tableView reloadData];
         [weakSelf.tableView.mj_header endRefreshing];
+        [weakSelf.footerView setHidden:NO];
     }];
 }
 
@@ -111,6 +116,14 @@ NS_ASSUME_NONNULL_BEGIN
         [_nextButton addTarget:self action:@selector(nextStep) forControlEvents:UIControlEventTouchUpInside];
     }
     return _nextButton;
+}
+
+- (ProductBankFooterView *)footerView{
+    if (!_footerView) {
+        _footerView = [[ProductBankFooterView alloc] initWithFrame:CGRectMake(0, 0, kScreenW, kRatio(78))];
+        [_footerView setHidden:YES];
+    }
+    return _footerView;
 }
 
 // MARK: - UITableViewDelegate,UITableViewDataSource

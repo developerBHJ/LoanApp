@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong,readonly) NSString *rightImageName;
 @property (nonatomic, copy) simpleCompletion completion;
 @property (nonatomic, copy) simpleStringCompletion valueChanged;
+@property (nonatomic, assign) UIKeyboardType keyboardType;
+
 
 - (instancetype)initWith:(BPProductFormStyle)style title:(NSString *)title text:(NSString *)text placeHolder:(NSString *)placeHolder inputBgColor:(UIColor *)inputBgColor completion:(simpleCompletion)completion valueChanged:(simpleStringCompletion)valueChanged;
 

@@ -137,6 +137,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImageView *)rightImageView{
     if (!_rightImageView) {
         _rightImageView = [[UIImageView alloc] init];
+        _rightImageView.image = kGetImage(@"icon_auth_rightImage");
     }
     return _rightImageView;
 }
@@ -181,7 +182,6 @@ NS_ASSUME_NONNULL_BEGIN
     }
     self.bannerView.imageURLStringsGroup = tempArray;
     self.titleLabel.text = self.model.title;
-    self.rightImageView.image = kGetImage(self.model.imageName);
     [self.nextButton setTitle:self.model.buttonTitle forState:UIControlStateNormal];
     self.progressView.currentStep = self.model.progress;
 }

@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *savethe;
 // 下拉的key值       最终传参字段
 @property (nonatomic, strong) NSString *everyonehad;
+// 键盘类型
+@property (nonatomic, assign) NSInteger toour;
 
 @end
 

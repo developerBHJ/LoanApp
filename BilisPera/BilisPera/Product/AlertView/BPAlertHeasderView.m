@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_closeButton) {
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeButton.layer.cornerRadius = kRatio(12);
-        [_closeButton setImage:kGetImage(@"") forState:UIControlStateNormal];
+        [_closeButton setImage:kGetImage(@"icon_close") forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeEvent) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
@@ -89,6 +89,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImageView *)backImageView{
     if (!_backImageView) {
         _backImageView = [[UIImageView alloc] init];
+        _backImageView.image = kGetImage(@"icon_alert_title_bg");
     }
     return _backImageView;
 }

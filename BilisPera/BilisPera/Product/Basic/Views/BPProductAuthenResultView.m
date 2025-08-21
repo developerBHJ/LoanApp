@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIImageView *successImageView;
 @property (nonatomic, strong) UIStackView *stackView;
 @property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) UIImageView *contentBgImageView;
 
 @end
 
@@ -41,6 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
     [self.contentBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.top.equalTo(self);
         make.leading.trailing.equalTo(self);
+    }];
+    
+    [self.contentBgView addSubview:self.contentBgImageView];
+    [self.contentBgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.top.equalTo(self.contentBgView);
+        make.leading.trailing.equalTo(self.contentBgView);
     }];
     
     [self.contentBgView addSubview:self.titleLabel];
@@ -124,6 +131,14 @@ NS_ASSUME_NONNULL_BEGIN
         _rightImageView = [[UIImageView alloc] init];
     }
     return _rightImageView;
+}
+
+- (UIImageView *)contentBgImageView{
+    if (!_contentBgImageView) {
+        _contentBgImageView = [[UIImageView alloc] init];
+        _contentBgImageView.image = kGetImage(@"icon_auth_result_bg");
+    }
+    return _contentBgImageView;
 }
 
 - (UIImageView *)successImageView{
