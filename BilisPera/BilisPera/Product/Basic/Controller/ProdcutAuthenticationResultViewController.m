@@ -52,8 +52,9 @@ NS_ASSUME_NONNULL_BEGIN
     BPProductAuthenResultItemViewModel *item2 = [[BPProductAuthenResultItemViewModel alloc] init:@"ID NO." content:self.viewModel.infoModel.loins.humps.wounds];
     BPProductAuthenResultItemViewModel *item3 = [[BPProductAuthenResultItemViewModel alloc] init:@"Brithday" content:self.viewModel.infoModel.loins.humps.alsowith];
     model.items = @[item1,item2,item3];
+    kWeakSelf;
     model.completion = ^{
-        [[ProductHandle shared] onPushNextStep:self.productId type:@""];
+        [weakSelf popNavigation:YES];
     };
     self.contentView.model = model;
 }

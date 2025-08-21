@@ -64,9 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
             model.linkUrl = [NSString stringWithFormat:@"%@",
                              orderInfo.forwe.nearest];
             kWeakSelf;
-            model.completion = ^(NSString *productId) {
+            model.completion = ^(NSString *url) {
                 if ([weakSelf.delegate respondsToSelector:@selector(itemClick:)]) {
-                    [weakSelf.delegate itemClick:productId];
+                    [weakSelf.delegate itemClick:url];
                 }
             };
             [tempArray addObject:model];

@@ -184,10 +184,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 // MARK: - OrderListViewItemClickDelegate
-- (void)itemClick:(NSString *)orderId{
-    [[ProductHandle shared] onPushOrderDetailView:orderId completion:^(NSString *url) {
-        [[Routes shared] routeTo:url];
-    }];
+- (void)itemClick:(NSString *)url{
+    [[Routes shared] routeTo:url];
 }
 
 @end

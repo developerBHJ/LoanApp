@@ -131,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (success) {
             [[TrackTools shared] saveTrackTime:BPTrackRiskTypeBasicInfo start:NO];
             [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeBasicInfo productId:weakSelf.productId];
-            [[ProductHandle shared] onPushNextStep:self.productId type:@""];
+            [[ProductHandle shared] enterAuthenView:weakSelf.productId type:@""];
         }
     }];
 }

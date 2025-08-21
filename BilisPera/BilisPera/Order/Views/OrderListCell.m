@@ -173,7 +173,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)tapEvent{
     if (self.model.completion) {
-        self.model.completion(self.model.productId);
+        self.model.completion(self.model.linkUrl);
     }
 }
 

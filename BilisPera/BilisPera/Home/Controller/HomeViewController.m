@@ -135,7 +135,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self checkPermission:^(BOOL result) {
         if (result) {
             [weakSelf updateLocation];
-            [[ProductHandle shared] applyEvent:prodcutId];
+            [[ProductHandle shared] apply:prodcutId];
         }
     }];
 }

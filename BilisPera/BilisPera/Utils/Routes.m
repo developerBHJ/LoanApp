@@ -158,7 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }else if ([route isEqual:BPRoute.productDetail]){
         NSString *productId = [NSString stringWithFormat:@"%@",params[@"buy"]];
-        [[ProductHandle shared] onPushDetailHomeView:productId];
+        [[ProductHandle shared] onPushProductHomeView:productId];
         return;
     }
 }

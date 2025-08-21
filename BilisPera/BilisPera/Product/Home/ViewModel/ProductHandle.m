@@ -18,10 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ProductHandle ()
 
-@property (nonatomic, strong) ProductApplyInfoModel *applyInfo;
 @property (nonatomic, strong) ProductDetailModel *detailModel;
 // 所有认证都已完成
 @property (nonatomic, assign) BOOL isCompleted;
+@property (nonatomic, strong) NSString *orderId;
+@property (nonatomic, strong) NSString *nextTitle;
+@property (nonatomic, strong) NSString *productId;
 
 @end
 
@@ -63,55 +65,6 @@ NS_ASSUME_NONNULL_BEGIN
     return temp;
 }
 
--(void)onPushDetailView:(NSString *)productId{
-    kWeakSelf;
-    [self apply:productId completion:^{
-        if ((weakSelf.applyInfo.thecavalry == 200) && weakSelf.applyInfo.improbable.length > 0) {
-            NSString *url = [NSString stringWithFormat:@"%@",
-                             weakSelf.applyInfo.improbable];
-            [[Routes shared] routeTo:url];
-        }
-    }];
-}
-
--(void)onPushDetailHomeView:(NSString *)productId{
-    kWeakSelf;
-    [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
-        weakSelf.detailModel = model;
-        if ((weakSelf.detailModel.thecavalry != 200) && weakSelf.detailModel.improbable.length > 0) {
-            NSString *url = [NSString stringWithFormat:@"%@",
-                             weakSelf.detailModel.improbable];
-            [[Routes shared] routeTo:url];
-        }else{
-            ProductHomeViewController *homeVC = [[ProductHomeViewController alloc] initWith:productId];
-            [[UIViewController topMost].navigationController pushViewController:homeVC animated:YES];
-        }
-    }];
-}
-
--(void)applyEvent:(NSString *)productId{
-    kWeakSelf;
-    [self apply:productId completion:^{
-        if (weakSelf.applyInfo.improbable.length > 0) {
-            [[Routes shared] routeTo:weakSelf.applyInfo.improbable];
-        }
-    }];
-}
-
--(void)apply:(NSString *)productId completion:(simpleCompletion)completion{
-    kWeakSelf;
-    NSDictionary *paramas = @{@"buy":productId,
-                              @"mules":[NSString randomString],
-                              @"athand":[NSString randomString]};
-    [[HttpManager shared] requestWithService:Apply parameters:paramas showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-        weakSelf.applyInfo = [ProductApplyInfoModel mj_objectWithKeyValues:response.couldsee];
-        completion();
-    } failure:^(NSError * _Nonnull error,
-                NSDictionary * _Nonnull errorDictionary) {
-        completion();
-    }];
-}
-
 -(void)queryProductDetail:(NSString *)productId completion:(productDetailList)completion{
     NSDictionary *paramas = @{@"buy":productId,
                               @"pitched":[NSString randomString],
@@ -123,72 +76,6 @@ NS_ASSUME_NONNULL_BEGIN
                 NSDictionary * _Nonnull errorDictionary) {
         completion(nil);
     }];
-}
-
-// 进订单详情页
--(void)onPushOrderDetailView:(NSString *)productId completion:(simpleStringCompletion)completion{
-    kWeakSelf;
-    [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
-        if ((model.thecavalry != 200) && model.improbable.length > 0) {
-            NSString *url = [NSString stringWithFormat:@"%@",
-                             weakSelf.detailModel.improbable];
-            [[Routes shared] routeTo:url];
-        }else{
-            [weakSelf onPushDetailViewWithOrderId:[NSString stringWithFormat:@"%@",
-                                                   model.rhete.andto] completion:completion];
-        }
-    }];
-}
-
--(void)onPushDetailViewWithOrderId:(NSString *)orderId completion:(simpleStringCompletion)completion{
-    if (orderId.length == 0) {
-        return;
-    }
-    [[HttpManager shared] requestWithService:OrderDetail parameters:@{@"marmot": orderId,@"prairie":[NSString randomString],@"difficulties":[NSString randomString],@"thesentinels":[NSString randomString],@"brow":[NSString randomString]} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-        NSString *url = [NSString stringWithFormat:@"%@",
-                         response.couldsee[@"improbable"]];
-        completion(url);
-    } failure:^(NSError * _Nonnull error,
-                NSDictionary * _Nonnull errorDictionary) {
-        completion(@"");
-    }];
-}
-
--(void)onPushNextStep:(NSString *)productId type:(NSString *)type{
-    kWeakSelf;
-    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:YES];
-    [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
-        if (model.thecavalry != 200 && model.improbable.length > 0) {
-            [[Routes shared] routeTo:model.improbable];
-            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:NO];
-            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeApply productId:productId];
-        }else if (model.packed && model.packed.trading.length > 0) {
-            BPProductStep nextStep = [[ProductHandle shared] getProductStepWith:model.packed.trading];
-            weakSelf.isCompleted = NO;
-            [weakSelf enterNextStepViewWith:productId step:nextStep title:[NSString stringWithFormat:@"%@",
-                                                                           model.packed.enclosed] type:type];
-        }else{
-            weakSelf.isCompleted = YES;
-        }
-    }];
-}
-
--(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type{
-    if (step == BPProductStepFaceId ) {
-        [ProdcutAuthenticationTypeViewModel onPushAuthAuthenticationView:productId title:title type:type];
-    }else if (step == BPProductStepBasic){
-        ProductPersonalViewController *personalVC = [[ProductPersonalViewController alloc] initWith:productId title:title];
-        [[UIViewController topMost].navigationController pushViewController:personalVC animated:YES];
-    }else if (step == BPProductStepWork){
-        ProductWorkViewController *workVC = [[ProductWorkViewController alloc] initWith:productId title:title];
-        [[UIViewController topMost].navigationController pushViewController:workVC animated:YES];
-    }else if (step == BPProductStepContact){
-        ProductContactsViewController *contactsVC = [[ProductContactsViewController alloc] initWith:productId title:title];
-        [[UIViewController topMost].navigationController pushViewController:contactsVC animated:YES];
-    }else if (step == BPProductStepBank){
-        ProductBankViewController *bankVC = [[ProductBankViewController alloc] initWith:productId title:title];
-        [[UIViewController topMost].navigationController pushViewController:bankVC animated:YES];
-    }
 }
 
 -(void)saveUserInfoWithParamaters:(NSDictionary *)paramaters completion:(simpleBoolCompletion)completion{
@@ -213,6 +100,123 @@ NS_ASSUME_NONNULL_BEGIN
                 NSDictionary * _Nonnull errorDictionary) {
             
     }];
+}
+
+-(void)onPushProductHomeView:(NSString *)productId{
+    if (productId.length > 0) {
+        self.productId = productId;
+    }
+    [self requestNextStep:productId completion:^(id obj) {
+        if ([obj isKindOfClass:[ProductDetailModel class]]) {
+            ProductDetailModel *model = (ProductDetailModel *)obj;
+            if (model.thecavalry != 200 && model.improbable.length > 0) {
+                NSString *url = [NSString stringWithFormat:@"%@",
+                                 model.improbable];
+                [[Routes shared] routeTo:url];
+            }else{
+                ProductHomeViewController *homeVC = [[ProductHomeViewController alloc] initWith:productId];
+                [[UIViewController topMost].navigationController pushViewController:homeVC animated:YES];
+            }
+        }
+    }];
+}
+
+-(void)requestNextStep:(NSString *)productId completion:(simpleObjectCompletion)completion{
+    if (productId.length == 0) {
+        completion(@"");
+        return;
+    }
+    kWeakSelf;
+    [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
+        if (model.rhete.andto.length > 0) {
+            weakSelf.orderId = model.rhete.andto;
+        }
+        if (model.packed.enclosed.length > 0) {
+            weakSelf.nextTitle = model.packed.enclosed;
+        }
+        completion(model);
+    }];
+}
+
+-(void)requestNextStepWithOrderId:(NSString *)orderId completion:(simpleStringCompletion)completion{
+    if (orderId.length == 0) {
+        completion(@"");
+        return;
+    }
+    kWeakSelf;
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:YES];
+    [[HttpManager shared] requestWithService:OrderDetail parameters:@{@"marmot": orderId,@"prairie":[NSString randomString],@"difficulties":[NSString randomString],@"thesentinels":[NSString randomString],@"brow":[NSString randomString]} showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+        NSString *url = [NSString stringWithFormat:@"%@",
+                         response.couldsee[@"improbable"]];
+        if (url.length > 0) {
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:NO];
+            [[TrackTools shared]trackRiskInfo:BPTrackRiskTypeApply productId: weakSelf.productId];
+            completion(url);
+        }else{
+            completion(@"");
+        }
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+        completion(@"");
+    }];
+}
+
+-(void)enterAuthenView:(NSString *)productId type:(NSString *)type{
+    if (productId.length > 0) {
+        self.productId = productId;
+    }
+    kWeakSelf;
+    [self requestNextStep:productId completion:^(id obj) {
+        if ([obj isKindOfClass:[ProductDetailModel class]]) {
+            ProductDetailModel *model = (ProductDetailModel *)obj;
+            if (model.packed) {
+                weakSelf.nextTitle = model.packed.enclosed;
+                BPProductStep step = [[ProductHandle shared] getProductStepWith:model.packed.trading];
+                [weakSelf enterNextStepViewWith:productId step:step title:weakSelf.nextTitle type:type];
+            }else {
+                [self requestNextStepWithOrderId:self.orderId completion:^(NSString *url) {
+                    if (url.length > 0) {
+                        [[Routes shared] routeTo:url];
+                    }
+                }];
+            }
+        }
+    }];
+}
+
+-(void)apply:(NSString *)productId{
+    if (productId.length > 0) {
+        self.productId = productId;
+    }
+    NSDictionary *paramas = @{@"buy":productId,
+                              @"mules":[NSString randomString],
+                              @"athand":[NSString randomString]};
+    [[HttpManager shared] requestWithService:Apply parameters:paramas showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+        ProductApplyInfoModel *applyInfo = [ProductApplyInfoModel mj_objectWithKeyValues:response.couldsee];
+        if (applyInfo.improbable.length > 0) {
+            [[Routes shared] routeTo:applyInfo.improbable];
+        }
+    } failure:^(NSError * _Nonnull error,
+                NSDictionary * _Nonnull errorDictionary) {
+    }];
+}
+
+-(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type{
+    if (step == BPProductStepFaceId ) {
+        [ProdcutAuthenticationTypeViewModel onPushAuthAuthenticationView:productId title:title type:type];
+    }else if (step == BPProductStepBasic){
+        ProductPersonalViewController *personalVC = [[ProductPersonalViewController alloc] initWith:productId title:title];
+        [[UIViewController topMost].navigationController pushViewController:personalVC animated:YES];
+    }else if (step == BPProductStepWork){
+        ProductWorkViewController *workVC = [[ProductWorkViewController alloc] initWith:productId title:title];
+        [[UIViewController topMost].navigationController pushViewController:workVC animated:YES];
+    }else if (step == BPProductStepContact){
+        ProductContactsViewController *contactsVC = [[ProductContactsViewController alloc] initWith:productId title:title];
+        [[UIViewController topMost].navigationController pushViewController:contactsVC animated:YES];
+    }else if (step == BPProductStepBank){
+        ProductBankViewController *bankVC = [[ProductBankViewController alloc] initWith:productId title:title];
+        [[UIViewController topMost].navigationController pushViewController:bankVC animated:YES];
+    }
 }
 
 @end

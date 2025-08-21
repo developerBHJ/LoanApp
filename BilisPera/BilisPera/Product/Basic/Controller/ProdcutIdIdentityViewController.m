@@ -255,7 +255,7 @@ NS_ASSUME_NONNULL_BEGIN
     kWeakSelf;
     [[ProductHandle shared] saveUserInfoWithParamaters:paramas completion:^(BOOL success) {
         if (success) {
-            [[ProductHandle shared] onPushNextStep:self.productId type:weakSelf.type];
+            [[ProductHandle shared] enterAuthenView:weakSelf.productId type:weakSelf.type];
         }
     }];
 }

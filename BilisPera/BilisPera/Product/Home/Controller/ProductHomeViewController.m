@@ -127,7 +127,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void)nextStep{
-    [[ProductHandle shared] onPushNextStep:self.productId type:@""];
+    [[ProductHandle shared] enterAuthenView:self.productId type:@""];
 }
 @end
 

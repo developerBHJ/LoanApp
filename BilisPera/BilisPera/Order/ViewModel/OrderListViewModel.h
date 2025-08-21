@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol OrderListViewItemClickDelegate <NSObject>
 
--(void)itemClick:(NSString *)orderId;
+-(void)itemClick:(NSString *)url;
 
 @end
 
