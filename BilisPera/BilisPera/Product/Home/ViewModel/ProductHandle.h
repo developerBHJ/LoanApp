@@ -49,6 +49,8 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 -(void)onPushProductHomeView:(NSString *)productId;
 // 进入认证页面
 -(void)enterAuthenView:(NSString *)productId type:(NSString *)type;
+// 进入具体某个认证页面
+-(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type;
 
 @end
 

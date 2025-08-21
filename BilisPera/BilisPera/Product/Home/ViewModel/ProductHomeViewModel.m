@@ -54,7 +54,11 @@ NS_ASSUME_NONNULL_BEGIN
         }
         kWeakSelf;
         __block ProductStepBannerItemViewModel *itemModel = [[ProductStepBannerItemViewModel alloc] initWith:[[ProductHandle shared] getProductStepWith:stepModel.trading] finished:(stepModel.building == 1) completion:^(NSInteger step) {
-            [[ProductHandle shared] enterAuthenView:weakSelf.productId type:@""];
+            if (stepModel.building == 1) {
+                [[ProductHandle shared] enterNextStepViewWith:weakSelf.productId step:step title:stepModel.enclosed type:@""];
+            }else{
+                [[ProductHandle shared] enterAuthenView:weakSelf.productId type:@""];
+            }
         }];
         [tempArray addObject:itemModel];
     }
