@@ -59,13 +59,13 @@ NS_ASSUME_NONNULL_BEGIN
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.headrView.mas_bottom);
         make.leading.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.view).inset(kCustomTabBarH - kTabBarHeight);
+        make.bottom.equalTo(self.view);
     }];
     [self.view addSubview:self.emptyView];
     [self.emptyView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.headrView.mas_bottom);
         make.leading.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.view).inset(kCustomTabBarH - kTabBarHeight);
+        make.bottom.equalTo(self.view);
     }];
     kWeakSelf;
     self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{

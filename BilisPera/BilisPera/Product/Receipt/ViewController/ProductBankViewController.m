@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear: animated];
     [self.tableView.mj_header beginRefreshing];
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeReceipt start:YES];
 }
 
 -(void)configUI{
@@ -151,8 +152,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 // MARK: -
 -(void)nextStep{
+    kWeakSelf;
     [self.viewModel saveUserInfoWith:self.productId completion:^(BOOL success) {
         if (success) {
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeReceipt start:NO];
+            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeReceipt productId:weakSelf.productId];
             [[ProductHandle shared] onPushNextStep:self.productId type:@""];
         }
     }];

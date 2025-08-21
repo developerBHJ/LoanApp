@@ -101,13 +101,13 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - storage内存模块相关属性
 @interface DreamyModel : BaseModel
 /// 未使用存储大小
-@property (nonatomic, assign) NSInteger mound;
+@property (nonatomic, strong) NSString *mound;
 /// 总存储大小
-@property (nonatomic, assign) NSInteger sawwhat;
+@property (nonatomic, strong) NSString *sawwhat;
 /// 总内存大小
-@property (nonatomic, assign) NSInteger dusk;
+@property (nonatomic, strong) NSString *dusk;
 /// 未使用内存大小
-@property (nonatomic, assign) NSInteger overtaking;
+@property (nonatomic, strong) NSString *overtaking;
 
 @end
 

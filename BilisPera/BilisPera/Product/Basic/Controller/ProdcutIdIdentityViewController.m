@@ -177,6 +177,7 @@ NS_ASSUME_NONNULL_BEGIN
     }else{
         [self openCameraView];
     }
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeIdInfo start:YES];
 }
 
 - (void)pickerDate{
@@ -192,7 +193,7 @@ NS_ASSUME_NONNULL_BEGIN
     kWeakSelf;
     [[PermissionTools shared] requestCameraAccessWithCompletion:^(BOOL result) {
         if (result) {
-            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionBack];
+            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionBack canFlip:YES];
             pickerVC.completion = ^(UIImage * _Nonnull image) {
                 weakSelf.viewModel.selectedImage = image;
                 [weakSelf dismissViewControllerAnimated:YES completion:^{
@@ -247,6 +248,9 @@ NS_ASSUME_NONNULL_BEGIN
         kWeakSelf;
         [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage  completion:^(id obj) {
             if ([obj isKindOfClass:[ProductAuthenIndetyInfoModel class]]) {
+                [[TrackTools shared] saveTrackTime:BPTrackRiskTypeIdInfo start:NO];
+                [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeIdInfo productId:weakSelf.productId];
+                
                 ProductAuthenIndetyInfoModel *model = (ProductAuthenIndetyInfoModel *)obj;
                 BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^(NSDictionary *dic) {
                     [weakSelf saveuserInfo:dic];

@@ -72,7 +72,6 @@ static NSString *bPageKey = @"bPageKey";
 static NSString *isFirstLuanch = @"isFirst";
 
 
-
 typedef NS_ENUM(NSInteger,BPOrderStatus) {
     BPOrderStatusAll = 4,
     BPOrderStatusApplying = 7,

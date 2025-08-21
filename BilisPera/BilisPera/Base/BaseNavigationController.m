@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self.navigationBar setTintColor:[UIColor blackColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: kBlackColor,NSFontAttributeName:kFont(18)}];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName: kBlackColor,
+                                                           NSFontAttributeName:kFont(18)}];
+    self.view.backgroundColor = kColor_FFF6F9;
 }
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{

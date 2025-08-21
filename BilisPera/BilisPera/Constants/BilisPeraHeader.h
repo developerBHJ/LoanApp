@@ -11,10 +11,10 @@
 #import "MJExtension/MJExtension.h"
 #import "SDWebImage/SDWebImage.h"
 #import "MJRefresh/MJRefresh.h"
-#import "DeviceKit/DeviceKit-Swift.h"
 #import "Masonry/Masonry.h"
 #import "SDCycleScrollView/SDCycleScrollView.h"
 #import "IQKeyboardManager/IQKeyboardManager.h"
+#import <UIDevice_Hardware/UIDevice-Hardware.h>
 
 #import "BaseViewController.h"
 #import "UIColor+_Extension.h"
@@ -40,7 +40,6 @@
 #import "UIStackView+Extension.h"
 #import "HtmlPath.h"
 #import "ProductHandle.h"
-#import "UIImage+Extension.h"
 #import "BPLayoutButton.h"
 #import "UIView+Extension.h"
 #import "UINavigationController+Extension.h"
@@ -52,6 +51,7 @@
 #import "PermissionTools.h"
 #import "BPAddressModel.h"
 #import "NSData+Extension.h"
+#import "BaseNavigationController.h"
 
 
 

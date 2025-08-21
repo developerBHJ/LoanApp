@@ -33,6 +33,7 @@ PODS:
   - SDWebImage (5.21.0):
     - SDWebImage/Core (= 5.21.0)
   - SDWebImage/Core (5.21.0)
+  - UIDevice-Hardware (0.1.13)
 
 DEPENDENCIES:
   - AFNetwork
@@ -45,6 +46,7 @@ DEPENDENCIES:
   - MJRefresh (~> 3.7.9)
   - SDCycleScrollView
   - SDWebImage
+  - UIDevice-Hardware
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -61,6 +63,7 @@ SPEC REPOS:
     - MJRefresh
     - SDCycleScrollView
     - SDWebImage
+    - UIDevice-Hardware
 
 SPEC CHECKSUMS:
   AFNetwork: 0dbdb2ffb4a7770b3d1802dc85b50ab31263f2c2
@@ -76,7 +79,8 @@ SPEC CHECKSUMS:
   MJRefresh: ff9e531227924c84ce459338414550a05d2aea78
   SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
+  UIDevice-Hardware: c10ce5703fa8de762079b84236c548cf31223531
 
-PODFILE CHECKSUM: 55c2c8020f6a16a4d3a5415206013f06a6466868
+PODFILE CHECKSUM: 2dd6746dd436386c87fcb4d28cb53b7d7c1c4e3d
 
 COCOAPODS: 1.16.2

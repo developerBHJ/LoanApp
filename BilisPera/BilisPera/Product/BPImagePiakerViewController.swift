@@ -20,14 +20,33 @@ class BPImagePiakerViewController: UIViewController {
     private let captureButton = UIButton()
     private let flashButton = UIButton()
     private var position: AVCaptureDevice.Position = .back
+    private lazy var flipButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "camera.rotate"), for: .normal)
+        button.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
+        button.tintColor = UIColor.white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var backButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage.init(named: "icon_nav_back")?.withTintColor(UIColor.white), for: .normal)
+        button.addTarget(self, action: #selector(backEvent), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     @objc
     var completion: ((UIImage) -> Void)?
+    @objc
+    var canFlip: Bool = false
     
     @objc
-    convenience init(position: AVCaptureDevice.Position){
+    convenience init(position: AVCaptureDevice.Position,canFlip: Bool = false){
         self.init()
         self.position = position
+        self.canFlip = canFlip
     }
     
     override func viewDidLoad() {
@@ -94,10 +113,51 @@ class BPImagePiakerViewController: UIViewController {
                 for: .touchUpInside
             )
         view.addSubview(captureButton)
+        view.addSubview(flipButton)
+        view.addSubview(backButton)
+        NSLayoutConstraint.activate([
+            flipButton.centerYAnchor.constraint(equalTo: captureButton.centerYAnchor),
+            flipButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60.ratio()),
+            flipButton.widthAnchor.constraint(equalToConstant: 44.ratio()),
+            flipButton.heightAnchor.constraint(equalToConstant: 44.ratio()),
+            
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16.ratio()),
+            backButton.widthAnchor.constraint(equalToConstant: 44.ratio()),
+            backButton.heightAnchor.constraint(equalToConstant: 44.ratio()),
+        ])
+        flipButton.isHidden = !canFlip
     }
     
     @objc private func captureButtonTapped() {
         capturePhoto()
+    }
+    
+    @objc private func flipCamera() {
+        captureSession.beginConfiguration()
+        defer { captureSession.commitConfiguration() }
+        guard let currentInput = captureSession.inputs.first as? AVCaptureDeviceInput,
+              let newCamera = currentCamera?.position == .back ?
+                AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) :
+                AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        else { return }
+        do {
+            let newInput = try AVCaptureDeviceInput(device: newCamera)
+            captureSession.removeInput(currentInput)
+            
+            if captureSession.canAddInput(newInput) {
+                captureSession.addInput(newInput)
+                currentCamera = newCamera
+            } else {
+                captureSession.addInput(currentInput)
+            }
+        } catch {
+            print("切换摄像头失败: \(error)")
+        }
+    }
+    
+    @objc func backEvent(){
+        self.dismiss(animated: false)
     }
 }
 

@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger,ServiceAPI) {
     UploadDeviceInfo,
     UploadContacts,
     APNPost,
+    UploadRiskInfo,
 };
 
 typedef NS_ENUM(NSUInteger, BPRequestContentType) {

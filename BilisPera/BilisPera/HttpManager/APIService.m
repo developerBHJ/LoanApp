@@ -92,6 +92,9 @@ NS_ASSUME_NONNULL_BEGIN
         case APNPost:
             url = @"/sudden/officer";
             break;
+        case UploadRiskInfo:
+            url = @"/sudden/assistantour";
+            break;
     }
     return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
 }

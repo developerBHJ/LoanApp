@@ -31,9 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(Virulence *)configVirulence{
     Virulence *model = [[Virulence alloc] init];
     [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-    model.adraught = (int)[UIDevice currentDevice].batteryLevel * 100;
+    model.adraught = (int)([UIDevice currentDevice].batteryLevel * 100);
     model.drank = [UIDevice currentDevice].batteryState == UIDeviceBatteryStateCharging ? 1 : 0;
-    return [[Virulence alloc] init];
+    return model;
 }
 
 -(Effect *)configEffectModel{
@@ -48,9 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
     model.spouse = @"";
     model.isegrim = (int)kScreenH;
     model.giermund = (int)kScreenW;
-    model.frau = kDeviceName;
-    model.schone = kDeviceModel;
-    model.sleek = [[UIDevice currentDevice] localizedModel] ?: @"";
+    model.frau = [UIDevice currentDevice].name;
+    model.schone = [UIDevice currentDevice].modelName;
+    model.sleek = [UIDevice currentDevice].modelIdentifier;
     model.gorged = [DeviceInfo getDiagonal];
     model.brute = kDeviceSystemVersion;
     return  model;
@@ -74,10 +74,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(DreamyModel *)configDreamyModel{
     DreamyModel *model = [[DreamyModel alloc] init];
-    model.sawwhat = (int)[DiskTools getTotalDiskSpace];
-    model.mound = (int)[DiskTools getFreeDiskSpace];
-    model.dusk = (int)[DiskTools getTotalMemory];
-    model.overtaking = (int)[DiskTools getAvailableMemory];
+    model.sawwhat = [NSString stringWithFormat:@"%lld",[DiskTools getTotalDiskSpace]];
+    model.mound = [NSString stringWithFormat:@"%lld",[DiskTools getFreeDiskSpace]];
+    model.dusk = [NSString stringWithFormat:@"%lld",[DiskTools getTotalMemory]];
+    model.overtaking = [NSString stringWithFormat:@"%lld",[DiskTools getAvailableMemory]];
     return  model;
 }
 

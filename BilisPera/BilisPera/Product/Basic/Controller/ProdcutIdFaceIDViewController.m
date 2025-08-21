@@ -129,13 +129,14 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - ProdcutIdIdentityViewDelegate
 - (void)pickerImage{
     [self openCameraView];
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFaceId start:YES];
 }
 
 -(void)openCameraView{
     kWeakSelf;
     [[PermissionTools shared] requestCameraAccessWithCompletion:^(BOOL result) {
         if (result) {
-            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionFront];
+            BPImagePiakerViewController *pickerVC = [[BPImagePiakerViewController alloc] initWithPosition:AVCaptureDevicePositionFront canFlip:NO];
             pickerVC.completion = ^(UIImage * _Nonnull image) {
                 weakSelf.viewModel.selectedImage = image;
                 [weakSelf dismissViewControllerAnimated:YES completion:^{
@@ -160,6 +161,8 @@ NS_ASSUME_NONNULL_BEGIN
         [self.viewModel uplodaImage:self.productId image:self.viewModel.selectedImage completion:^(BOOL success) {
             if (success) {
                 [[ProductHandle shared] onPushNextStep:self.productId type:weakSelf.type];
+                [[TrackTools shared] saveTrackTime:BPTrackRiskTypeFaceId start:NO];
+                [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeFaceId productId:weakSelf.productId];
             }
         }];
     }else{

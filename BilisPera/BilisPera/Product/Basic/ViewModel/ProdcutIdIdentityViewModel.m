@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                                                                                                          @"icon_auth_example2",
                                                                                                                                                          @"icon_auth_example3",
                                                                                                                                                          @"icon_auth_example4"]];
-    ProdcutAuthenticationIndetifyCellModel *cellModel = [[ProdcutAuthenticationIndetifyCellModel alloc] initWith:@"POSTAL ID" imageUrl:imageUrl image:self.selectedImage cameraImage:@"icon_auth_camera" exampleModel:exampleModel completion:^{
+    ProdcutAuthenticationIndetifyCellModel *cellModel = [[ProdcutAuthenticationIndetifyCellModel alloc] initWith:self.type imageUrl:imageUrl image:self.selectedImage cameraImage:@"icon_auth_camera" exampleModel:exampleModel completion:^{
         if ([weakSelf.delegate respondsToSelector:@selector(pickerImage)]) {
             [weakSelf.delegate pickerImage];
         }
@@ -113,22 +113,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)uplodaImage:(NSString *)productId image:(UIImage *)image completion:(simpleObjectCompletion)completion{
     [BPProressHUD showWindowesLoadingWithView:nil message:@"" autoHide:NO animated:YES];
-    [image smartCompressWithMaxKB:500 completion:^(NSData *imageData) {
-        if (imageData) {
-            [BPProressHUD hideHUDQueryHUDWithView:nil];
-            [[HttpManager shared] requestWithService:UploadImage parameters:@{@"reloaded":@(self.imageSource),@"buy":productId,@"everyonehad":@(11),@"tender":self.type,@"eachshould":[NSString randomString],@"turnedagain":@"",@"hardlydared":@"1"} showLoading:YES showMessage:YES bodyBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-                [formData appendPartWithFileData:imageData name:@"wives" fileName:@"user_identify.jpg" mimeType:@"image/jpeg"];
-            } success:^(HttpResponse * _Nonnull response) {
-                ProductAuthenIndetyInfoModel *info = [ProductAuthenIndetyInfoModel mj_objectWithKeyValues:response.couldsee];
-                if (info) {
-                    completion(info);
-                }
-            } failure:^(NSError * _Nonnull error,
-                        NSDictionary * _Nonnull errorDictionary) {
-                completion(@"");
-            }];
-        }
-    }];
+    NSData *imageData = [UIImage compressWithImage:image maxSizeKB:500 maxResolution:2000];
+    if (imageData) {
+        [BPProressHUD hideHUDQueryHUDWithView:nil];
+        [[HttpManager shared] requestWithService:UploadImage parameters:@{@"reloaded":@(self.imageSource),@"buy":productId,@"everyonehad":@(11),@"tender":self.type,@"eachshould":[NSString randomString],@"turnedagain":@"",@"hardlydared":@"1"} showLoading:YES showMessage:YES bodyBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            [formData appendPartWithFileData:imageData name:@"wives" fileName:@"user_identify.jpg" mimeType:@"image/jpeg"];
+        } success:^(HttpResponse * _Nonnull response) {
+            ProductAuthenIndetyInfoModel *info = [ProductAuthenIndetyInfoModel mj_objectWithKeyValues:response.couldsee];
+            if (info) {
+                completion(info);
+            }
+        } failure:^(NSError * _Nonnull error,
+                    NSDictionary * _Nonnull errorDictionary) {
+            completion(@"");
+        }];
+    }
 }
 
 

@@ -21,9 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 // IDFA
 @property (nonatomic, strong) NSString *reins;
 // 经度
-@property (nonatomic, assign) NSInteger sighted;
+@property (nonatomic, strong) NSString *sighted;
 // 纬度
-@property (nonatomic, assign) NSInteger hills;
+@property (nonatomic, strong) NSString *hills;
 // 开始时间
 @property (nonatomic, strong) NSString *trail;
 // 结束时间

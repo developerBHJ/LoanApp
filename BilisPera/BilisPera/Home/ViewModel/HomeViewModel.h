@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)reloadData:(simpleCompletion)completion;
 
+-(BOOL)needLocation;
+
 @end
 
 NS_ASSUME_NONNULL_END

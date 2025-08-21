@@ -64,20 +64,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)uplodaImage:(NSString *)productId image:(UIImage *)image completion:(simpleBoolCompletion)completion{
     [BPProressHUD showWindowesLoadingWithView:nil message:@"" autoHide:NO animated:YES];
-    [image smartCompressWithMaxKB:500 completion:^(NSData *imageData) {
-        if (imageData) {
-            [BPProressHUD hideHUDQueryHUDWithView:nil];
-            [[HttpManager shared] requestWithService:UploadImage parameters:@{@"reloaded":@(self.imageSource),@"buy":productId,@"everyonehad":@(10),@"tender":self.type,@"eachshould":[NSString randomString],@"turnedagain":@"",@"hardlydared":@"1"} showLoading:YES showMessage:YES bodyBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-                NSString *imageName = [NSString stringWithFormat:@"%@%@%@",@"user_identify",[NSString randomString],@".jpg"];
-                [formData appendPartWithFileData:imageData name:@"wives" fileName:imageName mimeType:@"image/jpeg"];
-            } success:^(HttpResponse * _Nonnull response) {
-                completion(YES);
-            } failure:^(NSError * _Nonnull error,
-                        NSDictionary * _Nonnull errorDictionary) {
-                completion(NO);
-            }];
-        }
-    }];
+    NSData *imageData = [UIImage compressWithImage:image maxSizeKB:500 maxResolution:2000];
+    if (imageData) {
+        [BPProressHUD hideHUDQueryHUDWithView:nil];
+        [[HttpManager shared] requestWithService:UploadImage parameters:@{@"reloaded":@(self.imageSource),@"buy":productId,@"everyonehad":@(10),@"tender":self.type,@"eachshould":[NSString randomString],@"turnedagain":@"",@"hardlydared":@"1"} showLoading:YES showMessage:YES bodyBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            NSString *imageName = [NSString stringWithFormat:@"%@%@%@",@"user_identify",[NSString randomString],@".jpg"];
+            [formData appendPartWithFileData:imageData name:@"wives" fileName:imageName mimeType:@"image/jpeg"];
+        } success:^(HttpResponse * _Nonnull response) {
+            completion(YES);
+        } failure:^(NSError * _Nonnull error,
+                    NSDictionary * _Nonnull errorDictionary) {
+            completion(NO);
+        }];
+    }
 }
 
 @end

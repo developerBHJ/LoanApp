@@ -7,20 +7,22 @@
 
 import Foundation
 
+let userLocationKey = "user_Location";
+
 @objc
 class BPLocationModel: NSObject {
     /// 省
-    var truly: String = ""
+    @objc var truly: String = ""
     /// 国家code
-    var astonishing: String = ""
+    @objc var astonishing: String = ""
     /// 国家
-    var stopped: String = ""
+    @objc var stopped: String = ""
     /// 街道
-    var horizon: String = ""
+    @objc var horizon: String = ""
     /// 纬度
-    var hills: String = ""
+    @objc var hills: String = ""
     /// 经度
-    var sighted: String = ""
+    @objc var sighted: String = ""
     /// 市
-    var theplain: String = ""
+    @objc var theplain: String = ""
 }

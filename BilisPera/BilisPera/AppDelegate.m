@@ -13,12 +13,15 @@
 
 @interface AppDelegate ()
 
+@property (nonatomic, strong) NSDate *luanchTime;
+
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.luanchTime = [NSDate date];
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self changeRootViewController:![[LoginTools shared] isFirstLuanch]];
@@ -28,6 +31,13 @@
     [[IQKeyboardManager sharedManager] setEnable:YES];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    if (self.luanchTime) {
+        NSInteger duration = [[NSDate date] timeIntervalSinceDate:self.luanchTime];
+        [TrackTools shared].launchTime = duration;
+    }
 }
 
 -(void)changeRootViewController:(BOOL)needGuide{

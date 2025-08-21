@@ -60,7 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(kNavigationBarHeight);
-        make.leading.trailing.bottom.equalTo(self.view);
+        make.leading.trailing.equalTo(self.view);
+        make.bottom.equalTo(self.view);
     }];
     self.tableView.tableHeaderView = self.headerView;
     [self.tableView reloadData];

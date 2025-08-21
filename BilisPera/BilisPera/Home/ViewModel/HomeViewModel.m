@@ -207,6 +207,10 @@ NS_ASSUME_NONNULL_BEGIN
     self.dataSource = tempArray;
 }
 
+
+-(BOOL)needLocation{
+    return self.pageModel.togo == 1;
+}
 @end
 
 NS_ASSUME_NONNULL_END

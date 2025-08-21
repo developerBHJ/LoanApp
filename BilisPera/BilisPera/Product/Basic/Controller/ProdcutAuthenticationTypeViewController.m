@@ -42,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear: animated];
     [self.tableView.mj_header beginRefreshing];
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeAuthenSelect start:YES];
 }
 
 -(void)configUI{
@@ -109,6 +110,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 // MARK: - ProdcutAuthenticationTypeViewDelegate
 - (void)itemSelected:(NSString *)type{
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeAuthenSelect start:NO];
+    [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeAuthenSelect productId:self.productId];
+    
     ProdcutIdIdentityViewController *targetVC = [[ProdcutIdIdentityViewController alloc] initWith:self.productId title:self.navTitle type:type];
     [self.navigationController popCurrentAndPushNewVC:targetVC];
 }

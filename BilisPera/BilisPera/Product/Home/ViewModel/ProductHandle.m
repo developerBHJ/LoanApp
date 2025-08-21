@@ -156,9 +156,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)onPushNextStep:(NSString *)productId type:(NSString *)type{
     kWeakSelf;
+    [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:YES];
     [self queryProductDetail:productId completion:^(ProductDetailModel * _Nullable model) {
         if (model.thecavalry != 200 && model.improbable.length > 0) {
             [[Routes shared] routeTo:model.improbable];
+            [[TrackTools shared] saveTrackTime:BPTrackRiskTypeApply start:NO];
+            [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeApply productId:productId];
         }else if (model.packed && model.packed.trading.length > 0) {
             BPProductStep nextStep = [[ProductHandle shared] getProductStepWith:model.packed.trading];
             weakSelf.isCompleted = NO;

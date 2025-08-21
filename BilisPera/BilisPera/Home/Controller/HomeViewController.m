@@ -46,7 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).offset(kNavigationBarHeight);
         make.leading.trailing.equalTo(self.view);
-        make.bottom.equalTo(self.view).inset(kCustomTabBarH - kTabBarHeight);
+        make.bottom.equalTo(self.view);
     }];
     kWeakSelf;
     self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
@@ -116,7 +116,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 // MARK: - HomePageEventDelegate
 - (void)onpushOtherView:(NSString *)url{
-    [[Routes shared] routeTo:url];
+    kWeakSelf;
+    [self checkPermission:^(BOOL result) {
+        if (result) {
+            [weakSelf updateLocation];
+            [[Routes shared] routeTo:url];
+        }
+    }];
 }
 
 - (void)onpushCommonQuestionsView{
@@ -125,7 +131,13 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)onPushProductDetail:(NSString *)prodcutId{
-    [[ProductHandle shared] applyEvent:prodcutId];
+    kWeakSelf;
+    [self checkPermission:^(BOOL result) {
+        if (result) {
+            [weakSelf updateLocation];
+            [[ProductHandle shared] applyEvent:prodcutId];
+        }
+    }];
 }
 
 - (void)kingKongItemClick:(HomeKingKongType)type{
@@ -134,12 +146,42 @@ NS_ASSUME_NONNULL_BEGIN
             [[Routes shared] onPushOrderView:BPOrderStatusAll];
             break;
         case HomeKingKongTypeResponse:
-            [[Routes shared] onPushWebView:@""];
+            //            [[Routes shared] onPushWebView:@""];
             break;
         case HomeKingKongTypeService:
-            [[Routes shared] onPushWebView:@""];
+            //            [[Routes shared] onPushWebView:@""];
             break;
     }
+}
+
+-(void)updateLocation{
+    [[TrackTools shared] trackLocation];
+    [[TrackTools shared] trackDeviceInfo];
+    if ([TrackTools shared].registerStartTime > 0) {
+        [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeRegister productId:@""];
+    }
+}
+
+-(void)checkPermission:(simpleBoolCompletion)completion{
+    kWeakSelf;
+    [[PermissionTools shared] requestLocationAccessWithCompletion:^(BOOL success) {
+        if (success) {
+            completion(YES);
+        }else{
+            if (weakSelf.viewModel.needLocation) {
+                [self showCustomAlertWithTitle:@"" message:kLocationAlertMessage confirmCompletion:^{
+                    [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
+                                              kScheme,
+                                              [BPRoute settingPage]]];
+                } cancelCompletion:^{
+                    
+                }];
+                completion(NO);
+            }else{
+                completion(YES);
+            }
+        }
+    }];
 }
 
 @end

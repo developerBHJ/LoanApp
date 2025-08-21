@@ -33,8 +33,21 @@ NS_ASSUME_NONNULL_BEGIN
     return _shared;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.trackTime = [[NSMutableDictionary alloc] init];
+        [self registerStartTime];
+        self.lastLoginTime = 0;
+        self.launchTime = 0;
+        self.latitude = 0;
+        self.longitude = 0;
+    }
+    return self;
+}
+
 -(void)configData{
-    self.defaultCoordinate = CLLocationCoordinate2DMake(0, 0);
     self.latitude = 0;
     self.longitude = 0;
     self.deviceModel = [[TrackDeviceModel alloc] init];
@@ -97,8 +110,27 @@ NS_ASSUME_NONNULL_BEGIN
     [[FBSDKApplicationDelegate sharedInstance] application:[UIApplication sharedApplication] didFinishLaunchingWithOptions:nil];
 }
 
--(void)trackLocation:(NSDictionary *)paramas{
-    [[HttpManager shared] requestWithService:UploadLocation parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+-(void)trackLocation{
+    [[BPLocationManager shared] startLocationRequestWithCompletion:^{
+        BPLocationModel *model = [[BPLocationManager shared] getUserLocation];
+        if (model) {
+            NSDictionary  *paramas = model.mj_keyValues;
+            [[HttpManager shared] requestWithService:UploadLocation parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+                    
+            } failure:^(NSError * _Nonnull error,
+                        NSDictionary * _Nonnull errorDictionary) {
+                    
+            }];
+        }
+    }];
+}
+
+-(void)trackDeviceInfo{
+    TrackDeviceModel *model = [[TrackDeviceModel alloc] init];
+    NSDictionary *paramas = model.mj_keyValues;
+    NSString *json = [NSData objectToBase64JSONString:paramas];
+    NSDictionary *dic = @{@"couldsee" : json};
+    [[HttpManager shared] requestWithService:UploadDeviceInfo parameters:dic showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
             
     } failure:^(NSError * _Nonnull error,
                 NSDictionary * _Nonnull errorDictionary) {
@@ -116,13 +148,18 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)trackRiskInfo:(BPTrackRiskType)type productId:(NSString *)productId{
-    NSMutableDictionary *paramas = [[NSMutableDictionary alloc] init];
-    
-    [[HttpManager shared] requestWithService:UploadContacts parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
-            
-    } failure:^(NSError * _Nonnull error,
-                NSDictionary * _Nonnull errorDictionary) {
-            
+    [[BPLocationManager shared] startLocationRequestWithCompletion:^{
+        NSMutableDictionary *paramas = [[NSMutableDictionary alloc] init];
+        BPTrackRiskModel *model = [self configRiskTrackData:type productId:productId];
+        paramas = model.mj_keyValues;
+        [[HttpManager shared] requestWithService:UploadRiskInfo parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+            if (type == BPTrackRiskTypeRegister) {
+                [self resetRegisterTrackTime];
+            }
+        } failure:^(NSError * _Nonnull error,
+                    NSDictionary * _Nonnull errorDictionary) {
+                
+        }];
     }];
 }
 
@@ -130,6 +167,17 @@ NS_ASSUME_NONNULL_BEGIN
     BPTrackRiskModel *model = [[BPTrackRiskModel alloc] init];
     model.myinexperience = productId;
     model.instincts = [NSString stringWithFormat:@"%ld",type];
+    model.superior = [[ADTool shared] idfvString];
+    model.reins = [[ADTool shared] idfaString];
+    BPLocationModel *location = [[BPLocationManager shared] getUserLocation];
+    if (location) {
+        model.sighted = location.sighted;
+        model.hills = location.hills;
+    }
+    model.trail = [NSString stringWithFormat:@"%ld",
+                   [self getTrackTime:type start:YES]];
+    model.neigh = [NSString stringWithFormat:@"%ld",
+                   [self getTrackTime:type start:NO]];
     return model;
 }
 

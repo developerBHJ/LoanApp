@@ -21,7 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)showLoginView:(nullable void (^)(void) )completion{
-    
+    kUserDefaultRmove(tokenKey);
+    [[Routes shared] changeRootView];
 }
 
 -(NSString *)getToken{
@@ -50,6 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     kUserDefaultRmove(userNameKey);
     kUserDefaultRmove(loginStatusKey);
     kUserDefaultRmove(bPageKey);
+    [ADTool shared].trackCount = 0;
 }
 
 @end

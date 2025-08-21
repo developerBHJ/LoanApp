@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PermissionTools ()<CLLocationManagerDelegate>
 
 @property (nonatomic, copy) BPAccessCompletion locationCompletion;
+@property (nonatomic, strong) CLLocationManager *locationMannager;
 
 @end
 
@@ -74,11 +75,12 @@ NS_ASSUME_NONNULL_BEGIN
     self.locationCompletion = completion;
     CLLocationManager *manager = [[CLLocationManager alloc] init];
     manager.delegate = self;
-    CLAuthorizationStatus status = manager.authorizationStatus;
+    self.locationMannager = manager;
+    CLAuthorizationStatus status = self.locationMannager.authorizationStatus;
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
         completion(YES);
     }else{
-        [manager requestWhenInUseAuthorization];
+        [self.locationMannager requestWhenInUseAuthorization];
     }
 }
 

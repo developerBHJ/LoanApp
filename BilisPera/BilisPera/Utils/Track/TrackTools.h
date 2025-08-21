@@ -35,8 +35,6 @@ typedef NS_ENUM(NSInteger,BPTrackRiskType) {
 // 经度
 @property (nonatomic, assign) double latitude;
 
-@property (nonatomic, assign) CLLocationCoordinate2D defaultCoordinate;
-
 @property (nonatomic, assign, readonly) NSInteger registerStartTime;
 
 -(void)configData;
@@ -48,7 +46,9 @@ typedef NS_ENUM(NSInteger,BPTrackRiskType) {
 
 -(void)trackForGoogleMarket;
 
--(void)trackLocation:(NSDictionary *)paramas;
+-(void)trackLocation;
+
+-(void)trackDeviceInfo;
 
 -(void)trackContactsInfo:(NSDictionary *)paramas;
 
