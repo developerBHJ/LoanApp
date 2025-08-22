@@ -269,8 +269,8 @@ NS_ASSUME_NONNULL_BEGIN
         }
         [[TrackTools shared] saveTrackTime:BPTrackRiskTypeIdInfo start:NO];
         [[TrackTools shared] trackRiskInfo:BPTrackRiskTypeIdInfo productId:weakSelf.productId];
-        BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^(NSDictionary *dic) {
-            [weakSelf saveuserInfo:dic];
+        BPProductAuthInfoConfirmViewController *confirmVC = [[BPProductAuthInfoConfirmViewController alloc] initWith:model productId:weakSelf.productId type:weakSelf.type completion:^() {
+            [[ProductHandle shared] enterAuthenView:weakSelf.productId type:weakSelf.type];
         }];
         [confirmVC presentFullScreen];
         [weakSelf presentViewController:confirmVC animated:NO completion:nil];

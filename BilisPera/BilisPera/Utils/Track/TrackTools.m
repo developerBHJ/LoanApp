@@ -88,9 +88,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)trackForGoogleMarket{
     NSMutableDictionary *paramas = [[NSMutableDictionary alloc] init];
     paramas[@"meat"] = [NSString randomString];
-    paramas[@"fresh"] = [[ADTool shared] idfvString];
-    paramas[@"nd"] = [[ADTool shared] idfaString];
+    paramas[@"fresh"] = [[BPADTools shared] getIDFV];
+    paramas[@"nd"] = [[BPADTools shared] getIDFA];
     kWeakSelf;
+    NSLog(@"%@",paramas);
     [[HttpManager shared] requestWithService:GoogleMarket parameters:paramas showLoading:NO showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         [weakSelf registerFaceBook:response.couldsee[@"abruised"]];
     } failure:^(NSError * _Nonnull error,
@@ -167,8 +168,8 @@ NS_ASSUME_NONNULL_BEGIN
     BPTrackRiskModel *model = [[BPTrackRiskModel alloc] init];
     model.myinexperience = productId;
     model.instincts = [NSString stringWithFormat:@"%ld",type];
-    model.superior = [[ADTool shared] idfvString];
-    model.reins = [[ADTool shared] idfaString];
+    model.superior =  [[BPADTools shared] getIDFV];
+    model.reins =  [[BPADTools shared] getIDFA];
     BPLocationModel *location = [[BPLocationManager shared] getUserLocation];
     if (location) {
         model.sighted = location.sighted;

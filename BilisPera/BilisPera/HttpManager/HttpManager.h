@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^requestSuccessBlock)(HttpResponse *response);
+typedef void(^requestSuccessBlock)(HttpResponse   * _Nonnull response);
 typedef void(^requestFailureBlock)(NSError *error,NSDictionary *errorDictionary);
 
 @interface HttpManager : NSObject

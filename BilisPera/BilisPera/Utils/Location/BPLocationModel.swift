@@ -10,7 +10,7 @@ import Foundation
 let userLocationKey = "user_Location";
 
 @objc
-class BPLocationModel: NSObject {
+class BPLocationModel: NSObject,Codable {
     /// 省
     @objc var truly: String = ""
     /// 国家code
@@ -25,4 +25,8 @@ class BPLocationModel: NSObject {
     @objc var sighted: String = ""
     /// 市
     @objc var theplain: String = ""
+    
+   @objc func toDictionary() -> [String : Any]{
+        return ["truly": truly,"astonishing":astonishing,"stopped": stopped,"horizon": horizon,"hills" : hills,"sighted":sighted ,"theplain" :  theplain]
+    }
 }

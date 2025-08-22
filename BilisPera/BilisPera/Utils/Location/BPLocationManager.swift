@@ -12,12 +12,13 @@ import Combine
 @objc
 class BPLocationManager: NSObject, @preconcurrency CLLocationManagerDelegate {
     let geocoder = CLGeocoder()
+    var manager = CLLocationManager()
     
     @MainActor @objc static let shared = BPLocationManager()
     
     @MainActor
    @objc func startLocationRequest(completion: (() -> Void)? = nil) {
-        let manager = CLLocationManager()
+        manager = CLLocationManager()
         manager.delegate = self
         manager.startUpdatingLocation()
         Task{
@@ -36,7 +37,7 @@ class BPLocationManager: NSObject, @preconcurrency CLLocationManagerDelegate {
         let model = BPLocationModel.init()
         model.sighted = "\(location.coordinate.latitude)"
         model.hills = "\(location.coordinate.longitude)"
-        UserDefaults.standard.set(model, forKey: userLocationKey)
+        saveUserLocation(model: model)
         reverseGeocodeLocation(coordinate: location.coordinate)
     }
     
@@ -58,7 +59,7 @@ class BPLocationManager: NSObject, @preconcurrency CLLocationManagerDelegate {
                     return
                 }
                 var model = BPLocationModel()
-                if let m = UserDefaults.standard.object(forKey: userLocationKey) as? BPLocationModel{
+                if let m = getUserLocation(){
                     model = m;
                 }
                 model.astonishing = place.isoCountryCode ?? ""
@@ -66,12 +67,27 @@ class BPLocationManager: NSObject, @preconcurrency CLLocationManagerDelegate {
                 model.truly = place.administrativeArea ?? (place.locality ?? "")
                 model.theplain = place.locality ?? ""
                 model.horizon = place.name ?? ""
-                UserDefaults.standard.set(model, forKey: userLocationKey)
+                saveUserLocation(model: model)
             }
     }
     
     @objc func getUserLocation() -> BPLocationModel?{
-        return UserDefaults.standard
-            .object(forKey: userLocationKey) as? BPLocationModel
+        var model: BPLocationModel?
+       if let dic = UserDefaults.standard
+        .object(forKey: userLocationKey){
+           do {
+               let jsonData = try JSONSerialization.data(withJSONObject: dic as Any)
+               let decoder = JSONDecoder()
+               model = try decoder.decode(BPLocationModel.self, from: jsonData)
+           } catch {
+               print("转换失败: \(error)")
+           }
+       }
+        return model
+    }
+    
+    private func saveUserLocation(model: BPLocationModel){
+        let dic = model.toDictionary()
+        UserDefaults.standard.set(dic, forKey: userLocationKey)
     }
 }

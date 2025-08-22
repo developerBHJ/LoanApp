@@ -11,6 +11,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation LoginViewModel
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.isAgress = YES;
+    }
+    return self;
+}
+
 -(BOOL)checkCompletion{
     BOOL isCompleted = NO;
     if (_phoneNum.length > 0 && _code.length > 0 &&  _isAgress) {
@@ -42,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     paramas[@"disgusting"] = [WifiInfoHandle isProxyEnabled] ? @"1" : @"0";
     paramas[@"greediness"] = @"en";
     kWeakSelf;
-    [[HttpManager shared] requestWithService:LoginAndRegister parameters:paramas showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:LoginAndRegister parameters:paramas showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         [weakSelf handleData: response.couldsee];
         completion(YES);
     } failure:^(NSError * _Nonnull error,

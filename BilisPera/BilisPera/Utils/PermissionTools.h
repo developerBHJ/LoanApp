@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^BPAccessCompletion)(BOOL);
+typedef  void(^ _Nullable BPAccessCompletion)(BOOL);
 
 static NSString *kLocationAlertMessage = @"Location permission required for identity verification. Please grant access in settings.";
 static NSString *kCameraAlertMessage = @"Camera access is needed to securely capture your ID for verification.";

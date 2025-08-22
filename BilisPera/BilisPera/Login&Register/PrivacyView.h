@@ -16,6 +16,7 @@ typedef void(^checkBoxCompletion)(BOOL);
 
 @property (nonatomic, strong) TapLabelModel *tapModel;
 @property (nonatomic, assign) BOOL isAlert;
+@property (nonatomic, assign) BOOL isAgree;
 @property (nonatomic, copy,nullable) checkBoxCompletion checkBoxCompletion;
 
 @end

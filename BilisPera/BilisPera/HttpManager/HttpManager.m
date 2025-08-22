@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (method == NetRequestType_GET) {
         [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                         id  _Nullable responseObject) {
-            [weakSelf handleSuccess:responseObject success:success showMessage:showMessage];
+            [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
         } failure:^(NSURLSessionDataTask * _Nullable task,
                     NSError * _Nonnull error) {
             [weakSelf handleFailure:error failure:failure];
@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (contentType == BPRequestContentTypeMultipartFormData) {
             [manager POST:urlString parameters:params constructingBodyWithBlock:bodyBlock progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                                                                  id  _Nullable responseObject) {
-                [weakSelf handleSuccess:responseObject success:success showMessage:showMessage];
+                [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
             } failure:^(NSURLSessionDataTask * _Nullable task,
                         NSError * _Nonnull error) {
                 [weakSelf handleFailure:error failure:failure];
@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                              id  _Nullable responseObject) {
-                [weakSelf handleSuccess:responseObject success:success showMessage:showMessage];
+                [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
             } failure:^(NSURLSessionDataTask * _Nullable task,
                         NSError * _Nonnull error) {
                 [weakSelf handleFailure:error failure:failure];
@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void)handleSuccess:(id  _Nullable)responseObject success:(requestSuccessBlock)success showMessage:(BOOL)showMessage{
+-(void)handleSuccess:(id  _Nullable)responseObject showMessage:(BOOL)showMessage success:(requestSuccessBlock)success failure:(requestFailureBlock)failure{
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
     HttpResponse *model = [HttpResponse mj_objectWithKeyValues:data];
     [BPProressHUD hideHUDQueryHUDWithView:nil];
@@ -102,10 +102,13 @@ NS_ASSUME_NONNULL_BEGIN
     }
     NSLog(@"%@",model.couldsee);
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(model.resolution == -2){
-            [[LoginTools shared] showLoginView:nil];
-        }else{
+        if (model.resolution == 0) {
             success(model);
+        }else if (model.resolution == -2){
+            [[LoginTools shared] showLoginView:nil];
+            failure([NSError new],[NSDictionary new]);
+        }else{
+            failure([NSError new],[NSDictionary new]);
         }
     });
 }

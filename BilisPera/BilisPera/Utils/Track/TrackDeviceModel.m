@@ -100,8 +100,8 @@ NS_ASSUME_NONNULL_BEGIN
 {
     self = [super init];
     if (self) {
-        _fresh = [[ADTool shared] idfvString];
-        _nd = [[ADTool shared] idfaString];
+        _fresh =  [[BPADTools shared] getIDFV];
+        _nd =  [[BPADTools shared] getIDFA];
         _filthy = [WifiInfoHandle getCurrentWifiBSid];
         _myround = (int)[[NSDate date] timeIntervalSince1970];
         _bacteria = [WifiInfoHandle isProxyEnabled] ? 1 : 0;

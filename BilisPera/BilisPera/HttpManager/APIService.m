@@ -151,7 +151,7 @@ NS_ASSUME_NONNULL_BEGIN
         @"sensefacts" : kDeviceSystemVersion,
         @"accustomed":@"secloanapi",
         @"accomplished":[LoginTools shared].getToken ?: @"",
-        @"unusually":[ADTool shared].idfvString ?: @"",
+        @"unusually": [[BPADTools shared] getIDFV] ?: @"",
         @"boyfine": [NSString randomString]
     };
 }

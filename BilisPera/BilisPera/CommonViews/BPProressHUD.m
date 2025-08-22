@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
         hud.label.font = kFont(12);
         hud.margin = 10.0f;
         if (autoHide) {
-            [hud hideAnimated:YES afterDelay:3];
+            [hud hideAnimated:YES afterDelay:1.5];
         }
     });
 }
@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
             hud.label.text = message ?: @"";
             hud.label.font = kFont(12);
             hud.margin = 10.0f;
-            [hud hideAnimated:YES afterDelay:3];
+            [hud hideAnimated:YES afterDelay:1.5];
         });
     }
 }

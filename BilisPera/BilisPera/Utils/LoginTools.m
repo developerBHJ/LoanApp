@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
     kUserDefaultRmove(userNameKey);
     kUserDefaultRmove(loginStatusKey);
     kUserDefaultRmove(bPageKey);
-    [ADTool shared].trackCount = 0;
+    [BPADTools shared].trackCount = 0;
 }
 
 @end

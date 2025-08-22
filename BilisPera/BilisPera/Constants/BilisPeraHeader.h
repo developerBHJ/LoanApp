@@ -21,7 +21,6 @@
 #import "Macro.h"
 #import "BaseModel.h"
 #import "LoginTools.h"
-#import "ADTool.h"
 #import "NSString+Extension.h"
 #import "NSDictionary+Extension.h"
 #import "APIService.h"

@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
     self = [super init];
     if (self) {
         _tapModel = [[TapLabelModel alloc] init];
+        _isAgree = NO;
     }
     return self;
 }
@@ -81,6 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.checkBox setImage:kGetImage(imageName) forState:UIControlStateNormal];
     [self.checkBox setImage:kGetImage(selectedImageName) forState:UIControlStateSelected];
     [self.checkBox setImage:kGetImage(selectedImageName) forState:UIControlStateHighlighted];
+    
+    self.checkBox.selected = self.model.isAgree;
 }
 
 -(void)checkEvent:(UIButton *)sender{

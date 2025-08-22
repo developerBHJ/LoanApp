@@ -72,14 +72,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)requestLocationAccessWithCompletion:(BPAccessCompletion)completion {
-    self.locationCompletion = completion;
     CLLocationManager *manager = [[CLLocationManager alloc] init];
     manager.delegate = self;
     self.locationMannager = manager;
     CLAuthorizationStatus status = self.locationMannager.authorizationStatus;
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
         completion(YES);
+        self.locationCompletion = nil;
     }else{
+        self.locationCompletion = completion;
         [self.locationMannager requestWhenInUseAuthorization];
     }
 }
@@ -87,9 +88,13 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager{
     CLAuthorizationStatus status = manager.authorizationStatus;
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        self.locationCompletion(YES);
+        if (self.locationCompletion) {
+            self.locationCompletion(YES);
+        }
     }else{
-        self.locationCompletion(NO);
+        if (self.locationCompletion) {
+            self.locationCompletion(NO);
+        }
     }
 }
 
@@ -110,6 +115,9 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         case CNAuthorizationStatusRestricted:
         case CNAuthorizationStatusDenied:
+            completion(NO);
+            break;
+        case CNAuthorizationStatusLimited:
             completion(NO);
             break;
         default:

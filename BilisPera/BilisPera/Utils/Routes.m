@@ -103,17 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
     if (urlString.length == 0) {
         return;
     }
-    if ([urlString hasPrefix:@"http"] || [urlString hasPrefix:@"https"]) {
-        NSURL *url = [urlString getHtmlUrl];
-        if (url) {
-            [self handleURL:url];
-        }
-    } else {
-        NSURL *url = [NSURL URLWithString:urlString];
-        if (url) {
-            [self handleURL:url];
-        }
-    }
+    NSURL *url = [NSURL URLWithString:urlString];
+    [self handleURL:url];
 }
 
 - (void)registerRoutes {

@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
     self.viewModel = [[LoginViewModel alloc] init];
     [self configUI];
     [self checkComplete];
-    [[ADTool shared] registerIDFAAndTrack];
+    [[BPADTools shared] registerIDFAAndTrack];
 }
 
 
@@ -101,6 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (PrivacyView *)privacyView{
     if (!_privacyView) {
         PrivacyViewModel *model = [[PrivacyViewModel alloc] init];
+        model.isAgree = YES;
         model. tapModel.regluarText = @"By logging in, you agree to the ";
         model.tapModel.linkText = @"Privacy Agreement";
         model.tapModel.linkUrl = kH5Path(kPrivacy);
@@ -192,9 +193,9 @@ NS_ASSUME_NONNULL_BEGIN
     kWeakSelf;
     [self.view endEditing:YES];
     [[TrackTools shared]saveTrackTime:BPTrackRiskTypeRegister start:YES];
-    if ([ADTool shared].trackCount < 2){
+    if ( [[BPADTools shared] trackCount] < 2){
         [[TrackTools shared] trackForGoogleMarket];
-        [ADTool shared].trackCount += 1;
+        [BPADTools shared].trackCount += 1;
     }
     [self.viewModel getVerifyCodeWithCompletion:^(BOOL sucdess) {
         if (sucdess) {

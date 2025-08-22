@@ -104,6 +104,14 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+- (void)popNavigation:(BOOL)animated{
+    if ([self.webView canGoBack]) {
+        [self.webView goBack];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:animated];
+    }
+}
+
 -(void)registerJSMethod{
     kWeakSelf;
     [self.jsBridge registerHandler:BPJSMethod.uploadRiskLoan handler:^(id params) {
@@ -125,7 +133,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
     
     [self.jsBridge registerHandler:BPJSMethod.closeSyn handler:^(id url) {
-        [self popNavigation:YES];
+        [weakSelf popNavigation:YES];
     }];
     
     [self.jsBridge registerHandler:BPJSMethod.jumpToHome handler:^(id params) {
@@ -152,6 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
 // MARK: - Observe
 - (void)observeValueForKeyPath:(nullable NSString *)keyPath ofObject:(nullable id)object change:( nullable NSDictionary<NSKeyValueChangeKey,id> *)change context:(nullable void *)context{
     if ([keyPath  isEqual: @"estimatedProgress"]) {
+        [self.progressView setHidden:NO];
         self.progressView.alpha = 1.0;
         [self.progressView setProgress:self.webView.estimatedProgress animated:YES];
         if (self.webView.estimatedProgress >= 1.0) {
@@ -159,6 +168,7 @@ NS_ASSUME_NONNULL_BEGIN
                 self.progressView.alpha = 0;
             } completion:^(BOOL finished) {
                 [self.progressView setProgress:0.0 animated:NO];
+                [self.progressView setHidden:YES];
             }];
         }
     }

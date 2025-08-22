@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) NSMutableDictionary *parmaters;
-@property (nonatomic, copy) simpleObjectCompletion completion;
+@property (nonatomic, copy) simpleCompletion completion;
 @property (nonatomic, strong) NSString *type;
 
 @end
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation BPProductAuthInfoConfirmViewController
 
 
-- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId type:(NSString *)type completion:(simpleObjectCompletion)completion{
+- (instancetype)initWith:(ProductAuthenIndetyInfoModel *)model productId:(NSString *)productId type:(NSString *)type completion:(simpleCompletion)completion{
     if (self = [super init]) {
         self.model = model;
         self.productId = productId;
@@ -248,9 +248,19 @@ NS_ASSUME_NONNULL_BEGIN
     self.parmaters[@"tongues"] = self.viewModel.userName;
     self.parmaters[@"alsowith"] = self.viewModel.birthDay;
     self.parmaters[@"wounds"] = self.viewModel.idNumber;
+    [self saveuserInfo:self.parmaters];
+}
+
+-(void)saveuserInfo:(NSDictionary *)paramas{
     kWeakSelf;
-    [self dismissViewControllerAnimated:NO completion:^{
-        weakSelf.completion(weakSelf.parmaters);
+    [[ProductHandle shared] saveUserInfoWithParamaters:paramas completion:^(BOOL success) {
+        if (success) {
+            [weakSelf dismissViewControllerAnimated:NO completion:^{
+                if (weakSelf.completion) {
+                    weakSelf.completion();
+                }
+            }];
+        }
     }];
 }
 
