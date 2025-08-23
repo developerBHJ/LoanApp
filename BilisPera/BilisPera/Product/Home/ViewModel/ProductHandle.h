@@ -31,6 +31,8 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 + (instancetype)shared;
 
 @property (nonatomic, strong) NSArray<BPAddressModel *> *addressList;
+// 是否需要强制定位
+@property (nonatomic, assign) BOOL needLocation;
 
 // 获取认证流程
 -(BPProductStep)getProductStepWith:(NSString *)step;
@@ -51,6 +53,8 @@ typedef void(^productDetailList)(ProductDetailModel  * _Nullable model);
 -(void)enterAuthenView:(NSString *)productId type:(NSString *)type;
 // 进入具体某个认证页面
 -(void)enterNextStepViewWith:(NSString *)productId step:(BPProductStep)step title:(NSString *)title type:(NSString *)type;
+// 检查是否都已认证完成
+-(void)checkAuthCompleted:(simpleBoolCompletion)completion;
 
 @end
 

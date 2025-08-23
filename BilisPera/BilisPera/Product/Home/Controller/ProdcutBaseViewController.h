@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)dismisProductAlertView:(simpleCompletion)completion;
 -(void)showDatePickerView:(NSString *)dafaultDate selectedDate:(simpleStringCompletion)selectedDate;
 -(void)showCommonPickView:(NSString *)title options:(NSArray<BPProductFormModel *> *)options selectedCompletion:(simpleStringCompletion)selectedCompletion;
--(void)showAddressPickerViewSelectedDate:(simpleStringCompletion)selectedDate;
+-(void)showAddressPickerView:(NSString *)title selectedDate:(simpleStringCompletion)selectedDate;
 
 @end
 

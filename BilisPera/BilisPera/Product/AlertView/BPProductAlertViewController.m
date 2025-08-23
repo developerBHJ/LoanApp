@@ -101,7 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImageView *)contentBgImageView{
     if (!_contentBgImageView) {
         _contentBgImageView = [[UIImageView alloc] init];
-        _contentBgImageView.image = kGetImage(@"icon_alert_bg");
+        _contentBgImageView.image = kGetImage(@"icon_product_alert_bg");
     }
     return _contentBgImageView;
 }

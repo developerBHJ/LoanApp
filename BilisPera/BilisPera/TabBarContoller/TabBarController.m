@@ -51,7 +51,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
     self.customTabBar.defaultIndex = self.selectedIndex;
+    kWeakSelf;
     [[PermissionTools shared] requestLocationAccessWithCompletion:^(BOOL success) {
+        if (!success && [ProductHandle shared].needLocation) {
+            [weakSelf showCustomAlertWithTitle:@"" message:kLocationAlertMessage confirmCompletion:^{
+                [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
+                                          kScheme,
+                                          [BPRoute settingPage]]];
+            } cancelCompletion:^{
+                
+            }];
+        }
     }];
 }
 
@@ -66,7 +76,10 @@ NS_ASSUME_NONNULL_BEGIN
     self.tabBar.backgroundImage = nil;
     self.tabBar.shadowImage = nil;
     [self.tabBar addSubview:self.customTabBar];
-    self.customTabBar.frame = CGRectMake(0, 0, kScreenW, kRatio(75) + kSafeAreaBottomHeight + kRatio(10));
+    self.customTabBar.frame = CGRectMake(0,
+                                         0,
+                                         kScreenW,
+                                         kRatio(75) + kSafeAreaBottomHeight + kRatio(10));
 }
 
 - (void)viewDidLayoutSubviews{

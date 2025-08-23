@@ -147,6 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
                                model.shrugged];
         NSString *amountDesc = [NSString stringWithFormat:@"%@",model.bring];
         NSString *productId = [NSString stringWithFormat:@"%ld",model.rice];
+        NSString *buttonTitle = [NSString stringWithFormat:@"%@",model.thesage];
         HomeProductListCellModel *cellModel = [[HomeProductListCellModel alloc] initWith:name rate:rateStr duration:durationStr amount:amountStr completion:^(NSString *productId) {
             if ([weakSelf.deleagete respondsToSelector:@selector(onPushProductDetail:)]) {
                 [weakSelf.deleagete onPushProductDetail:productId];
@@ -154,6 +155,7 @@ NS_ASSUME_NONNULL_BEGIN
         }];
         cellModel.productId = productId;
         cellModel.amountDesc = amountDesc;
+        cellModel.buttonTitle = buttonTitle;
         [tempArray addObject:cellModel];
     }
     HomeSectionModel *sectionModel = [[HomeSectionModel alloc] initWith:[HomeProductListCell class] cellData:tempArray];
@@ -180,6 +182,7 @@ NS_ASSUME_NONNULL_BEGIN
     }else if([self.pageModel.kettle.everyonehad isEqual: @"changedc"]){
         self.isLarge = NO;
     }
+    [ProductHandle shared].needLocation = (self.pageModel.togo == 1);
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     if (self.pageModel.kettle.eveningmeal.firstObject) {
         HomePageProductModel *pModel = (HomePageProductModel *)self.pageModel.kettle.eveningmeal.firstObject;

@@ -160,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
             pickVC.delegate = weakSelf;
             pickVC.predicateForEnablingContact = [NSPredicate predicateWithFormat:@"phoneNumbers.@count > 0"];
             [self presentViewController:pickVC animated:NO completion:nil];
-            
+            [weakSelf trackContactsInfo];
         }else{
             [self showCustomAlertWithTitle:@"" message:kContactsAlertMessage confirmCompletion:^{
                 [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",

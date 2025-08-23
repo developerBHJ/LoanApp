@@ -240,7 +240,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
     NSLog(@"paramas = %@",paramas);
-    [[HttpManager shared] requestWithService:SaveBankInfo parameters:paramas showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:SaveBankInfo parameters:paramas showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         completion(YES);
     } failure:^(NSError * _Nonnull error,
                 NSDictionary * _Nonnull errorDictionary) {

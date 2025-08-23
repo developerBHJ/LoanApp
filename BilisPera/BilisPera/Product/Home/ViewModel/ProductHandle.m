@@ -37,6 +37,15 @@ NS_ASSUME_NONNULL_BEGIN
     return _shared;
 }
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.needLocation = NO;
+    }
+    return self;
+}
+
 - (BPProductStep)getProductStepWith:(NSString *)step{
     BPProductStep temp = BPProductStepFaceId;
     if ([step isEqualToString:@"changedf"]) {
@@ -219,6 +228,16 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
+
+-(void)checkAuthCompleted:(simpleBoolCompletion)completion{
+    [self queryProductDetail:self.productId completion:^(ProductDetailModel * _Nullable model) {
+        if (model.packed) {
+            completion(NO);
+        }else{
+            completion(YES);
+        }
+    }];
+}
 @end
 
 NS_ASSUME_NONNULL_END

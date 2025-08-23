@@ -140,7 +140,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)showPickerView:(NSString *)key title:(NSString *)title values:(NSArray<BPProductFormModel *> *)values isAddress:(BOOL)isAddress{
     kWeakSelf;
     if (isAddress) {
-        [self showAddressPickerViewSelectedDate:^(NSString *value) {
+        [self showAddressPickerView:title selectedDate:^(NSString *value) {
             BPProductFormEditModel *item = [[BPProductFormEditModel alloc] initWith:key value:value general:@""];
             [weakSelf saveUserInfo:item];
         }];

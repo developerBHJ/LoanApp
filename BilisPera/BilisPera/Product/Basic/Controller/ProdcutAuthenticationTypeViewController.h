@@ -6,10 +6,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ProdcutBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ProdcutAuthenticationTypeViewController : BaseViewController
+@interface ProdcutAuthenticationTypeViewController : ProdcutBaseViewController
 
 - (instancetype)initWith:(NSString *)productId title:(NSString *)title;
 

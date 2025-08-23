@@ -48,6 +48,14 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+- (void)popNavigation:(BOOL)animated{
+    if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:animated completion:nil];
+    }else{
+        [self.navigationController popViewControllerAnimated:animated];
+    }
+}
+
 - (UITableView *)tableView{
     if (!_tableView) {
         _tableView = [[UITableView alloc] init];

@@ -38,7 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void)popEvent{
-    [self popViewControllerAnimated:YES];
+    UIViewController *topMost = [UIViewController topMost];
+    if (topMost) {
+        [topMost popNavigation:YES];
+    }
 }
 
 

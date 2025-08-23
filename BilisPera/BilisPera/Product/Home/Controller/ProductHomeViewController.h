@@ -7,13 +7,13 @@
 
 #import <Foundation/Foundation.h>
 #import "ProductHomeViewModel.h"
+#import "ProdcutBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ProductHomeViewController : BaseViewController
+@interface ProductHomeViewController : ProdcutBaseViewController
 
 - (instancetype)initWith:(NSString *)productId;
-@property (nonatomic, strong) NSString *productId;
 
 @end
 

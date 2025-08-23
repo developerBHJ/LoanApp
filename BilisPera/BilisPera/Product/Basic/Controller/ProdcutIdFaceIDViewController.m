@@ -159,7 +159,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)nextStep{
-    [self uploadImage];
+    if (self.viewModel.selectedImage) {
+        [self uploadImage];
+    }else{
+        [self pickerImage];
+    }
 }
 
 -(void)uploadImage{

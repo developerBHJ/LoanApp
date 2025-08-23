@@ -248,7 +248,11 @@ NS_ASSUME_NONNULL_BEGIN
         [self saveuserInfo:paramas];
         return;
     }
-    [self uploadImage];
+    if (self.viewModel.selectedImage) {
+        [self uploadImage];
+    }else{
+        [self pickerImage];
+    }
 }
 
 -(void)saveuserInfo:(NSDictionary *)paramas{

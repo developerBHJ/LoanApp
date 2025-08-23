@@ -6,6 +6,7 @@
 //
 
 #import "ProdcutBaseViewController.h"
+#import "ProductHomeViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,6 +31,43 @@ NS_ASSUME_NONNULL_BEGIN
     [super viewDidLoad];
     self.navigationItem.title = self.navTitle;
 }
+
+- (void)popNavigation:(BOOL)animated{
+    kWeakSelf;
+    [[ProductHandle shared] checkAuthCompleted:^(BOOL isCompleted) {
+        if (isCompleted) {
+            [weakSelf popToRootView];
+        }else{
+            [weakSelf showStayAlertView];
+        }
+    }];
+}
+
+-(void)showStayAlertView{
+    BPAlertViewModel *model = [[BPAlertViewModel alloc] initWith:BPAlertViewTypeStay];
+    kWeakSelf;
+    model.confirmCompletion = ^{
+        [weakSelf dismisCustomAlertView:^{
+            [weakSelf popToRootView];
+        }];
+    };
+    model.cancelCompletion = ^{
+        [weakSelf dismisCustomAlertView:nil];
+    };
+    [self  showCustomAlertViewWith:model];
+}
+
+-(void)popToRootView{
+    ProductHomeViewController *homeVC = [self.navigationController.childViewControllers firstWhereWithBlock:^BOOL(id _Nonnull childVC) {
+        return [childVC isKindOfClass:[ProductHomeViewController class]];
+    }];
+    if (homeVC) {
+        [self.navigationController popToViewController:homeVC animated:YES];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 
 -(void)showProductAlertView:(BPProductAlertViewControllerModel *)model{
     BPProductAlertViewController *alertVC = [[BPProductAlertViewController alloc] init];
@@ -115,7 +153,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void)showAddressPickerViewSelectedDate:(simpleStringCompletion)selectedDate{
+-(void)showAddressPickerView:(NSString *)title selectedDate:(simpleStringCompletion)selectedDate{
     
     BPAddressPickerViewModel *model = [[BPAddressPickerViewModel alloc] init];
     model.dataSource = [ProductHandle shared].addressList;
@@ -142,7 +180,7 @@ NS_ASSUME_NONNULL_BEGIN
             [pickView nextStep];
         }
     };
-    viewM.headerModel = [[BPAlertHeasderViewModel alloc] initWith:@"Please select a time" needClose:NO completion:^{
+    viewM.headerModel = [[BPAlertHeasderViewModel alloc] initWith:title needClose:NO completion:^{
         [weakSelf dismisProductAlertView:^{}];
     }];
     viewM.contentView = pickView;

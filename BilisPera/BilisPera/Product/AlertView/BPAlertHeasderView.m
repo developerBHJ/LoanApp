@@ -103,6 +103,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setModel:(BPAlertHeasderViewModel *)model{
     _model = model;
     self.titleLabel.text = model.title;
+    CGFloat titleWidth = [model.title getWidthWithFont:kFont(18) height:kRatio(25)] + kRatio(100);
+    [self.backImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(titleWidth);
+    }];
+    
     [self.closeButton setHidden: !model.needClose];
 }
 

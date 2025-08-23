@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                                 injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                                              forMainFrameOnly:NO];
         
+        
         [userController addUserScript:script];
         [userController addUserScript:noneSelectScript];
         config.userContentController = userController;
@@ -49,8 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
         preferences.allowsContentJavaScript = YES;
         config.defaultWebpagePreferences = preferences;
         _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
-        _webView.backgroundColor = [UIColor clearColor];
+        _webView.backgroundColor = kColor_FFF6F9;
         _webView.scrollView.bounces = NO;
+        _webView.scrollView.backgroundColor = kColor_FFF6F9;
     }
     return _webView;
 }
@@ -75,12 +77,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear: animated];
-    
+    [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    [self.webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 - (void)dealloc
