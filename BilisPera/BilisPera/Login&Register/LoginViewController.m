@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
         model.isAgree = YES;
         model. tapModel.regluarText = @"By logging in, you agree to the ";
         model.tapModel.linkText = @"Privacy Agreement";
-        model.tapModel.linkUrl = kH5Path(kPrivacy);
+        model.tapModel.linkUrl = [[HtmlPath getUrl:BPHtmlPathPrivacy] absoluteString];
         model.tapModel.tapCompletion = ^(NSString * url) {
             [[Routes shared] onPushWebView:url];
         };

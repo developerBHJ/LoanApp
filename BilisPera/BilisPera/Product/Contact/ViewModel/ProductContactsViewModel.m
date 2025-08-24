@@ -189,7 +189,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     paramas[@"couldsee"] = [NSData objectToJSONString:tempArray];
     NSLog(@"paramas = %@",paramas);
-    [[HttpManager shared] requestWithService:SaveContactInfo parameters:paramas showLoading:YES showMessage:NO bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
+    [[HttpManager shared] requestWithService:SaveContactInfo parameters:paramas showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {
         completion(YES);
     } failure:^(NSError * _Nonnull error,
                 NSDictionary * _Nonnull errorDictionary) {

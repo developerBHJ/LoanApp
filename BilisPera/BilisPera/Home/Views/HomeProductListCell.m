@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
             .equalTo(self.contentBgView.mas_trailing)
             .inset(kRatio(12));
         make.centerY.equalTo(self.titleLabel);
-        make.leading.equalTo(self.titleLabel.mas_trailing).offset(kRatio(10));
+        make.leading.mas_lessThanOrEqualTo(self.titleLabel.mas_trailing).offset(kRatio(10));
     }];
     
     [self.contentBgView addSubview:self.amountTitleLabel];
@@ -178,6 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
         _rateLabel = [[UILabel alloc] init];
         _rateLabel.textColor = kColor_81556D;
         _rateLabel.font = kFontSemibold(12);
+        _rateLabel.textAlignment = NSTextAlignmentRight;
     }
     return _rateLabel;
 }
@@ -186,6 +187,8 @@ NS_ASSUME_NONNULL_BEGIN
     if (!_productImageView) {
         _productImageView = [[UIImageView alloc] init];
         _productImageView.image = kGetImage(@"icon_home_product");
+        _productImageView.layer.cornerRadius = kRatio(6);
+        _productImageView.layer.maskedCorners = YES;
     }
     return _productImageView;
 }

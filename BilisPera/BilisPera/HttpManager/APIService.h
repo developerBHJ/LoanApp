@@ -56,6 +56,8 @@ typedef NS_ENUM(NSUInteger, BPRequestContentType) {
 +(NetRequestType)getRequestType:(ServiceAPI)service;
 +(NSDictionary *)pulicParmas;
 +(BPRequestContentType)contentType:(ServiceAPI)service;
+// 获取验证码，成功/失败都要弹出toast
++(BOOL)showMesage:(ServiceAPI)service;
 
 @end
 

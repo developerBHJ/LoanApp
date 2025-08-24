@@ -192,7 +192,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.loanButton setTitle:self.model.buttonTitle forState:UIControlStateNormal];
     [self.remindView setHidden: self.model.type != OrderListTypeDelay  && self.model.type != OrderListTypeRepayment];
     [self.loanButton setHidden: self.model.type == OrderListTypeReview  || self.model.type == OrderListTypeFinish];
-    CGFloat buttonWidth = [self.model.buttonTitle getWidthWithFont:kFont(16) height:kRatio(20)] + kRatio(13);
+    CGFloat buttonWidth = [self.model.status getWidthWithFont:kFont(16) height:kRatio(20)] + kRatio(13);
     [self.statusButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(buttonWidth);
     }];
@@ -214,6 +214,7 @@ NS_ASSUME_NONNULL_BEGIN
         }];
     }
     if (self.model.type == OrderListTypeReview  || self.model.type == OrderListTypeFinish) {
+        self.dateLabel.textAlignment = NSTextAlignmentRight;
         [self.amountTitleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top
                 .equalTo(self.productImageView.mas_bottom)
@@ -234,6 +235,7 @@ NS_ASSUME_NONNULL_BEGIN
                 .offset(-kRatio(5));
         }];
     }else{
+        self.dateLabel.textAlignment = NSTextAlignmentLeft;
         [self.amountLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentBgView).offset(kRatio(42));
             make.leading.equalTo(self.contentBgView).offset(kRatio(13));

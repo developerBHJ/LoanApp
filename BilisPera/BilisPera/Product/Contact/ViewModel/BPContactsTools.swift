@@ -26,9 +26,9 @@ class BPContactsTools: NSObject {
                 var contactDict = [String: Any]()
                 let name = "\(contact.givenName) \(contact.familyName)"
                 let phones = contact.phoneNumbers.map { $0.value.stringValue }
-                contactDict["nowadays"] = name
+                contactDict["tongues"] = name
                     .replacingOccurrences(of: " ", with: "")
-                contactDict["pay"] = phones
+                contactDict["theglutton"] = phones
                     .joined(separator: ",")
                     .replacingOccurrences(of: " ", with: "")
                 contactsArray.append(contactDict)

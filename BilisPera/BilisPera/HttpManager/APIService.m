@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
             url = @"/sudden/assistantour";
             break;
     }
-    return [NSString stringWithFormat:@"%@%@?%@",kBaseUrl,url,[APIService pulicParmas].toURLStrings];
+    return [NSString stringWithFormat:@"%@%@%@%@%@",kBaseUrl,@"/genius",url,@"?",[APIService pulicParmas].toURLStrings];
 }
 
 +(NetRequestType)getRequestType:(ServiceAPI)service{
@@ -154,6 +154,18 @@ NS_ASSUME_NONNULL_BEGIN
         @"unusually": [[BPADTools shared] getIDFV] ?: @"",
         @"boyfine": [NSString randomString]
     };
+}
+
++(BOOL)showMesage:(ServiceAPI)service{
+    BOOL showMessage = NO;
+    switch (service) {
+        case GetVerfyCode:
+            showMessage = YES;
+            break;
+        default:
+            showMessage = NO;
+    }
+    return showMessage;
 }
 
 @end

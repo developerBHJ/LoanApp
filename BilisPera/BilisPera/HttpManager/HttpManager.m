@@ -59,6 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
     }
     NetRequestType method = [APIService getRequestType:service];
     NSString *urlString = [APIService getUrlWith:service];
+    BOOL showToast = [APIService showMesage:service];
     if (showLoading) {
         [BPProressHUD showWindowesLoadingWithView:nil message:@"" autoHide:NO animated:YES];
     }
@@ -67,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (method == NetRequestType_GET) {
         [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                         id  _Nullable responseObject) {
-            [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
+            [weakSelf handleSuccess:responseObject showMessage:showMessage showToast:showToast success:success failure:failure];
         } failure:^(NSURLSessionDataTask * _Nullable task,
                     NSError * _Nonnull error) {
             [weakSelf handleFailure:error failure:failure];
@@ -76,7 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
         if (contentType == BPRequestContentTypeMultipartFormData) {
             [manager POST:urlString parameters:params constructingBodyWithBlock:bodyBlock progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                                                                  id  _Nullable responseObject) {
-                [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
+                [weakSelf handleSuccess:responseObject showMessage:showMessage showToast:showToast success:success failure:failure];
             } failure:^(NSURLSessionDataTask * _Nullable task,
                         NSError * _Nonnull error) {
                 [weakSelf handleFailure:error failure:failure];
@@ -84,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
         } else {
             [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task,
                                                                              id  _Nullable responseObject) {
-                [weakSelf handleSuccess:responseObject showMessage:showMessage success:success failure:failure];
+                [weakSelf handleSuccess:responseObject showMessage:showMessage showToast:showToast success:success failure:failure];
             } failure:^(NSURLSessionDataTask * _Nullable task,
                         NSError * _Nonnull error) {
                 [weakSelf handleFailure:error failure:failure];
@@ -93,11 +94,14 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
--(void)handleSuccess:(id  _Nullable)responseObject showMessage:(BOOL)showMessage success:(requestSuccessBlock)success failure:(requestFailureBlock)failure{
+-(void)handleSuccess:(id  _Nullable)responseObject showMessage:(BOOL)showMessage showToast:(BOOL)showToast  success:(requestSuccessBlock)success failure:(requestFailureBlock)failure{
     NSDictionary *data = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
     HttpResponse *model = [HttpResponse mj_objectWithKeyValues:data];
     [BPProressHUD hideHUDQueryHUDWithView:nil];
-    if (showMessage) {
+    if (showMessage && model.resolution != 0) {
+        [BPProressHUD showToastWithView:nil message:model.forbreakfast];
+    }
+    if (showToast) {
         [BPProressHUD showToastWithView:nil message:model.forbreakfast];
     }
     NSLog(@"%@",model.couldsee);

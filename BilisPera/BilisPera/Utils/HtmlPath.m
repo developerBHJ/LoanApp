@@ -13,9 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(NSURL *)getUrl:(BPHtmlPath)type{
     NSString *path = @"";
+    NSString *host = kH5Host;
     switch (type) {
         case BPHtmlPathPrivacy:
             path = @"/lampCupcake";
+            host = kBaseUrl;
             break;
         case BPHtmlPathLoan:
             path = @"/zebraTeriya";
@@ -40,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
             break;
         case BPHtmlPathCustomerService:
             path = @"/xylophonist";
+            host = kBaseUrl;
             break;
         case BPHtmlPathRecommendList:
             path = @"/nutmegEggpl";
@@ -63,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
             path = @"/blueberryOn";
             break;
     }
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kH5Host,path]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",host,path]];
 }
 
 @end

@@ -148,6 +148,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *amountDesc = [NSString stringWithFormat:@"%@",model.bring];
         NSString *productId = [NSString stringWithFormat:@"%ld",model.rice];
         NSString *buttonTitle = [NSString stringWithFormat:@"%@",model.thesage];
+        NSString *imageUrl = [NSString stringWithFormat:@"%@",model.hens];
         HomeProductListCellModel *cellModel = [[HomeProductListCellModel alloc] initWith:name rate:rateStr duration:durationStr amount:amountStr completion:^(NSString *productId) {
             if ([weakSelf.deleagete respondsToSelector:@selector(onPushProductDetail:)]) {
                 [weakSelf.deleagete onPushProductDetail:productId];
@@ -156,6 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
         cellModel.productId = productId;
         cellModel.amountDesc = amountDesc;
         cellModel.buttonTitle = buttonTitle;
+        cellModel.imageUrl = imageUrl;
         [tempArray addObject:cellModel];
     }
     HomeSectionModel *sectionModel = [[HomeSectionModel alloc] initWith:[HomeProductListCell class] cellData:tempArray];

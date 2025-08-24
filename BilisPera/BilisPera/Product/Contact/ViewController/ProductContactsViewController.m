@@ -188,7 +188,9 @@ NS_ASSUME_NONNULL_BEGIN
             dic[@"withdiminished"] = [NSString randomString];
             dic[@"cavalcade"] = [NSString randomString];
             dic[@"couldsee"] = json;
-            [[TrackTools shared] trackContactsInfo:dic];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[TrackTools shared] trackContactsInfo:dic];
+            });
         }
     }];
 }

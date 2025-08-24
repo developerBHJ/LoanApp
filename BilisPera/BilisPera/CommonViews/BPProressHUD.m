@@ -21,7 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
         if (!superView) return;
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:superView animated:animated];
         hud.label.text = message ?: @"";
-        hud.label.font = kFont(12);
+        hud.label.font = kFont(14);
+        hud.label.numberOfLines = 0;
         hud.margin = 10.0f;
         if (autoHide) {
             [hud hideAnimated:YES afterDelay:1.5];
@@ -38,7 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:superView animated:YES];
             hud.mode = MBProgressHUDModeText;
             hud.label.text = message ?: @"";
-            hud.label.font = kFont(12);
+            hud.label.font = kFont(14);
+            hud.label.numberOfLines = 0;
             hud.margin = 10.0f;
             [hud hideAnimated:YES afterDelay:1.5];
         });

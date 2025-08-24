@@ -46,14 +46,12 @@
 #define kDeviceUUID [[[UIDevice currentDevice] identifierForVendor] UUIDString]
 
 // baseUrl
-#define kBaseUrl @"http://8.212.166.255:9993/genius"
+#define kBaseUrl @"http://8.212.166.255:9993"
 // H5 Host
 #define kH5Host @"http://8.212.166.255:9893"
 #define kH5Host1 @"https://8.212.166.255:9893"
 
 #define kScheme @"app://bilispera.ios.app"
-// Privacy
-#define kPrivacy @"/lampCupcake"
 
 
 #define kH5Path(path) [NSString stringWithFormat:@"%@%@",kH5Host,path]
