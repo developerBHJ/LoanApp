@@ -14,7 +14,7 @@
 #import "Masonry/Masonry.h"
 #import "SDCycleScrollView/SDCycleScrollView.h"
 #import "IQKeyboardManager/IQKeyboardManager.h"
-#import <UIDevice_Hardware/UIDevice-Hardware.h>
+#import <DeviceKit/DeviceKit-Swift.h>
 
 #import "BaseViewController.h"
 #import "UIColor+_Extension.h"

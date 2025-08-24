@@ -9,7 +9,6 @@ import SystemConfiguration.CaptiveNetwork
 import CoreLocation
 import NetworkExtension
 import CoreTelephony
-import DeviceKit
 
 enum NetworkType: String{
     case other = "OTHER"

@@ -49,8 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
     model.isegrim = (int)kScreenH;
     model.giermund = (int)kScreenW;
     model.frau = [UIDevice currentDevice].name;
-    model.schone = [UIDevice currentDevice].modelName;
-    model.sleek = [UIDevice currentDevice].modelIdentifier;
+    model.schone = [UIDevice currentDevice].model;
+    model.sleek = [DeviceInfo getIdentifier];
     model.gorged = [DeviceInfo getDiagonal];
     model.brute = kDeviceSystemVersion;
     return  model;
