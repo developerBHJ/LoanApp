@@ -9,6 +9,7 @@
 #import "LoginViewModel.h"
 #import "LoginInputView.h"
 #import "PrivacyView.h"
+#import "BPADTools.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

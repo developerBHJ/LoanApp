@@ -8,7 +8,6 @@ target 'BilisPera' do
   pod 'AFNetwork'
   pod 'FBSDKCoreKit'
   pod 'MJExtension'
-  pod 'DeviceKit'
   pod 'MBProgressHUD','~> 1.2.0'
   pod 'SDCycleScrollView'
   pod 'IQKeyboardManager'

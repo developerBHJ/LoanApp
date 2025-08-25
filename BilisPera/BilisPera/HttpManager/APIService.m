@@ -6,6 +6,7 @@
 //
 
 #import "APIService.h"
+#import "BPADTools.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -147,7 +148,7 @@ NS_ASSUME_NONNULL_BEGIN
         @"certainmesmerist": @"ios",
         @"writer":kAppVersion,
         @"forbusiness": kDeviceName,
-        @"economist":@"idfv",
+        @"economist": [[BPADTools shared] getIDFV] ?: @"",
         @"sensefacts" : kDeviceSystemVersion,
         @"accustomed":@"secloanapi",
         @"accomplished":[LoginTools shared].getToken ?: @"",

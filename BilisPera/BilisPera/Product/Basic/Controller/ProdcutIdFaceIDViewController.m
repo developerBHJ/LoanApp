@@ -6,6 +6,7 @@
 //
 
 #import "ProdcutIdFaceIDViewController.h"
+#import "BPImagePiakerViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

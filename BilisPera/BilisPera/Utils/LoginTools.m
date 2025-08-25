@@ -7,6 +7,8 @@
 
 #import "LoginTools.h"
 #import "LoginViewController.h"
+#import "BPADTools.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation LoginTools
@@ -46,7 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)cleanUserData{
-    kUserDefaultRmove(isFirstLuanch);
     kUserDefaultRmove(tokenKey);
     kUserDefaultRmove(userNameKey);
     kUserDefaultRmove(loginStatusKey);

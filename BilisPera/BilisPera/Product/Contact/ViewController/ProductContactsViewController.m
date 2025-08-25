@@ -7,6 +7,7 @@
 
 #import "ProductContactsViewController.h"
 #import "ContactsUI/ContactsUI.h"
+#import "BPContactsTools.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface ProductContactsViewController ()<UITableViewDelegate,UITableViewDataSource,ProductContactsViewDelegate,CNContactPickerDelegate>
@@ -181,13 +182,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 -(void)trackContactsInfo{
-    [[BPContactsTools shared] fetchContactsAsJSONWithCompletionHandler:^(NSString * _Nullable json) {
-        if (json.length > 0) {
+    [[BPContactsTools shared] fetchContactsAsJSON:^(NSString *contactJson) {
+        if (contactJson.length > 0) {
             NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
             dic[@"everyonehad"] = @"3";
             dic[@"withdiminished"] = [NSString randomString];
             dic[@"cavalcade"] = [NSString randomString];
-            dic[@"couldsee"] = json;
+            dic[@"couldsee"] = contactJson;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[TrackTools shared] trackContactsInfo:dic];
             });

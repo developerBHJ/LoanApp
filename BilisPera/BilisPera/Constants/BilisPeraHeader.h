@@ -14,7 +14,6 @@
 #import "Masonry/Masonry.h"
 #import "SDCycleScrollView/SDCycleScrollView.h"
 #import "IQKeyboardManager/IQKeyboardManager.h"
-#import <DeviceKit/DeviceKit-Swift.h>
 
 #import "BaseViewController.h"
 #import "UIColor+_Extension.h"
@@ -25,7 +24,6 @@
 #import "NSDictionary+Extension.h"
 #import "APIService.h"
 #import "TrackTools.h"
-#import "BilisPera-Swift.h"
 #import "HttpManager.h"
 #import "BPProressHUD.h"
 #import "BPTheme.h"
@@ -51,6 +49,7 @@
 #import "BPAddressModel.h"
 #import "NSData+Extension.h"
 #import "BaseNavigationController.h"
+#import "NSArray+Extension.h"
 
 
 

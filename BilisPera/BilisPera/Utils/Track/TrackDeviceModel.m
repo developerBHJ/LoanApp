@@ -7,6 +7,9 @@
 
 #import "TrackDeviceModel.h"
 #import "DiskTools.h"
+#import "BPWifiInfoHandle.h"
+#import "BPADTools.h"
+#import "DeviceInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -51,21 +54,21 @@ NS_ASSUME_NONNULL_BEGIN
     model.frau = [UIDevice currentDevice].name;
     model.schone = [UIDevice currentDevice].model;
     model.sleek = [DeviceInfo getIdentifier];
-    model.gorged = [DeviceInfo getDiagonal];
+    model.gorged = [NSString stringWithFormat:@"%.2f",[DeviceInfo deviceDiagonalSize]];
     model.brute = kDeviceSystemVersion;
     return  model;
 }
 
 -(AnalystModel *)configAnalystModel{
     AnalystModel *model = [[AnalystModel alloc] init];
-    model.carcase = [WifiInfoHandle getLocalIPAddress] ?: @"";
+    model.carcase = [BPWifiInfoHandle getLocalIPAddress] ?: @"";
     model.putrid = [[NSArray alloc] init];
-    if ([WifiInfoHandle getCurrentWifiSSid]){
+    if ([BPWifiInfoHandle getCurrentWifiSSid]){
         LearnModel *currentWifi = [[LearnModel alloc] init];
-        currentWifi.tongues = [WifiInfoHandle getCurrentWifiSSid];
-        currentWifi.butonly = [WifiInfoHandle getCurrentWifiBSid];
-        currentWifi.filthy = [WifiInfoHandle getCurrentWifiBSid];
-        currentWifi.spurred = [WifiInfoHandle getCurrentWifiSSid];
+        currentWifi.tongues = [BPWifiInfoHandle getCurrentWifiSSid];
+        currentWifi.butonly = [BPWifiInfoHandle getCurrentWifiBSid];
+        currentWifi.filthy = [BPWifiInfoHandle getCurrentWifiBSid];
+        currentWifi.spurred = [BPWifiInfoHandle getCurrentWifiSSid];
         model.swamp = currentWifi;
     }
     model.mewhich = model.putrid.count;
@@ -102,15 +105,15 @@ NS_ASSUME_NONNULL_BEGIN
     if (self) {
         _fresh =  [[BPADTools shared] getIDFV];
         _nd =  [[BPADTools shared] getIDFA];
-        _filthy = [WifiInfoHandle getCurrentWifiBSid];
+        _filthy = [BPWifiInfoHandle getCurrentWifiBSid];
         _myround = (int)[[NSDate date] timeIntervalSince1970];
-        _bacteria = [WifiInfoHandle isProxyEnabled] ? 1 : 0;
-        _feverish = [WifiInfoHandle isVPNConnected] ? 1: 0;
-        _poorlittle = [WifiInfoHandle checkSymbolicLink] ? 1: 0;
-        _millions = [WifiInfoHandle isSimulator] ? 1 : 0;
+        _bacteria = [BPWifiInfoHandle isProxyEnabled] ? 1 : 0;
+        _feverish = [BPWifiInfoHandle isVPNConnected] ? 1: 0;
+        _poorlittle = [BPWifiInfoHandle checkSymbolicLink] ? 1: 0;
+        _millions = [BPWifiInfoHandle isSimulator] ? 1 : 0;
         _swarmed = @"en";
-        _girths = [WifiInfoHandle getCarrierName] ?: @"";
-        _saddle = [WifiInfoHandle getCellularNetworkGeneration] ?: @"";
+        _girths = [BPWifiInfoHandle getDefaultCarrierName] ?: @"";
+        _saddle = [BPWifiInfoHandle currentNetworkTypeString] ?: @"";
         _plodded = [[NSTimeZone localTimeZone] abbreviation] ?: @"";
         _nosewouldn = [TrackTools shared].launchTime;
     }

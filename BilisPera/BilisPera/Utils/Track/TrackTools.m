@@ -10,6 +10,8 @@
 #import "FBSDKCoreKit/FBSDKCoreKit.h"
 #import "TrackDeviceModel.h"
 #import "BPTrackRiskModel.h"
+#import "BPADTools.h"
+#import "BPLocationManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

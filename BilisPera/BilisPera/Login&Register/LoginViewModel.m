@@ -6,6 +6,7 @@
 //
 
 #import "LoginViewModel.h"
+#import "BPWifiInfoHandle.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,8 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
     paramas[@"decency"] = self.phoneNum;
     paramas[@"allhe"] = self.code;
     paramas[@"offilthy"] = [NSString randomString];
-    paramas[@"eating"] = [WifiInfoHandle isVPNConnected] ? @"1" : @"0";
-    paramas[@"disgusting"] = [WifiInfoHandle isProxyEnabled] ? @"1" : @"0";
+    paramas[@"eating"] = [BPWifiInfoHandle isVPNConnected] ? @"1" : @"0";
+    paramas[@"disgusting"] = [BPWifiInfoHandle isProxyEnabled] ? @"1" : @"0";
     paramas[@"greediness"] = @"en";
     kWeakSelf;
     [[HttpManager shared] requestWithService:LoginAndRegister parameters:paramas showLoading:YES showMessage:YES bodyBlock:nil success:^(HttpResponse * _Nonnull response) {

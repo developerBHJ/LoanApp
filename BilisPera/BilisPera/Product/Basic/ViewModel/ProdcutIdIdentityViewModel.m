@@ -6,6 +6,7 @@
 //
 
 #import "ProdcutIdIdentityViewModel.h"
+#import "UIImage+Extension.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface ProdcutIdIdentityViewModel ()
@@ -113,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)uplodaImage:(NSString *)productId image:(UIImage *)image completion:(simpleObjectCompletion)completion{
     [BPProressHUD showWindowesLoadingWithView:nil message:@"" autoHide:NO animated:YES];
-    NSData *imageData = [UIImage compressWithImage:image maxSizeKB:500 maxResolution:2000];
+    NSData *imageData = [UIImage compressImage:image maxSizeKB:500 maxResolution:2000];
     if (imageData) {
         [BPProressHUD hideHUDQueryHUDWithView:nil];
         [[HttpManager shared] requestWithService:UploadImage parameters:@{@"reloaded":@(self.imageSource),@"buy":productId,@"everyonehad":@(11),@"tender":self.type,@"eachshould":[NSString randomString],@"turnedagain":@"",@"hardlydared":@"1"} showLoading:YES showMessage:YES bodyBlock:^(id<AFMultipartFormData> _Nonnull formData) {

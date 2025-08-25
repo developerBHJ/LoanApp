@@ -9,6 +9,7 @@
 #import "ProdcutIdIdentityViewModel.h"
 #import "BPImageSelectedAlertView.h"
 #import "BPProductAuthInfoConfirmViewController.h"
+#import "BPImagePiakerViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

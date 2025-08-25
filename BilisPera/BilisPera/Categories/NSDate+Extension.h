@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSDate (Extension)
 
 + (NSDate *)dateFromString:(NSString *)timeString withFormat:(NSString *)dateFormat;
+- (NSInteger)currentYear;
+- (NSInteger)currentMonth;
+- (NSInteger)currentDay;
++ (NSString *)currentTimeWithFormatter:(NSString *)formatter;
++ (NSInteger)daysInMonthWithYear:(NSInteger)year month:(NSInteger)month;
 
 @end
 

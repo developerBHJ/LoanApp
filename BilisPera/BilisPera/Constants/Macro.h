@@ -67,6 +67,7 @@ static NSString *userNameKey = @"userName";
 static NSString *loginStatusKey = @"loginStatus";
 static NSString *bPageKey = @"bPageKey";
 static NSString *isFirstLuanch = @"isFirst";
+static NSString *userLocationKey = @"user_Location";
 
 
 typedef NS_ENUM(NSInteger,BPOrderStatus) {

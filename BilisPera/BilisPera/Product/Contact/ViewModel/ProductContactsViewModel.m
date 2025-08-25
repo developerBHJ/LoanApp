@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
     [tempArray addObject:header];
     if (self.listItems.count > 0) {
         for (ProductContactModel *model in self.listItems) {
-            NSString *relationship = [[model.sand firstWhereWithBlock:^BOOL(BPProductFormModel  * _Nonnull obj) {
+            NSString *relationship = [[model.sand firstWhere:^BOOL(BPProductFormModel   * _Nonnull obj) {
                 return [obj.everyonehad isEqual:model.tribe];
             }] tongues] ?: @"";
             if (model.tongues.length > 0) {
@@ -61,17 +61,17 @@ NS_ASSUME_NONNULL_BEGIN
                                      model.forrattlesnakes];
         NSString *name = [NSString stringWithFormat:@"%@",model.tongues];
         NSString *phoneNum = [NSString stringWithFormat:@"%@",model.patriarch];
-        NSString *relationship = [[model.sand firstWhereWithBlock:^BOOL(BPProductFormModel  * _Nonnull obj) {
+        NSString *relationship = [[model.sand firstWhere:^BOOL(BPProductFormModel  * _Nonnull obj) {
             return [obj.everyonehad isEqual:model.tribe];
         }] tongues] ?: @"";
-        ProductContactEditModel *editModel = [self.editData firstWhereWithBlock:^BOOL(ProductContactEditModel * _Nonnull obj) {
+        ProductContactEditModel *editModel = [self.editData firstWhere:^BOOL(ProductContactEditModel * _Nonnull obj) {
             return [obj.prairiedogs isEqual:model.prairiedogs];
         }];
         if (editModel) {
             name = editModel.tongues;
             phoneNum = editModel.patriarch;
             relationship = editModel.tongues;
-            relationship = [[model.sand firstWhereWithBlock:^BOOL(BPProductFormModel * _Nonnull obj) {
+            relationship = [[model.sand firstWhere:^BOOL(BPProductFormModel * _Nonnull obj) {
                 return [obj.everyonehad isEqual:editModel.tribe];
             }] tongues] ?: @"";
         }
@@ -125,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (key.length == 0) return;
     if (name.length == 0 && phone.length == 0 && relationKey.length == 0) return;
     ProductContactEditModel *item = [[ProductContactEditModel alloc] init];
-    ProductContactEditModel *existingModel = [self.editData firstWhereWithBlock:^BOOL(ProductContactEditModel * _Nonnull obj) {
+    ProductContactEditModel *existingModel = [self.editData firstWhere:^BOOL(ProductContactEditModel * _Nonnull obj) {
         return [obj.prairiedogs isEqual:key];
     }];
     if (existingModel) {

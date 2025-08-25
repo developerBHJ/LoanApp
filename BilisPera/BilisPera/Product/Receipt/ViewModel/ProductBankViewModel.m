@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)configData{
-    NSArray *currentArray = [[self.listItems firstWhereWithBlock:^BOOL(ProductBankListModel * _Nonnull obj) {
+    NSArray *currentArray = [[self.listItems firstWhere:^BOOL(ProductBankListModel * _Nonnull obj) {
         return obj.everyonehad == self.selectedType;
     }] bolt];
     self.currentArray = currentArray;
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
     for (int i = 0; i < list.count;  i ++) {
         __block ProductBankListFormModel *model = list[i];
         NSString *content = @"";
-        BPProductFormEditModel *editModel = [self.editData firstWhereWithBlock:^BOOL(BPProductFormEditModel *_Nonnull obj) {
+        BPProductFormEditModel *editModel = [self.editData firstWhere:^BOOL(BPProductFormEditModel *_Nonnull obj) {
             return [obj.key isEqual:model.resolution];
         }];
         if (editModel) {
@@ -95,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
     for (int i = 0; i < list.count;  i ++) {
         __block ProductBankListFormModel *model = list[i];
         NSString *content = @"";
-        BPProductFormEditModel *editModel = [self.editData firstWhereWithBlock:^BOOL(BPProductFormEditModel *_Nonnull obj) {
+        BPProductFormEditModel *editModel = [self.editData firstWhere:^BOOL(BPProductFormEditModel *_Nonnull obj) {
             return [obj.key isEqual:model.resolution];
         }];
         if (editModel) {
