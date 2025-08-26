@@ -9,13 +9,16 @@
 #import "Photos/Photos.h"
 #import "CoreLocation/CoreLocation.h"
 #import "Contacts/Contacts.h"
+#import <os/lock.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PermissionTools ()<CLLocationManagerDelegate>
 
-@property (nonatomic, copy) BPAccessCompletion locationCompletion;
+@property (nonatomic, copy,nullable) BPAccessCompletion locationCompletion;
 @property (nonatomic, strong) CLLocationManager *locationMannager;
+@property (nonatomic, assign) os_unfair_lock lock;
+@property (nonatomic, assign) BOOL isWaitingResponse;
 
 @end
 
@@ -29,6 +32,15 @@ NS_ASSUME_NONNULL_BEGIN
         instance = [[PermissionTools alloc] init];
     });
     return instance;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _lock = OS_UNFAIR_LOCK_INIT;
+    }
+    return self;
 }
 
 - (void)requestPhotoLibraryAccessWithCompletion:(BPAccessCompletion)completion {
@@ -72,30 +84,50 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)requestLocationAccessWithCompletion:(BPAccessCompletion)completion {
-    CLLocationManager *manager = [[CLLocationManager alloc] init];
-    manager.delegate = self;
-    self.locationMannager = manager;
+    os_unfair_lock_lock(&_lock);
+    self.isWaitingResponse = NO;
+    self.locationCompletion = completion;
+    self.locationMannager = [[CLLocationManager alloc] init];
     CLAuthorizationStatus status = self.locationMannager.authorizationStatus;
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        completion(YES);
-        self.locationCompletion = nil;
+        [self completeWithStatus:status];
     }else{
-        self.locationCompletion = completion;
+        self.locationMannager.delegate = self;
+        self.isWaitingResponse = YES;
         [self.locationMannager requestWhenInUseAuthorization];
     }
+    os_unfair_lock_unlock(&_lock);
+}
+
+- (void)completeWithStatus:(CLAuthorizationStatus)status {
+    BOOL result = NO;
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways:
+            result = YES;
+            break;
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+            result = NO;
+            break;
+        default:
+            result = NO;
+    }
+    
+    if (self.locationCompletion) {
+        self.locationCompletion(result);
+        self.locationCompletion = nil;
+    }
+    self.isWaitingResponse = NO;
 }
 
 -(void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager{
-    CLAuthorizationStatus status = manager.authorizationStatus;
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorizedAlways) {
-        if (self.locationCompletion) {
-            self.locationCompletion(YES);
-        }
-    }else{
-        if (self.locationCompletion) {
-            self.locationCompletion(NO);
-        }
+    os_unfair_lock_lock(&_lock);
+    if (self.isWaitingResponse) {
+        CLAuthorizationStatus status = manager.authorizationStatus;
+        [self completeWithStatus:status];
     }
+    os_unfair_lock_unlock(&_lock);
 }
 
 - (void)requestContactsAccessWithCompletion:(BPAccessCompletion)completion {
@@ -103,8 +135,10 @@ NS_ASSUME_NONNULL_BEGIN
     switch (status) {
         case CNAuthorizationStatusNotDetermined: {
             CNContactStore *store = [[CNContactStore alloc] init];
-            [store requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+            [store requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted,
+                                                                                       NSError * _Nullable error) {
+                dispatch_async(dispatch_get_main_queue(),
+                               ^{
                     completion([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts] == CNAuthorizationStatusAuthorized);
                 });
             }];

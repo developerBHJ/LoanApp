@@ -18,7 +18,7 @@ typedef void(^textFieldValueChanged)(NSString *);
 @property (nonatomic, copy) textFieldValueChanged didEndEditting;
 
 -(void)cutDown;
-
+-(void)endCutDown;
 @end
 
 NS_ASSUME_NONNULL_END

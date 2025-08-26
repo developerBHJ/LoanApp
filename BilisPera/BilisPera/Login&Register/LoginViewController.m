@@ -201,6 +201,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.viewModel getVerifyCodeWithCompletion:^(BOOL sucdess) {
         if (sucdess) {
             [weakSelf.codeView cutDown];
+        }else{
+            [weakSelf.codeView endCutDown];
         }
     }];
 }

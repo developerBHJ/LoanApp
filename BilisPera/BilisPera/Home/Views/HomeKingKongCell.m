@@ -147,7 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
         view.model = itemModel;
         [self.stackView addArrangedSubview:view];
         [view mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(kRatio(150));
+            make.height.mas_equalTo(kRatio(155));
             make.width.mas_equalTo((kScreenW - kRatio(46)) / 3);
         }];
     }

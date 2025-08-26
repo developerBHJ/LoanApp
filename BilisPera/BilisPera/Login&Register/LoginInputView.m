@@ -174,6 +174,10 @@ NS_ASSUME_NONNULL_BEGIN
         [self.codeButton startCountDown];
 }
 
+-(void)endCutDown{
+        [self.codeButton endCountDown];
+}
+
 -(void)sendCodeEvent{
     self.sendCode();
 }

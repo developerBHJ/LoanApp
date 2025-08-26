@@ -164,11 +164,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)checkPermission:(simpleBoolCompletion)completion{
     kWeakSelf;
-    [[PermissionTools shared] requestLocationAccessWithCompletion:^(BOOL success) {
-        if (success) {
-            completion(YES);
-        }else{
-            if (weakSelf.viewModel.needLocation) {
+    if (self.viewModel.needLocation) {
+        [[PermissionTools shared] requestLocationAccessWithCompletion:^(BOOL success) {
+            if (success) {
+                completion(YES);
+            }else{
                 [self showCustomAlertWithTitle:@"" message:kLocationAlertMessage confirmCompletion:^{
                     [[Routes shared] routeTo:[NSString stringWithFormat:@"%@%@",
                                               kScheme,
@@ -177,11 +177,11 @@ NS_ASSUME_NONNULL_BEGIN
                     
                 }];
                 completion(NO);
-            }else{
-                completion(YES);
             }
-        }
-    }];
+        }];
+    }else{
+        completion(YES);
+    };
 }
 
 @end

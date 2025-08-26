@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    self.navigationItem.title = @"Common Qs";
+//    self.navigationItem.title = @"Common Qs";
     [self configViewModel];
     [self configUI];
 }
